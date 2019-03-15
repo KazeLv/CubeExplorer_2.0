@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Source Files\kociemba">
+      <UniqueIdentifier>{d418f2ec-3dfc-483f-90ca-db936b0fdbee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\kociemba">
+      <UniqueIdentifier>{5325ebd2-9816-4a2f-9374-e32c7e890ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{72d14a65-eeea-4012-bb32-f3168a351323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{755f08b1-f5c5-42e5-b989-8b6fa1b80bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\recog_and_solve">
+      <UniqueIdentifier>{cd80a353-4586-4370-8b74-de721aabb799}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\recog_and_solve">
+      <UniqueIdentifier>{f1a8922c-dcff-41e2-a46d-a84911611611}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\coordcube.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\cubiecube.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\facecube.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\prunetable_helpers.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\search.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="kociemba\solve.c">
+      <Filter>Source Files\kociemba</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugWidget.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="RecogAreaDialog.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="QMyGraphicsView.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeExplorerWithQt.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="recog_and_solve\CubeRecognizer.cpp">
+      <Filter>Source Files\recog_and_solve</Filter>
+    </ClCompile>
+    <ClCompile Include="recog_and_solve\CubeExplorer.cpp">
+      <Filter>Source Files\recog_and_solve</Filter>
+    </ClCompile>
+    <ClCompile Include="HSVDataDialog.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HSVThresholdDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="DebugWidget.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="RecogAreaDialog.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="QMyGraphicsView.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="CubeExplorerWithQt.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="HSVDataDialog.h">
+      <Filter>Header Files\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="HSVThresholdDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="CubicExplorerWithQt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="DebugWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="RecogAreaDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="HSVDataDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="HSVThresholdDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="CubicExplorerWithQt.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="kociemba\color.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\coordcube.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\corner.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\cubiecube.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\edge.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\facecube.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\facelet.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\prunetable_helpers.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\search.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="kociemba\solve.h">
+      <Filter>Header Files\kociemba</Filter>
+    </ClInclude>
+    <ClInclude Include="recog_and_solve\CubeRecognizer.h">
+      <Filter>Header Files\recog_and_solve</Filter>
+    </ClInclude>
+    <ClInclude Include="recog_and_solve\CubeExplorer.h">
+      <Filter>Header Files\recog_and_solve</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
