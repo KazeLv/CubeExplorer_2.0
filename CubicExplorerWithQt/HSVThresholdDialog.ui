@@ -180,9 +180,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -216,9 +214,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -240,9 +236,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -276,9 +270,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -300,9 +292,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -336,9 +326,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -360,9 +348,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -396,9 +382,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -420,9 +404,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -456,9 +438,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -480,9 +460,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -516,9 +494,7 @@
              <number>180</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -555,9 +531,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -591,9 +565,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -615,9 +587,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -651,9 +621,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -675,9 +643,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -711,9 +677,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -735,9 +699,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -771,9 +733,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -795,9 +755,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -831,9 +789,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -855,9 +811,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -891,9 +845,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -930,9 +882,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -966,9 +916,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>114</unicode>
-             </char>
+             <string>red</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -990,9 +938,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -1026,9 +972,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>111</unicode>
-             </char>
+             <string>orange</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -1050,9 +994,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -1086,9 +1028,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>98</unicode>
-             </char>
+             <string>blue</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -1110,9 +1050,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -1146,9 +1084,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>103</unicode>
-             </char>
+             <string>green</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -1170,9 +1106,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -1206,9 +1140,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>121</unicode>
-             </char>
+             <string>yellow</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>
@@ -1230,9 +1162,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>true</bool>
@@ -1266,9 +1196,7 @@
              <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
-             <char>
-              <unicode>119</unicode>
-             </char>
+             <string>white</string>
             </property>
             <property name="min" stdset="0">
              <bool>false</bool>

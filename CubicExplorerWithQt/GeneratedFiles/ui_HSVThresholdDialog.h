@@ -243,7 +243,6 @@ public:
         spin_red_h_min = new QSpinBox(groupBox_H);
         spin_red_h_min->setObjectName(QStringLiteral("spin_red_h_min"));
         spin_red_h_min->setMaximum(180);
-        spin_red_h_min->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_h_min->setProperty("min", QVariant(true));
         spin_red_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -260,7 +259,6 @@ public:
         spin_red_h_max = new QSpinBox(groupBox_H);
         spin_red_h_max->setObjectName(QStringLiteral("spin_red_h_max"));
         spin_red_h_max->setMaximum(180);
-        spin_red_h_max->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_h_max->setProperty("min", QVariant(false));
         spin_red_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -275,7 +273,6 @@ public:
         spin_orange_h_min = new QSpinBox(groupBox_H);
         spin_orange_h_min->setObjectName(QStringLiteral("spin_orange_h_min"));
         spin_orange_h_min->setMaximum(180);
-        spin_orange_h_min->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_h_min->setProperty("min", QVariant(true));
         spin_orange_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -292,7 +289,6 @@ public:
         spin_orange_h_max = new QSpinBox(groupBox_H);
         spin_orange_h_max->setObjectName(QStringLiteral("spin_orange_h_max"));
         spin_orange_h_max->setMaximum(180);
-        spin_orange_h_max->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_h_max->setProperty("min", QVariant(false));
         spin_orange_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -307,7 +303,6 @@ public:
         spin_blue_h_min = new QSpinBox(groupBox_H);
         spin_blue_h_min->setObjectName(QStringLiteral("spin_blue_h_min"));
         spin_blue_h_min->setMaximum(180);
-        spin_blue_h_min->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_h_min->setProperty("min", QVariant(true));
         spin_blue_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -324,7 +319,6 @@ public:
         spin_blue_h_max = new QSpinBox(groupBox_H);
         spin_blue_h_max->setObjectName(QStringLiteral("spin_blue_h_max"));
         spin_blue_h_max->setMaximum(180);
-        spin_blue_h_max->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_h_max->setProperty("min", QVariant(false));
         spin_blue_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -339,7 +333,6 @@ public:
         spin_green_h_min = new QSpinBox(groupBox_H);
         spin_green_h_min->setObjectName(QStringLiteral("spin_green_h_min"));
         spin_green_h_min->setMaximum(180);
-        spin_green_h_min->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_h_min->setProperty("min", QVariant(true));
         spin_green_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -356,7 +349,6 @@ public:
         spin_green_h_max = new QSpinBox(groupBox_H);
         spin_green_h_max->setObjectName(QStringLiteral("spin_green_h_max"));
         spin_green_h_max->setMaximum(180);
-        spin_green_h_max->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_h_max->setProperty("min", QVariant(false));
         spin_green_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -371,7 +363,6 @@ public:
         spin_yellow_h_min = new QSpinBox(groupBox_H);
         spin_yellow_h_min->setObjectName(QStringLiteral("spin_yellow_h_min"));
         spin_yellow_h_min->setMaximum(180);
-        spin_yellow_h_min->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_h_min->setProperty("min", QVariant(true));
         spin_yellow_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -388,7 +379,6 @@ public:
         spin_yellow_h_max = new QSpinBox(groupBox_H);
         spin_yellow_h_max->setObjectName(QStringLiteral("spin_yellow_h_max"));
         spin_yellow_h_max->setMaximum(180);
-        spin_yellow_h_max->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_h_max->setProperty("min", QVariant(false));
         spin_yellow_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -403,7 +393,6 @@ public:
         spin_white_h_min = new QSpinBox(groupBox_H);
         spin_white_h_min->setObjectName(QStringLiteral("spin_white_h_min"));
         spin_white_h_min->setMaximum(180);
-        spin_white_h_min->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_h_min->setProperty("min", QVariant(true));
         spin_white_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -420,7 +409,6 @@ public:
         spin_white_h_max = new QSpinBox(groupBox_H);
         spin_white_h_max->setObjectName(QStringLiteral("spin_white_h_max"));
         spin_white_h_max->setMaximum(180);
-        spin_white_h_max->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_h_max->setProperty("min", QVariant(false));
         spin_white_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
@@ -445,7 +433,6 @@ public:
         spin_red_s_min = new QSpinBox(groupBox_S);
         spin_red_s_min->setObjectName(QStringLiteral("spin_red_s_min"));
         spin_red_s_min->setMaximum(255);
-        spin_red_s_min->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_s_min->setProperty("min", QVariant(true));
         spin_red_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -462,7 +449,6 @@ public:
         spin_red_s_max = new QSpinBox(groupBox_S);
         spin_red_s_max->setObjectName(QStringLiteral("spin_red_s_max"));
         spin_red_s_max->setMaximum(255);
-        spin_red_s_max->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_s_max->setProperty("min", QVariant(false));
         spin_red_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -477,7 +463,6 @@ public:
         spin_orange_s_min = new QSpinBox(groupBox_S);
         spin_orange_s_min->setObjectName(QStringLiteral("spin_orange_s_min"));
         spin_orange_s_min->setMaximum(255);
-        spin_orange_s_min->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_s_min->setProperty("min", QVariant(true));
         spin_orange_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -494,7 +479,6 @@ public:
         spin_orange_s_max = new QSpinBox(groupBox_S);
         spin_orange_s_max->setObjectName(QStringLiteral("spin_orange_s_max"));
         spin_orange_s_max->setMaximum(255);
-        spin_orange_s_max->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_s_max->setProperty("min", QVariant(false));
         spin_orange_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -509,7 +493,6 @@ public:
         spin_blue_s_min = new QSpinBox(groupBox_S);
         spin_blue_s_min->setObjectName(QStringLiteral("spin_blue_s_min"));
         spin_blue_s_min->setMaximum(255);
-        spin_blue_s_min->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_s_min->setProperty("min", QVariant(true));
         spin_blue_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -526,7 +509,6 @@ public:
         spin_blue_s_max = new QSpinBox(groupBox_S);
         spin_blue_s_max->setObjectName(QStringLiteral("spin_blue_s_max"));
         spin_blue_s_max->setMaximum(255);
-        spin_blue_s_max->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_s_max->setProperty("min", QVariant(false));
         spin_blue_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -541,7 +523,6 @@ public:
         spin_green_s_min = new QSpinBox(groupBox_S);
         spin_green_s_min->setObjectName(QStringLiteral("spin_green_s_min"));
         spin_green_s_min->setMaximum(255);
-        spin_green_s_min->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_s_min->setProperty("min", QVariant(true));
         spin_green_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -558,7 +539,6 @@ public:
         spin_green_s_max = new QSpinBox(groupBox_S);
         spin_green_s_max->setObjectName(QStringLiteral("spin_green_s_max"));
         spin_green_s_max->setMaximum(255);
-        spin_green_s_max->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_s_max->setProperty("min", QVariant(false));
         spin_green_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -573,7 +553,6 @@ public:
         spin_yellow_s_min = new QSpinBox(groupBox_S);
         spin_yellow_s_min->setObjectName(QStringLiteral("spin_yellow_s_min"));
         spin_yellow_s_min->setMaximum(255);
-        spin_yellow_s_min->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_s_min->setProperty("min", QVariant(true));
         spin_yellow_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -590,7 +569,6 @@ public:
         spin_yellow_s_max = new QSpinBox(groupBox_S);
         spin_yellow_s_max->setObjectName(QStringLiteral("spin_yellow_s_max"));
         spin_yellow_s_max->setMaximum(255);
-        spin_yellow_s_max->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_s_max->setProperty("min", QVariant(false));
         spin_yellow_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -605,7 +583,6 @@ public:
         spin_white_s_min = new QSpinBox(groupBox_S);
         spin_white_s_min->setObjectName(QStringLiteral("spin_white_s_min"));
         spin_white_s_min->setMaximum(255);
-        spin_white_s_min->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_s_min->setProperty("min", QVariant(true));
         spin_white_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -622,7 +599,6 @@ public:
         spin_white_s_max = new QSpinBox(groupBox_S);
         spin_white_s_max->setObjectName(QStringLiteral("spin_white_s_max"));
         spin_white_s_max->setMaximum(255);
-        spin_white_s_max->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_s_max->setProperty("min", QVariant(false));
         spin_white_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -647,7 +623,6 @@ public:
         spin_red_v_min = new QSpinBox(groupBox_V);
         spin_red_v_min->setObjectName(QStringLiteral("spin_red_v_min"));
         spin_red_v_min->setMaximum(255);
-        spin_red_v_min->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_v_min->setProperty("min", QVariant(true));
         spin_red_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -664,7 +639,6 @@ public:
         spin_red_v_max = new QSpinBox(groupBox_V);
         spin_red_v_max->setObjectName(QStringLiteral("spin_red_v_max"));
         spin_red_v_max->setMaximum(255);
-        spin_red_v_max->setProperty("tag_color", QVariant(QChar(114)));
         spin_red_v_max->setProperty("min", QVariant(false));
         spin_red_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -679,7 +653,6 @@ public:
         spin_orange_v_min = new QSpinBox(groupBox_V);
         spin_orange_v_min->setObjectName(QStringLiteral("spin_orange_v_min"));
         spin_orange_v_min->setMaximum(255);
-        spin_orange_v_min->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_v_min->setProperty("min", QVariant(true));
         spin_orange_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -696,7 +669,6 @@ public:
         spin_orange_v_max = new QSpinBox(groupBox_V);
         spin_orange_v_max->setObjectName(QStringLiteral("spin_orange_v_max"));
         spin_orange_v_max->setMaximum(255);
-        spin_orange_v_max->setProperty("tag_color", QVariant(QChar(111)));
         spin_orange_v_max->setProperty("min", QVariant(false));
         spin_orange_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -711,7 +683,6 @@ public:
         spin_blue_v_min = new QSpinBox(groupBox_V);
         spin_blue_v_min->setObjectName(QStringLiteral("spin_blue_v_min"));
         spin_blue_v_min->setMaximum(255);
-        spin_blue_v_min->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_v_min->setProperty("min", QVariant(true));
         spin_blue_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -728,7 +699,6 @@ public:
         spin_blue_v_max = new QSpinBox(groupBox_V);
         spin_blue_v_max->setObjectName(QStringLiteral("spin_blue_v_max"));
         spin_blue_v_max->setMaximum(255);
-        spin_blue_v_max->setProperty("tag_color", QVariant(QChar(98)));
         spin_blue_v_max->setProperty("min", QVariant(false));
         spin_blue_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -743,7 +713,6 @@ public:
         spin_green_v_min = new QSpinBox(groupBox_V);
         spin_green_v_min->setObjectName(QStringLiteral("spin_green_v_min"));
         spin_green_v_min->setMaximum(255);
-        spin_green_v_min->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_v_min->setProperty("min", QVariant(true));
         spin_green_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -760,7 +729,6 @@ public:
         spin_green_v_max = new QSpinBox(groupBox_V);
         spin_green_v_max->setObjectName(QStringLiteral("spin_green_v_max"));
         spin_green_v_max->setMaximum(255);
-        spin_green_v_max->setProperty("tag_color", QVariant(QChar(103)));
         spin_green_v_max->setProperty("min", QVariant(false));
         spin_green_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -775,7 +743,6 @@ public:
         spin_yellow_v_min = new QSpinBox(groupBox_V);
         spin_yellow_v_min->setObjectName(QStringLiteral("spin_yellow_v_min"));
         spin_yellow_v_min->setMaximum(255);
-        spin_yellow_v_min->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_v_min->setProperty("min", QVariant(true));
         spin_yellow_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -792,7 +759,6 @@ public:
         spin_yellow_v_max = new QSpinBox(groupBox_V);
         spin_yellow_v_max->setObjectName(QStringLiteral("spin_yellow_v_max"));
         spin_yellow_v_max->setMaximum(255);
-        spin_yellow_v_max->setProperty("tag_color", QVariant(QChar(121)));
         spin_yellow_v_max->setProperty("min", QVariant(false));
         spin_yellow_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -807,7 +773,6 @@ public:
         spin_white_v_min = new QSpinBox(groupBox_V);
         spin_white_v_min->setObjectName(QStringLiteral("spin_white_v_min"));
         spin_white_v_min->setMaximum(255);
-        spin_white_v_min->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_v_min->setProperty("min", QVariant(true));
         spin_white_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -824,7 +789,6 @@ public:
         spin_white_v_max = new QSpinBox(groupBox_V);
         spin_white_v_max->setObjectName(QStringLiteral("spin_white_v_max"));
         spin_white_v_max->setMaximum(255);
-        spin_white_v_max->setProperty("tag_color", QVariant(QChar(119)));
         spin_white_v_max->setProperty("min", QVariant(false));
         spin_white_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -894,26 +858,62 @@ public:
         label_8->setText(QApplication::translate("HSVThresholdDialog", "\351\273\204", Q_NULLPTR));
         label_9->setText(QApplication::translate("HSVThresholdDialog", "\347\231\275", Q_NULLPTR));
         groupBox_H->setTitle(QApplication::translate("HSVThresholdDialog", "H (0-180)", Q_NULLPTR));
+        spin_red_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
         label_2->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_red_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_orange_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_10->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_orange_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
+        spin_blue_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
         label_11->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_blue_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
+        spin_green_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
         label_12->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_green_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
+        spin_yellow_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
         label_13->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_yellow_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
+        spin_white_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         label_14->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_white_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         groupBox_S->setTitle(QApplication::translate("HSVThresholdDialog", "S (0-255)", Q_NULLPTR));
+        spin_red_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
         label_3->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_red_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_orange_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_15->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_orange_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
+        spin_blue_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
         label_16->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_blue_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
+        spin_green_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
         label_17->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_green_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
+        spin_yellow_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
         label_18->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_yellow_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
+        spin_white_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         label_19->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_white_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         groupBox_V->setTitle(QApplication::translate("HSVThresholdDialog", "V (0-255)", Q_NULLPTR));
+        spin_red_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
         label_4->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_red_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_orange_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_20->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_orange_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
+        spin_blue_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
         label_21->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_blue_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "blue", Q_NULLPTR)));
+        spin_green_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
         label_22->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_green_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "green", Q_NULLPTR)));
+        spin_yellow_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
         label_23->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_yellow_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "yellow", Q_NULLPTR)));
+        spin_white_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         label_24->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_white_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         btn_reset->setText(QApplication::translate("HSVThresholdDialog", "\351\207\215\347\275\256", Q_NULLPTR));
         btn_apply->setText(QApplication::translate("HSVThresholdDialog", "\345\272\224\347\224\250", Q_NULLPTR));
         btn_cancel->setText(QApplication::translate("HSVThresholdDialog", "\345\217\226\346\266\210", Q_NULLPTR));

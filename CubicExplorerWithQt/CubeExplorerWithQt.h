@@ -64,7 +64,7 @@ private:
 	QGraphicsVideoItem *videoItem_UB;	//
 	QGraphicsVideoItem *videoItem_LD;	//
 	QRect rec_tSelect;					//选取框位置临时记录
-	QString path_picCaptured;			//保存截取图片的地址
+	QString curPath;					//当前工作目录
 
 public slots:
 	//界面按钮槽函数

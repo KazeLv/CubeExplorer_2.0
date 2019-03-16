@@ -5,6 +5,8 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	curPath = QDir::currentPath();		//获取当前工作路径
+
 	//界面按钮信号槽绑定
 	connect(ui.btn_tightOrLoose, SIGNAL(clicked()), this, SLOT(on_btnTightOrLooseClicked()));
 	connect(ui.btn_restore, SIGNAL(clicked()), this, SLOT(on_btnRestoreClicked()));
@@ -67,7 +69,6 @@ void CubeExplorerWithQt::iniCamera()
 	camera_FR = new QCamera(list_cameraInfo.at(0));
 	capture_FR = new QCameraImageCapture(camera_FR);
 
-	path_picCaptured = "C:/Users/Wind/Desktop/CubicExplorerWithQt/CubicExplorerWithQt/pic_cam/";
 	//Capture响应槽绑定
 	connect(capture_FR, SIGNAL(imageSaved(int, QString)), this, SLOT(slot_imageSaved(int, QString)));
 
@@ -381,7 +382,7 @@ void CubeExplorerWithQt::slot_menuShowHSVTriggered()
 	caller.append(t[t.length() - 2]);
 	caller.append(t[t.length() - 1]);
 
-	capture_FR->capture(path_picCaptured+caller+"_temp_for_showHSV");
+	capture_FR->capture(curPath+"/pic_cam/"+caller+"_temp_for_showHSV");
 }
 
 void CubeExplorerWithQt::slot_setRecArea(QString groupName,QRect rect,int faceID, int blockID)

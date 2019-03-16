@@ -91,7 +91,7 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="HSVThresholdDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +111,7 @@
       <Filter>Header Files\UI</Filter>
     </QtMoc>
     <QtMoc Include="HSVThresholdDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

@@ -4,13 +4,15 @@
 #define RECOG_SIMILARITY_COE 0.25		//识别相似系数，当取色块中符合阈值的像素点所占比例大于该值时判定该取色块为对应颜色
 
 #include<iostream>
+#include<qmap.h>
+#include<qdir.h>
+#include<qtextstream.h>
 #include<core/core.hpp>
 #include<opencv2/opencv.hpp>
 #include<highgui/highgui.hpp>
 #include<fstream>
 #include<vector>
 
-//using namespace cv;
 using namespace std;
 
 //struct P {
@@ -23,11 +25,19 @@ typedef struct{
 	int y1, y2;
 }SamRec;
 
-typedef struct{
+typedef struct _hsv{
 	int iLowH, iHighH;
 	int iLowS, iHighS;
 	int iLowV, iHighV;
+
+	bool operator==(struct _hsv& target) {
+		return (target.iLowH == this->iLowH) && (target.iHighH == this->iHighH) && (target.iLowS == this->iLowS) && (target.iHighS == this->iHighS) && (target.iLowV == this->iLowV) && (target.iHighV == this->iHighV);
+	}
 }HSV;
+
+void iniHSVMap();
+QMap<QString, QMap<QString, HSV>>& getHSVMap();
+void saveHSVData();
 
 void setSampleRec(string strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
 

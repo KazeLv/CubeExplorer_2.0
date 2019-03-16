@@ -5,6 +5,9 @@ HSVThresholdDialog::HSVThresholdDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
+	map_hsv_t = map_hsv;
+
 	ui.radioBtn_f->setChecked(true);
 	showHSVData(curFace);
 	
@@ -115,12 +118,14 @@ void HSVThresholdDialog::showHSVData(QString face)
 
 void HSVThresholdDialog::on_btnResetClicked()
 {
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
 	map_hsv_t = map_hsv; 
 	showHSVData(curFace);
 }
 
 void HSVThresholdDialog::on_btnApplyClicked()
 {
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
 	map_hsv = map_hsv_t;
 	ui.btn_apply->setDisabled(true);	//设置"应用"按钮为不可交互状态
 }
@@ -140,13 +145,13 @@ void HSVThresholdDialog::on_faceRadioToggled(bool checked)
 
 void HSVThresholdDialog::slot_spinValueChanged(int value)
 {
-	QChar c_color = sender()->property("tag_color").toChar();	//获取sender的三个动态属性来判断修改哪个值被修改了
+	QString str_color = sender()->property("tag_color").toString();	//获取sender的三个动态属性来判断修改哪个值被修改了
 	QChar c_hsv = sender()->property("tag_hsv").toChar();		//
 	bool isMin = sender()->property("tag_min").toBool();		//
 
 	QMap<QString, HSV> &map_color = map_hsv_t[curFace];			//获取当前所在页面的map<color,HSV>引用
 
-	HSV &hsv = map_color[c_color];								//获取对应颜色的HSV引用
+	HSV &hsv = map_color[str_color];								//获取对应颜色的HSV引用
 
 	//根据tag_hsv和tag_min两个动态属性判断应该对应HSV结构中的修改哪一个值
 	if (isMin) switch (c_hsv.toLatin1()) {						
@@ -166,6 +171,6 @@ void HSVThresholdDialog::slot_spinValueChanged(int value)
 		break;
 	}
 
-	if (map_hsv != map_hsv_t) ui.btn_apply->setEnabled(true);	//对比原始数据和临时数据,如果不同,则设置"应用"按钮为可交互状态
-	else ui.btn_apply->setDisabled(true);						//否则,设置"应用"按钮为不可交互状态
+	//if (map_hsv != map_hsv_t) ui.btn_apply->setEnabled(true);	//对比原始数据和临时数据,如果不同,则设置"应用"按钮为可交互状态
+	//else ui.btn_apply->setDisabled(true);						//否则,设置"应用"按钮为不可交互状态
 }

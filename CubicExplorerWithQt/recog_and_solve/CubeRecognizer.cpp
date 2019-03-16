@@ -1,6 +1,6 @@
 #include "CubeRecognizer.h"
 
-static const cv::Scalar Red(0, 0, 255);			//色块定义，用于绘制
+static const cv::Scalar Red(0, 0, 255);			//魔方六个颜色定义，用于绘制识别结果
 static const cv::Scalar White(255, 255, 255);
 static const cv::Scalar Yellow(0, 255, 255);
 static const cv::Scalar Blue(255, 0, 0);
@@ -25,6 +25,95 @@ static HSV BBlueHSV, UBlueHSV, RBlueHSV, FBlueHSV, LBlueHSV, DBlueHSV;
 static HSV BGreenHSV, UGreenHSV, RGreenHSV, FGreenHSV, LGreenHSV, DGreenHSV;
 static HSV BOrangeHSV, UOrangeHSV, ROrangeHSV, FOrangeHSV, LOrangeHSV, DOrangeHSV;
 
+////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
+//
+
+static QMap<QString, QMap<QString, HSV>> map_face_color_hsv;		//存放hsv阈值数据的嵌套 map,访问方式为 map[faceName][colorName]
+static QList<QString> list_faceID, list_colorID;					//两个下标list，用于通过整数 index 取得对应的字符串作为 map 的key值来访问 map_face_color_hsv;
+
+void iniHSVMap()
+{
+	//初始化整个存储hsv数据的map，先添加六个面对应的次级空map到其中，以面名为key进行索引
+	QMap<QString, HSV> map_color_hsv_f, map_color_hsv_r, map_color_hsv_u, map_color_hsv_b, map_color_hsv_l, map_color_hsv_d;
+	map_face_color_hsv.insert("f", map_color_hsv_f);
+	map_face_color_hsv.insert("r", map_color_hsv_r);
+	map_face_color_hsv.insert("u", map_color_hsv_u);
+	map_face_color_hsv.insert("b", map_color_hsv_b);
+	map_face_color_hsv.insert("l", map_color_hsv_l);
+	map_face_color_hsv.insert("d", map_color_hsv_d);
+
+	list_faceID.append("f"); list_colorID.append("red");			//初始化两个下标list
+	list_faceID.append("r"); list_colorID.append("orange");			//
+	list_faceID.append("u"); list_colorID.append("blue");			//
+	list_faceID.append("b"); list_colorID.append("green");			//
+	list_faceID.append("l"); list_colorID.append("yellow");			//
+	list_faceID.append("d"); list_colorID.append("white");			//
+
+	//从本地文件读取存储的HSV数据
+	QFile file_hsv(QDir::currentPath() + "/data/hsv_threshold.txt");//读取阈值数据文件到 str_hsvData 以进行分割、遍历
+	file_hsv.open(QIODevice::ReadWrite);							//
+	QTextStream ts(&file_hsv);										//
+	QString str_hsvData = ts.readAll();								//
+
+
+	QList<QString> list_face = str_hsvData.split('~');				//首先根据 '~' 分割得到六个以面为单位的HSV数据
+	QList<QString> list_color;
+	QList<QString> list_hsv;
+
+	for (int i = 0; i < list_face.length(); i++) {
+		list_color.clear();
+		list_color = list_face[i].split('-');						//然后根据 '-' 分割得到当前面(i为下标遍历)中以颜色为单位的HSV数据
+		for (int j = 0; j < list_color.length(); j++) {
+			list_hsv.clear();
+			list_hsv = list_color[j].split('_');					//最后根据 '_' 分割得到对应面(i为下标)中对应颜色(j为下标)的各个HSV阈值
+
+			map_face_color_hsv[list_faceID[i]].insert(				//在 map_face_color_hsv 中的指定面(list_faceID[i]获得key)添加一组HSV数据(key由list_colorID[j]获取)
+				list_colorID[j], 
+				HSV{list_hsv[0].toInt(),list_hsv[1].toInt(),		//iLowH,iHighH
+					list_hsv[2].toInt(),list_hsv[3].toInt(),		//iLowS,iHighS
+					list_hsv[4].toInt(),list_hsv[5].toInt() });		//iLowV,iHighV
+		}
+	}
+
+	file_hsv.close();
+}
+
+QMap<QString, QMap<QString, HSV>>& getHSVMap() {
+	return map_face_color_hsv;
+}
+
+void saveHSVData() {
+	//将当前的 map_face_color_hsv 中保存的数据转换为字符串保存到 "./data/hsv_threshold.txt" 文件
+	QString data2write;
+
+	QMap<QString, HSV> map_face;
+	HSV hsv;
+
+	for (int i = 0; i < map_face_color_hsv.size(); i++) {
+		map_face.clear();
+		map_face = map_face_color_hsv[list_faceID[i]];						//获取各个面的hsv数据map
+		for (int j = 0; j < map_face.size(); j++) {
+			hsv = map_face[list_colorID[j]];
+			data2write.append(
+				QString(hsv.iLowH) + "_" + QString(hsv.iHighH) + "_" +		//以"iLowH_iHighH_iLowS_iHighS_iLowV_iHighV"的格式存储单个HSV结构
+				QString(hsv.iLowS) + "_" + QString(hsv.iHighS) + "_" +		//
+				QString(hsv.iLowV) + "_" + QString(hsv.iHighV));			//
+
+			if (j != map_face.size() - 1) data2write.append('-');			//除了最后一个颜色之外，都在其后添加一个 '-' 作为颜色的分割
+		}
+		if (i != map_face_color_hsv.size() - 1) data2write.append('~');		//除了最后一个面之外，都在其后添加一个 '~' 作为面的分割
+	}
+
+	QFile::remove(QDir::currentPath() + "/data/hsv_threshold.txt");			//直接删除原来的数据文件
+
+	QFile file_hsv(QDir::currentPath() + "/data/hsv_threshold.txt");		//创建并打开新文件进行输入
+	file_hsv.open(QIODevice::WriteOnly);									//
+	QTextStream ts(&file_hsv);												//
+	ts << data2write;														//
+
+	file_hsv.close();
+}
+
 void setSampleRec(string strFaceGroup, SamRec rect2set, int nFaceID, int nBlockID) {
 	vector<SamRec> *pVec;
 	if (strFaceGroup == "FR") {
@@ -37,6 +126,9 @@ void setSampleRec(string strFaceGroup, SamRec rect2set, int nFaceID, int nBlockI
 		pVec = &sampleRec_LD;
 	}
 }
+
+//
+////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
 
 void ColorTest(cv::Mat imgHSV, string c)
 {

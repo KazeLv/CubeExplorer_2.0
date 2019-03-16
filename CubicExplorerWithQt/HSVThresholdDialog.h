@@ -18,11 +18,9 @@ public:
 private:
 	Ui::HSVThresholdDialog ui;
 	
-	QMap<QString, QMap<QString, HSV>> map_hsv;		//获取得到的原始hsv数据,map.[面].[颜色]进行访问
-	QMap<QString, QMap<QString, HSV>> map_hsv_t;	//临时hsv数据,存放被更改但是尚未应用的hsv数值
+	QMap<QString, QMap<QString, HSV>> map_hsv_t;	//临时hsv数据,存放被更改但是尚未应用的hsv数值,map.[面].[颜色]进行访问
 
-	QChar curFace = 'f';
-
+	QChar curFace = 'f';							//当前显示面
 
 public slots:
 	void on_btnResetClicked();						//对话框按钮槽函数
