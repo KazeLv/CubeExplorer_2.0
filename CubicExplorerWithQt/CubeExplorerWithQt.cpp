@@ -389,8 +389,7 @@ void CubeExplorerWithQt::slot_setRecArea(QString groupName,QRect rect,int faceID
 {
 	ui.label_UI_message->setText(QStringLiteral("set Rect for")+groupName+faceID+blockID);
 	SamRec rec2set = { (rect.x() - 5) * 2,(rect.x() + rect.width() - 5) * 2,(rect.y() - 5) * 2,(rect.y() + rect.height() - 5) * 2 };
-	string strGroupName = groupName.toStdString();
-	setSampleRec(strGroupName, rec2set, faceID, blockID);		//设置采样矩阵
+	setSampleRec(groupName, rec2set, faceID, blockID);		//设置采样矩阵
 
 }
 

@@ -39,7 +39,8 @@ void iniHSVMap();
 QMap<QString, QMap<QString, HSV>>& getHSVMap();
 void saveHSVData();
 
-void setSampleRec(string strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
+void iniRecMap();
+void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
 
 void ColorTest(cv::Mat imgHSV, string c);
 int Color(cv::Mat imgHSV, string c, string Face);

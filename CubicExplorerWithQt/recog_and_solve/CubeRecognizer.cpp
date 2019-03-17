@@ -31,6 +31,9 @@ static HSV BOrangeHSV, UOrangeHSV, ROrangeHSV, FOrangeHSV, LOrangeHSV, DOrangeHS
 static QMap<QString, QMap<QString, HSV>> map_face_color_hsv;		//存放hsv阈值数据的嵌套 map,访问方式为 map[faceName][colorName]
 static QList<QString> list_faceID, list_colorID;					//两个下标list，用于通过整数 index 取得对应的字符串作为 map 的key值来访问 map_face_color_hsv;
 
+static QMap<QString, vector<SamRec>> map_pic_id_samRec;				//存放采样框数据的 map ,其中每个元素为存储 samRec 类型的vector，对应一张图片的18个采样位置
+static QList<QString> list_picID;									//用于采样框map的下标list，通过整数 index 取得对应的照片名作为 map 的key值来访问 map_pic_id_samRec
+
 void iniHSVMap()
 {
 	//初始化整个存储hsv数据的map，先添加六个面对应的次级空map到其中，以面名为key进行索引
@@ -61,10 +64,9 @@ void iniHSVMap()
 	QList<QString> list_hsv;
 
 	for (int i = 0; i < list_face.length(); i++) {
-		list_color.clear();
 		list_color = list_face[i].split('-');						//然后根据 '-' 分割得到当前面(i为下标遍历)中以颜色为单位的HSV数据
+		map_face_color_hsv[list_faceID[i]].clear();
 		for (int j = 0; j < list_color.length(); j++) {
-			list_hsv.clear();
 			list_hsv = list_color[j].split('_');					//最后根据 '_' 分割得到对应面(i为下标)中对应颜色(j为下标)的各个HSV阈值
 
 			map_face_color_hsv[list_faceID[i]].insert(				//在 map_face_color_hsv 中的指定面(list_faceID[i]获得key)添加一组HSV数据(key由list_colorID[j]获取)
@@ -114,17 +116,74 @@ void saveHSVData() {
 	file_hsv.close();
 }
 
-void setSampleRec(string strFaceGroup, SamRec rect2set, int nFaceID, int nBlockID) {
-	vector<SamRec> *pVec;
-	if (strFaceGroup == "FR") {
-		pVec = &sampleRec_FR;
+void iniRecMap() {
+	vector<SamRec> sampleRec_FR, sampleRec_UB, sampleRec_LD;		//存储三张照片的采样框
+	map_pic_id_samRec.insert("FR", sampleRec_FR);
+	map_pic_id_samRec.insert("UB", sampleRec_UB);
+	map_pic_id_samRec.insert("LD", sampleRec_LD);
+
+	list_picID.append("FR");										//初始化图片 key 下标list，0对应 "fr"
+	list_picID.append("UB");										//1对应 "ub"
+	list_picID.append("LD");										//2对应 "ld"
+
+	//从本地文件读取存储的采样框数据
+	QFile file_rec(QDir::currentPath() + "/data/sample_rec.txt");	//读取采样框数据文件到 str_samRecData 以进行分割、遍历
+	file_rec.open(QIODevice::ReadWrite);							//
+	QTextStream ts(&file_rec);										//
+	QString str_samRecData = ts.readAll();							//
+
+	QList<QString> list_pic = str_samRecData.split('~');			//首先根据 '~' 分割得到三个以图片为单位的采样框数据
+	QList<QString> list_id;
+	QList<QString> list_rec;
+
+	for (int i = 0; i < list_pic.length(); i++) {
+		list_id = list_pic[i].split('-');							//然后根据 '-' 分割得到当前照片名(i为下标遍历)中以照片为单位的采样框数据
+		map_pic_id_samRec[list_picID[i]].clear();
+		for (int j = 0; j < list_id.length(); j++) {
+			list_rec = list_id[j].split('_');						//最后根据 '_' 分割得到对应面(j为下标)中的各个采样框数据
+
+			map_pic_id_samRec[list_picID[i]].push_back(				//在 map_pic_id_samRec 中的指定面(list_picID[i]获得key)添加一组采样框数据(按顺序排序)
+				SamRec{ list_rec[0].toInt(),						//x1
+						list_rec[1].toInt(),						//x2
+						list_rec[2].toInt(),						//y1
+						list_rec[3].toInt() });						//y2
+		}
 	}
-	else if (strFaceGroup == "UB") {
-		pVec = &sampleRec_UB;
+}
+
+void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nBlockID) {
+	//将选定的采样框设置为对应面、序号的采样框
+	int index = (nFaceID-1) * 9 + nBlockID - 1;					//获取采样框序号，0~17
+	map_pic_id_samRec[strFaceGroup][index] = rect2set;
+
+	//将新的采样框数据保存到文件 "./data/sample_rec.txt" 文件
+	QString data2write;
+	vector<SamRec> vec_pic;
+	SamRec rec;
+
+	for (int i = 0; i < map_pic_id_samRec.size(); i++) {
+		vec_pic = map_pic_id_samRec[list_picID[i]];
+		for (int j = 0; j < vec_pic.size(); j++) {
+			rec = vec_pic[j];
+			data2write.append(
+				QString(rec.x1) + "_" +
+				QString(rec.x2) + "_" +
+				QString(rec.y1) + "_" +
+				QString(rec.y2));
+
+			if (j != vec_pic.size() - 1) data2write.append('-');
+		}
+		if (i != map_pic_id_samRec.size() - 1) data2write.append('~');
 	}
-	else if (strFaceGroup == "LD") {
-		pVec = &sampleRec_LD;
-	}
+
+	QFile::remove(QDir::currentPath() + "/data/sample_rec.txt");			//直接删除原来的数据文件
+
+	QFile file_rec(QDir::currentPath() + "/data/sample_rec.txt");		//创建并打开新文件进行输入
+	file_rec.open(QIODevice::WriteOnly);									//
+	QTextStream ts(&file_rec);												//
+	ts << data2write;														//
+
+	file_rec.close();
 }
 
 //
