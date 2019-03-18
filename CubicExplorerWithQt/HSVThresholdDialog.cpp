@@ -73,7 +73,7 @@ void HSVThresholdDialog::showHSVData(QString face)
 
 	QMap<QString, HSV> &map_color = map_hsv_t[face];
 
-	ui.spin_red_h_min->setValue(map_color["red"].iLowH);
+	ui.spin_red_h_min->setValue(map_color["red"].iLowH);s
 	ui.spin_red_h_max->setValue(map_color["red"].iHighH);
 	ui.spin_red_s_min->setValue(map_color["red"].iLowS);
 	ui.spin_red_s_max->setValue(map_color["red"].iHighS);

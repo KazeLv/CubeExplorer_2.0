@@ -15,11 +15,6 @@
 
 using namespace std;
 
-//struct P {
-//	int x1, x2;
-//	int y1, y2;
-//};
-
 typedef struct{
 	int x1, x2;
 	int y1, y2;
@@ -43,8 +38,11 @@ void iniRecMap();
 QMap<QString, vector<SamRec>>& getSamRecMap();
 void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
 
+//Color Recognition
+int Color(cv::Mat imgHSV, QString color, QString Face);
+
+//unused
 void ColorTest(cv::Mat imgHSV, string c);
-int Color(cv::Mat imgHSV, string c, string Face);
 void FillBlocks(cv::Mat& A, string color, int num);
 void getHSV(cv::Mat hsv, int x, int y);
 void PrintHSV(cv::Mat img, string hsv_name);

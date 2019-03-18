@@ -103,54 +103,28 @@ void CubeExplorerWithQt::iniCamera()
 	ui.graView_cameraLD->setCursor(Qt::CrossCursor);
 	ui.graView_cameraLD->setDragMode(QGraphicsView::RubberBandDrag);
 
-	scene_FR->addItem(videoItem_FR);
-	scene_UB->addItem(videoItem_UB);
-	scene_LD->addItem(videoItem_LD);
+	scene_FR->addItem(videoItem_FR);				//在三个scene中分别添加视频显示组件
+	scene_UB->addItem(videoItem_UB);				//
+	scene_LD->addItem(videoItem_LD);				//
 
-	camera_FR->setViewfinder(videoItem_FR);
+	camera_FR->setViewfinder(videoItem_FR);			//设置摄像头显示对象
 
-	map_pic_pScene.insert("FR", scene_FR);
-	map_pic_pScene.insert("UB", scene_FR);
-	map_pic_pScene.insert("LD", scene_FR);
+	map_pic_pScene.insert("FR", scene_FR);			//在map中添加三个scene指针
+	map_pic_pScene.insert("UB", scene_UB);			//
+	map_pic_pScene.insert("LD", scene_LD);			//
 }
 
 void CubeExplorerWithQt::Capture(std::string Case) {
-	//char filename[200];
-	//Mat frameFR, frameUB, frameLD;		//order: BDFLRU
-	//Mat frameFR_p, frameUB_p, frameLD_p;
-	//captureFR >> frameFR;
-	//captureUB >> frameUB;
-	//captureLD >> frameLD;
-	//captureFR >> frameFR;
-	//captureUB >> frameUB;
-	//captureLD >> frameLD;
-	//captureFR >> frameFR;
-	//captureUB >> frameUB;
-	//captureLD >> frameLD;
-
-	//if (Case == "Case1") {
-	//	captureFR >> frameFR;
-	//	captureUB >> frameUB;
-	//	captureLD >> frameLD;
-	//	sprintf(filename, "./pic_cam/cam_case1_RF.png");
-	//	imwrite(filename, frameFR);//图片保存到本工程目录中  
-	//	sprintf(filename, "./pic_cam/cam_case1_BU.png");
-	//	imwrite(filename, frameUB);//图片保存到本工程目录中
-	//	sprintf(filename, "./pic_cam/cam_case1_LD.png");
-	//	imwrite(filename, frameLD);//图片保存到本工程目录中
-
-	//}
-	//else if (Case == "Case2") {
-	//	captureFR >> frameFR;
-	//	captureUB >> frameUB;
-	//	captureLD >> frameLD;
-	//	sprintf(filename, "./pic_cam/cam_case2_RF.png");
-	//	imwrite(filename, frameFR);
-	//	sprintf(filename, "./pic_cam/cam_case2_BU.png");
-	//	imwrite(filename, frameUB);
-	//	sprintf(filename, "./pic_cam/cam_case2_LD.png");
-	//	imwrite(filename, frameLD);
-	//}
+	if (Case == "Case1") {
+		capture_FR->capture(curPath + "/pic_cam/cam_case1_FR");
+		capture_UB->capture(curPath + "/pic_cam/cam_case1_UB");
+		capture_LD->capture(curPath + "/pic_cam/cam_case1_LD");
+	}
+	else if (Case == "Case2") {
+		capture_FR->capture(curPath + "/pic_cam/cam_case2_FR");
+		capture_UB->capture(curPath + "/pic_cam/cam_case2_UB");
+		capture_LD->capture(curPath + "/pic_cam/cam_case2_LD");
+	}
 }
 
 void CubeExplorerWithQt::Sleep(int sec) {
@@ -172,6 +146,7 @@ void CubeExplorerWithQt::SendOperationSerial() {
 	serialPort->write(QString("#4P2T200\r\n").toLatin1());
 }
 
+//右边栏操作按钮响应槽函数
 void CubeExplorerWithQt::on_btnTightOrLooseClicked() {
 	//操作两只机械手进行微松开和夹紧，用以装配和取下魔方
 	if (cubeExplorer.handState.left.isTight) {
@@ -199,39 +174,37 @@ void CubeExplorerWithQt::on_btnResetClicked() {
 }
 
 void CubeExplorerWithQt::on_btnRestoreClicked() {
+	nImgSaved = 0;						//重置拍照计数
 	cubeExplorer.Reset();
 	serialPort->write(QString("#2P1T200\r\n").toLatin1());
 	serialPort->write(QString("#4P1T200\r\n").toLatin1());
 	//1.拍照case1，得到strCase1；拍照case2，得到strCase2
-		//a.左手夹紧，右手松开
+	//a.左手夹紧，右手松开
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
 	serialPort->flush();
 	cubeExplorer.handState.right.isTight = false;
 
-		//b.拍照case1
+	//b.拍照case1
 	Sleep(500);
 	Capture("Case1");
 
-		//c.右手夹紧，左手松开
+	//c.右手夹紧，左手松开
 	serialPort->clear();
 	serialPort->write(QString("#4P1T200\r\n").toLatin1());
 	serialPort->write(QString("#2P5T200\r\n").toLatin1());
-	//serialPort->waitForBytesWritten();
 	cubeExplorer.handState.left.isTight = false;
 	cubeExplorer.handState.right.isTight = true;
 
-		//d.拍照case2
+	//d.拍照case2
 	Sleep(500);
 	Capture("Case2");
 
-	//2.进行识别得到识别字符串
-	//因为摄像头还未齐全，故暂且使用以前留下的case照片进行测试
-	std::string strRec = Recognition();
-	//std::string strRec = "BBLFUBDLLURBDRDBRDLUFRFBRLUBFRBDFURRUUFDLUFUDDLLFBLFDR";
+	while (nImgSaved < 2);				//等待三张图片保存完毕		
 
+	//2.进行识别得到识别字符串
+	//std::string strRec = Recognition();
 
 	//把识别结果显示在界面上
-	//ui.text_cubicState->setText(QString(strRec.c_str()));
 	QGraphicsScene* scene_rec_F = new QGraphicsScene;
 	QGraphicsScene* scene_rec_R = new QGraphicsScene;
 	QGraphicsScene* scene_rec_U = new QGraphicsScene;
@@ -241,37 +214,37 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	QImage* image = new QImage();
 	QImage imageTmp;
 
-	image->load(QString("./pic_rec/rec_R.png"));
+	image->load(QString("./pic_res/res_R.png"));
 	imageTmp = image->scaled(ui.graphicsView_R->width() - 10, ui.graphicsView_R->height() - 10);
 	scene_rec_R->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_R->setScene(scene_rec_R);
 	ui.graphicsView_R->show();
 
-	image->load(QString("./pic_rec/rec_F.png"));
+	image->load(QString("./pic_res/res_F.png"));
 	imageTmp = image->scaled(ui.graphicsView_F->width() - 10, ui.graphicsView_F->height() - 10);
 	scene_rec_F->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_F->setScene(scene_rec_F);
 	ui.graphicsView_F->show();
 
-	image->load(QString("./pic_rec/rec_U.png"));
+	image->load(QString("./pic_res/res_U.png"));
 	imageTmp = image->scaled(ui.graphicsView_U->width() - 10, ui.graphicsView_U->height() - 10);
 	scene_rec_U->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_U->setScene(scene_rec_U);
 	ui.graphicsView_U->show();
 
-	image->load(QString("./pic_rec/rec_B.png"));
+	image->load(QString("./pic_res/res_B.png"));
 	imageTmp = image->scaled(ui.graphicsView_B->width() - 10, ui.graphicsView_B->height() - 10);
 	scene_rec_B->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_B->setScene(scene_rec_B);
 	ui.graphicsView_B->show();
 
-	image->load(QString("./pic_rec/rec_L.png"));
+	image->load(QString("./pic_res/res_L.png"));
 	imageTmp = image->scaled(ui.graphicsView_L->width() - 10, ui.graphicsView_L->height() - 10);
 	scene_rec_L->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_L->setScene(scene_rec_L);
 	ui.graphicsView_L->show();
 
-	image->load(QString("./pic_rec/rec_D.png"));
+	image->load(QString("./pic_res/res_D.png"));
 	imageTmp = image->scaled(ui.graphicsView_D->width() - 10, ui.graphicsView_D->height() - 10);
 	scene_rec_D->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_D->setScene(scene_rec_D);
@@ -289,22 +262,9 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 
 	//4.CubicExplorer对象调用解算方法，得到串口操作序列字符串
 	cubeExplorer.GetShortestWay();
-	////将操作序列显示到GUI的listView中
-	//QStringList qslOperation;
-	//vector<string> vsOperation = cubicExplorer.GetVecStrSerial();
-	//for (auto iter = vsOperation.cbegin(); iter != vsOperation.cend(); iter++) {
-	//	qslOperation << QString(iter->c_str());
-	//}
-	//QStringListModel* model = new QStringListModel(qslOperation);
-	//ui.listView_operation->setModel(model);
-	//int cnt = cubicExplorer.GetVecStrSerial().size();
-	//ui.label_UI_operationCount->setText(QString::number(cnt));
 
 	//5.通过串口通信把串口序列传递给控制机，并使用listView控件实时显示操作序列传输情况
 	SendOperationSerial();
-
-	//6.传输完成后使用GUI底部label传递信息，表明已经复原完成
-	//ui.label_UI_tip->setText(QStringLiteral("操作序列传输完毕..."));
 }
 
 void CubeExplorerWithQt::on_btnDebugClicked() {
@@ -363,6 +323,7 @@ void CubeExplorerWithQt::on_btnSetHSVClicked()
 	td.exec();
 }
 
+//右键菜单响应槽函数
 void CubeExplorerWithQt::slot_mouseReleasedInCameraViews(QRect rec_select)
 {
 	rec_tSelect = rec_select;
@@ -414,6 +375,7 @@ void CubeExplorerWithQt::slot_menuShowHSVTriggered()
 	capture_FR->capture(curPath+"/pic_cam/"+caller+"_temp_for_showHSV");
 }
 
+
 void CubeExplorerWithQt::slot_setRecArea(QString groupName,QRect rect,int faceID, int blockID)
 {
 	ui.label_UI_message->setText(QStringLiteral("set Rect for")+groupName+faceID+blockID);
@@ -434,16 +396,11 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		HSVDialog.setWindowTitle(QStringLiteral("HSV数据统计"));
 		HSVDialog.show();
 		HSVDialog.exec();
-
-		//for (int i = 0; i < imgHSV.rows; i++) {
-		//	for (int j = 0; j < imgHSV.cols; j++) {
-		//		Point p(i, j);
-		//		int(imgHSV.at<Vec3b>(p)[0]);//p[0,1,2]分别是H，S，V
-		//	}
-		//}
 	}
+	else nImgSaved++;				//拍照计数器递增，用于在复原前判断截图保存是否完成
 }
 
+//串口模块响应槽函数
 void CubeExplorerWithQt::on_btnPortRefreshClicked()
 {
 	ui.comboBox_coms->clear();
@@ -477,4 +434,3 @@ void CubeExplorerWithQt::slot_portInfoChanged(const QString & text)
 {
 	serialPort->setPortName(text);
 }
-

@@ -1,12 +1,5 @@
 #include "CubeRecognizer.h"
 
-static const cv::Scalar Red(0, 0, 255);			//Ä§·½Áù¸öÑÕÉ«¶¨Òå£¬ÓÃÓÚ»æÖÆÊ¶±ğ½á¹û
-static const cv::Scalar White(255, 255, 255);
-static const cv::Scalar Yellow(0, 255, 255);
-static const cv::Scalar Blue(255, 0, 0);
-static const cv::Scalar Green(0, 255, 0);
-static const cv::Scalar Orange(0, 165, 255);
-
 //B D F L R U
 SamRec P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18;			//Ã¿ÕÅÍ¼Æ¬¶¼¶ÔÓ¦18¸ö²ÉÑùµÄÎ»ÖÃ
 
@@ -32,8 +25,13 @@ static QMap<QString, QMap<QString, HSV>> map_face_color_hsv;		//´æ·ÅhsvãĞÖµÊı¾İµ
 static QList<QString> list_faceID, list_colorID;					//Á½¸öÏÂ±êlist£¬ÓÃÓÚÍ¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄ×Ö·û´®×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_face_color_hsv;
 
 static QMap<QString, vector<SamRec>> map_pic_id_samRec;				//´æ·Å²ÉÑù¿òÊı¾İµÄ map ,ÆäÖĞÃ¿¸öÔªËØÎª´æ´¢ samRec ÀàĞÍµÄvector£¬¶ÔÓ¦Ò»ÕÅÍ¼Æ¬µÄ18¸ö²ÉÑùÎ»ÖÃ
-QList<QString> list_picID;									//ÓÃÓÚ²ÉÑù¿òmapµÄÏÂ±êlist£¬Í¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄÕÕÆ¬Ãû×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_pic_id_samRec
+QList<QString> list_picID;											//ÓÃÓÚ²ÉÑù¿òmapµÄÏÂ±êlist£¬Í¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄÕÕÆ¬Ãû×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_pic_id_samRec
 
+static QMap<QString, vector<QString>> map_face_id_recogRes;			//´æ·ÅÊ¶±ğ½á¹û£¬·ÃÎÊ·½Ê½Îª map[face][blockID]
+static QMap<QString, cv::Scalar> map_color_scalar;					//´æ·ÅÔ¤ÉèÑÕÉ«Öµ£¬ÓÃÓÚ»æÖÆÊ¶±ğ½á¹ûÍ¼
+//static vector<cv::Rect> vec_rect_drawResult;						//´æ·Å¾ØĞÎÊı¾İ£¬ÓÃÓÚ»æÖÆÊ¶±ğ½á¹ûÍ¼µÄ¸÷¸öÉ«¿é
+
+//HSVÄ£¿é
 void iniHSVMap()
 {
 	//³õÊ¼»¯Õû¸ö´æ´¢hsvÊı¾İµÄmap£¬ÏÈÌí¼ÓÁù¸öÃæ¶ÔÓ¦µÄ´Î¼¶¿Õmapµ½ÆäÖĞ£¬ÒÔÃæÃûÎªkey½øĞĞË÷Òı
@@ -116,15 +114,16 @@ void saveHSVData() {
 	file_hsv.close();
 }
 
+//²ÉÑù¿òÄ£¿é
 void iniRecMap() {
 	vector<SamRec> sampleRec_FR, sampleRec_UB, sampleRec_LD;		//´æ´¢ÈıÕÅÕÕÆ¬µÄ²ÉÑù¿ò
 	map_pic_id_samRec.insert("FR", sampleRec_FR);
 	map_pic_id_samRec.insert("UB", sampleRec_UB);
 	map_pic_id_samRec.insert("LD", sampleRec_LD);
 
-	list_picID.append("FR");										//³õÊ¼»¯Í¼Æ¬ key ÏÂ±êlist£¬0¶ÔÓ¦ "fr"
-	list_picID.append("UB");										//1¶ÔÓ¦ "ub"
-	list_picID.append("LD");										//2¶ÔÓ¦ "ld"
+	list_picID.append("FR");										//³õÊ¼»¯Í¼Æ¬ key ÏÂ±êlist£¬0¶ÔÓ¦ "FR"
+	list_picID.append("UB");										//1¶ÔÓ¦ "UB"
+	list_picID.append("LD");										//2¶ÔÓ¦ "LD"
 
 	//´Ó±¾µØÎÄ¼ş¶ÁÈ¡´æ´¢µÄ²ÉÑù¿òÊı¾İ
 	QFile file_rec(QDir::currentPath() + "/data/sample_rec.txt");	//¶ÁÈ¡²ÉÑù¿òÊı¾İÎÄ¼şµ½ str_samRecData ÒÔ½øĞĞ·Ö¸î¡¢±éÀú
@@ -190,701 +189,239 @@ void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nBlock
 	file_rec.close();
 }
 
-//
-////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
+//Ê¶±ğÄ£¿é
+void iniRecogVars() {
+	//³õÊ¼»¯Ê¶±ğ½á¹û map Îª 6*9 ´óĞ¡
+	vector<QString> vec_fill;
+	vec_fill.resize(9);
+	map_face_id_recogRes.insert("f", vec_fill);
+	map_face_id_recogRes.insert("r", vec_fill);
+	map_face_id_recogRes.insert("u", vec_fill);
+	map_face_id_recogRes.insert("b", vec_fill);
+	map_face_id_recogRes.insert("l", vec_fill);
+	map_face_id_recogRes.insert("d", vec_fill);
 
-void ColorTest(cv::Mat imgHSV, string c)
-{
-	int iLowH, iHighH;
-	int iLowS, iHighS;
-	int iLowV, iHighV;
-	cv::Mat imgThresholded;
-	cv::Vec3b pixel;
-	pixel[0] = pixel[1] = pixel[2] = 255;
+	//³õÊ¼»¯»æÖÆÊ¶±ğ½á¹ûÍ¼ËùÓÃµÄÔ¤ÉèÑÕÉ« map
+	map_color_scalar.insert("red", cv::Scalar(0, 0, 255));
+	map_color_scalar.insert("orange", cv::Scalar(0, 165, 255));
+	map_color_scalar.insert("blue", cv::Scalar(255, 0, 0));
+	map_color_scalar.insert("green", cv::Scalar(0, 255, 0));
+	map_color_scalar.insert("yellow", cv::Scalar(0, 255, 255));
+	map_color_scalar.insert("white", cv::Scalar(255, 255, 255));
 
-	if (c == "White") {
-		iLowH = 10;
-		iHighH = 50;
-
-		iLowS = 0;
-		iHighS = 20;
-
-		iLowV = 220;
-		iHighV = 255;
-	}
-	else if (c == "Red") {
-		iLowH = 156;
-		iHighH = 180;
-
-		iLowS = 43;
-		iHighS = 255;
-
-		iLowV = 46;
-		iHighV = 255;
-	}
-	else if (c == "Yellow") {
-		iLowH = 26;
-		iHighH = 34;
-
-		iLowS = 43;
-		iHighS = 255;
-
-		iLowV = 46;
-		iHighV = 255;
-	}
-	else if (c == "Blue") {
-		iLowH = 100;
-		iHighH = 115;
-
-		iLowS = 43;
-		iHighS = 255;
-
-		iLowV = 46;
-		iHighV = 255;
-	}
-	else if (c == "Green") {
-		iLowH = 50;
-		iHighH = 70;
-
-		iLowS = 43;
-		iHighS = 255;
-
-		iLowV = 46;
-		iHighV = 255;
-	}
-	else if (c == "Orange") {
-		iLowH = 0;
-		iHighH = 10;
-
-		iLowS = 43;
-		iHighS = 255;
-
-		iLowV = 46;
-		iHighV = 255;
-	}
-
-	cv::inRange(imgHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the imageq
-	imwrite("threstest.png", imgThresholded);
-	int count = 0;
-	int i, j;
-
-	for (i = 0; i < imgThresholded.rows; i++) {
-		cv::Vec3b *p = imgThresholded.ptr<cv::Vec3b>(i);
-		for (j = 0; j < imgThresholded.cols; j++)
-			if (p[j] == pixel)
-				count++;
-	}
-
-	cout << count << endl;
-
+	//³õÊ¼»¯É«¿é¾ØÕóÊı¾İÈİÆ÷
+	/*vec_rect_drawResult.push_back(cv::Rect(0, 0, 120, 120));
+	vec_rect_drawResult.push_back(cv::Rect(120, 0, 240, 120));
+	vec_rect_drawResult.push_back(cv::Rect(240, 0, 360, 120));
+	vec_rect_drawResult.push_back(cv::Rect(0, 120, 120, 240));
+	vec_rect_drawResult.push_back(cv::Rect(120, 120, 240, 240));
+	vec_rect_drawResult.push_back(cv::Rect(240, 120, 360, 240));
+	vec_rect_drawResult.push_back(cv::Rect(0, 240, 120, 360));
+	vec_rect_drawResult.push_back(cv::Rect(120, 240, 240, 360));
+	vec_rect_drawResult.push_back(cv::Rect(240, 240, 360, 360));*/
 }
 
-int Color(cv::Mat imgHSV, string c, string Face)
+int isColor(cv::Mat imgHSV, QString color, QString face)
 {
-	int iLowH, iHighH;
-	int iLowS, iHighS;
-	int iLowV, iHighV;
-	int i, j;
+	HSV hsv = map_face_color_hsv[face][color];
+
 	cv::Mat imgThresholded;
-	cv::Vec3b pixel;
-	pixel[0] = pixel[1] = pixel[2] = 255;
-	iLowH = 0;
-	iHighH = 180;
 
-	iLowS = 0;
-	iHighS = 30;
-
-	iLowV = 220;
-	iHighV = 255;
-
-	if (c == "White") {
-		if (Face == "B") {
-			iLowH = BWhiteHSV.iLowH;
-			iHighH = BWhiteHSV.iHighH;
-
-			iLowS = BWhiteHSV.iLowS;
-			iHighS = BWhiteHSV.iHighS;
-
-			iLowV = BWhiteHSV.iLowV;
-			iHighV = BWhiteHSV.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = UWhiteHSV.iLowH;
-			iHighH = UWhiteHSV.iHighH;
-
-			iLowS = UWhiteHSV.iLowS;
-			iHighS = UWhiteHSV.iHighS;
-
-			iLowV = UWhiteHSV.iLowV;
-			iHighV = UWhiteHSV.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RWhiteHSV.iLowH;
-			iHighH = RWhiteHSV.iHighH;
-
-			iLowS = RWhiteHSV.iLowS;
-			iHighS = RWhiteHSV.iHighS;
-
-			iLowV = RWhiteHSV.iLowV;
-			iHighV = RWhiteHSV.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FWhiteHSV.iLowH;
-			iHighH = FWhiteHSV.iHighH;
-
-			iLowS = FWhiteHSV.iLowS;
-			iHighS = FWhiteHSV.iHighS;
-
-			iLowV = FWhiteHSV.iLowV;
-			iHighV = FWhiteHSV.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LWhiteHSV.iLowH;
-			iHighH = LWhiteHSV.iHighH;
-
-			iLowS = LWhiteHSV.iLowS;
-			iHighS = LWhiteHSV.iHighS;
-
-			iLowV = LWhiteHSV.iLowV;
-			iHighV = LWhiteHSV.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DWhiteHSV.iLowH;
-			iHighH = DWhiteHSV.iHighH;
-
-			iLowS = DWhiteHSV.iLowS;
-			iHighS = DWhiteHSV.iHighS;
-
-			iLowV = DWhiteHSV.iLowV;
-			iHighV = DWhiteHSV.iHighV;
-		}
-	}
-	else if (c == "Red") {
-		if (Face == "B") {
-			iLowH = BRedHSV_L.iLowH;
-			iHighH = BRedHSV_L.iHighH;
-
-			iLowS = BRedHSV_L.iLowS;
-			iHighS = BRedHSV_L.iHighS;
-
-			iLowV = BRedHSV_L.iLowV;
-			iHighV = BRedHSV_L.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = URedHSV_L.iLowH;
-			iHighH = URedHSV_L.iHighH;
-
-			iLowS = URedHSV_L.iLowS;
-			iHighS = URedHSV_L.iHighS;
-
-			iLowV = URedHSV_L.iLowV;
-			iHighV = URedHSV_L.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RRedHSV_L.iLowH;
-			iHighH = RRedHSV_L.iHighH;
-
-			iLowS = RRedHSV_L.iLowS;
-			iHighS = RRedHSV_L.iHighS;
-
-			iLowV = RRedHSV_L.iLowV;
-			iHighV = RRedHSV_L.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FRedHSV_L.iLowH;
-			iHighH = FRedHSV_L.iHighH;
-
-			iLowS = FRedHSV_L.iLowS;
-			iHighS = FRedHSV_L.iHighS;
-
-			iLowV = FRedHSV_L.iLowV;
-			iHighV = FRedHSV_L.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LRedHSV_L.iLowH;
-			iHighH = LRedHSV_L.iHighH;
-
-			iLowS = LRedHSV_L.iLowS;
-			iHighS = LRedHSV_L.iHighS;
-
-			iLowV = LRedHSV_L.iLowV;
-			iHighV = LRedHSV_L.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DRedHSV_L.iLowH;
-			iHighH = DRedHSV_L.iHighH;
-
-			iLowS = DRedHSV_L.iLowS;
-			iHighS = DRedHSV_L.iHighS;
-
-			iLowV = DRedHSV_L.iLowV;
-			iHighV = DRedHSV_L.iHighV;
-		}
-	}
-	else if (c == "Yellow") {
-		if (Face == "B") {
-			iLowH = BYellowHSV.iLowH;
-			iHighH = BYellowHSV.iHighH;
-
-			iLowS = BYellowHSV.iLowS;
-			iHighS = BYellowHSV.iHighS;
-
-			iLowV = BYellowHSV.iLowV;
-			iHighV = BYellowHSV.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = UYellowHSV.iLowH;
-			iHighH = UYellowHSV.iHighH;
-
-			iLowS = UYellowHSV.iLowS;
-			iHighS = UYellowHSV.iHighS;
-
-			iLowV = UYellowHSV.iLowV;
-			iHighV = UYellowHSV.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RYellowHSV.iLowH;
-			iHighH = RYellowHSV.iHighH;
-
-			iLowS = RYellowHSV.iLowS;
-			iHighS = RYellowHSV.iHighS;
-
-			iLowV = RYellowHSV.iLowV;
-			iHighV = RYellowHSV.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FYellowHSV.iLowH;
-			iHighH = FYellowHSV.iHighH;
-
-			iLowS = FYellowHSV.iLowS;
-			iHighS = FYellowHSV.iHighS;
-
-			iLowV = FYellowHSV.iLowV;
-			iHighV = FYellowHSV.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LYellowHSV.iLowH;
-			iHighH = LYellowHSV.iHighH;
-
-			iLowS = LYellowHSV.iLowS;
-			iHighS = LYellowHSV.iHighS;
-
-			iLowV = LYellowHSV.iLowV;
-			iHighV = LYellowHSV.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DYellowHSV.iLowH;
-			iHighH = DYellowHSV.iHighH;
-
-			iLowS = DYellowHSV.iLowS;
-			iHighS = DYellowHSV.iHighS;
-
-			iLowV = DYellowHSV.iLowV;
-			iHighV = DYellowHSV.iHighV;
-		}
-	}
-	else if (c == "Blue") {
-		if (Face == "B") {
-			iLowH = BBlueHSV.iLowH;
-			iHighH = BBlueHSV.iHighH;
-
-			iLowS = BBlueHSV.iLowS;
-			iHighS = BBlueHSV.iHighS;
-
-			iLowV = BBlueHSV.iLowV;
-			iHighV = BBlueHSV.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = UBlueHSV.iLowH;
-			iHighH = UBlueHSV.iHighH;
-
-			iLowS = UBlueHSV.iLowS;
-			iHighS = UBlueHSV.iHighS;
-
-			iLowV = UBlueHSV.iLowV;
-			iHighV = UBlueHSV.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RBlueHSV.iLowH;
-			iHighH = RBlueHSV.iHighH;
-
-			iLowS = RBlueHSV.iLowS;
-			iHighS = RBlueHSV.iHighS;
-
-			iLowV = RBlueHSV.iLowV;
-			iHighV = RBlueHSV.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FBlueHSV.iLowH;
-			iHighH = FBlueHSV.iHighH;
-
-			iLowS = FBlueHSV.iLowS;
-			iHighS = FBlueHSV.iHighS;
-
-			iLowV = FBlueHSV.iLowV;
-			iHighV = FBlueHSV.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LBlueHSV.iLowH;
-			iHighH = LBlueHSV.iHighH;
-
-			iLowS = LBlueHSV.iLowS;
-			iHighS = LBlueHSV.iHighS;
-
-			iLowV = LBlueHSV.iLowV;
-			iHighV = LBlueHSV.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DBlueHSV.iLowH;
-			iHighH = DBlueHSV.iHighH;
-
-			iLowS = DBlueHSV.iLowS;
-			iHighS = DBlueHSV.iHighS;
-
-			iLowV = DBlueHSV.iLowV;
-			iHighV = DBlueHSV.iHighV;
-		}
-	}
-	else if (c == "Green") {
-		if (Face == "B") {
-			iLowH = BGreenHSV.iLowH;
-			iHighH = BGreenHSV.iHighH;
-
-			iLowS = BGreenHSV.iLowS;
-			iHighS = BGreenHSV.iHighS;
-
-			iLowV = BGreenHSV.iLowV;
-			iHighV = BGreenHSV.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = UGreenHSV.iLowH;
-			iHighH = UGreenHSV.iHighH;
-
-			iLowS = UGreenHSV.iLowS;
-			iHighS = UGreenHSV.iHighS;
-
-			iLowV = UGreenHSV.iLowV;
-			iHighV = UGreenHSV.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RGreenHSV.iLowH;
-			iHighH = RGreenHSV.iHighH;
-
-			iLowS = RGreenHSV.iLowS;
-			iHighS = RGreenHSV.iHighS;
-
-			iLowV = RGreenHSV.iLowV;
-			iHighV = RGreenHSV.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FGreenHSV.iLowH;
-			iHighH = FGreenHSV.iHighH;
-
-			iLowS = FGreenHSV.iLowS;
-			iHighS = FGreenHSV.iHighS;
-
-			iLowV = FGreenHSV.iLowV;
-			iHighV = FGreenHSV.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LGreenHSV.iLowH;
-			iHighH = LGreenHSV.iHighH;
-
-			iLowS = LGreenHSV.iLowS;
-			iHighS = LGreenHSV.iHighS;
-
-			iLowV = LGreenHSV.iLowV;
-			iHighV = LGreenHSV.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DGreenHSV.iLowH;
-			iHighH = DGreenHSV.iHighH;
-
-			iLowS = DGreenHSV.iLowS;
-			iHighS = DGreenHSV.iHighS;
-
-			iLowV = DGreenHSV.iLowV;
-			iHighV = DGreenHSV.iHighV;
-		}
-	}
-	else if (c == "Orange") {
-		if (Face == "B") {
-			iLowH = BOrangeHSV.iLowH;
-			iHighH = BOrangeHSV.iHighH;
-
-			iLowS = BOrangeHSV.iLowS;
-			iHighS = BOrangeHSV.iHighS;
-
-			iLowV = BOrangeHSV.iLowV;
-			iHighV = BOrangeHSV.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = UOrangeHSV.iLowH;
-			iHighH = UOrangeHSV.iHighH;
-
-			iLowS = UOrangeHSV.iLowS;
-			iHighS = UOrangeHSV.iHighS;
-
-			iLowV = UOrangeHSV.iLowV;
-			iHighV = UOrangeHSV.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = ROrangeHSV.iLowH;
-			iHighH = ROrangeHSV.iHighH;
-
-			iLowS = ROrangeHSV.iLowS;
-			iHighS = ROrangeHSV.iHighS;
-
-			iLowV = ROrangeHSV.iLowV;
-			iHighV = ROrangeHSV.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FOrangeHSV.iLowH;
-			iHighH = FOrangeHSV.iHighH;
-
-			iLowS = FOrangeHSV.iLowS;
-			iHighS = FOrangeHSV.iHighS;
-
-			iLowV = FOrangeHSV.iLowV;
-			iHighV = FOrangeHSV.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LOrangeHSV.iLowH;
-			iHighH = LOrangeHSV.iHighH;
-
-			iLowS = LOrangeHSV.iLowS;
-			iHighS = LOrangeHSV.iHighS;
-
-			iLowV = LOrangeHSV.iLowV;
-			iHighV = LOrangeHSV.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DOrangeHSV.iLowH;
-			iHighH = DOrangeHSV.iHighH;
-
-			iLowS = DOrangeHSV.iLowS;
-			iHighS = DOrangeHSV.iHighS;
-
-			iLowV = DOrangeHSV.iLowV;
-			iHighV = DOrangeHSV.iHighV;
-		}
-	}
-
-	// PrintHSV(imgHSV);
-
-	cv::inRange(imgHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
+	cv::inRange(imgHSV, cv::Scalar(hsv.iLowH, hsv.iLowS, hsv.iLowV), cv::Scalar(hsv.iHighH, hsv.iHighS, hsv.iHighV), imgThresholded); //ãĞÖµ»¯´¦ÀíÍ¼Æ¬£¬·ûºÏãĞÖµµÄÏñËØµãÈıÍ¨µÀÖÃÎªÈ«255
 
 	int count = 0;
 	int totalPixNum = imgThresholded.cols*imgThresholded.rows;
 
-	for (i = 0; i < imgThresholded.rows; i++) {
+	for (int i = 0; i < imgThresholded.rows; i++) {				//±éÀúãĞÖµ»¯´¦ÀíºóµÄÍ¼Æ¬
 		cv::Vec3b *p = imgThresholded.ptr<cv::Vec3b>(i);
-		for (j = 0; j < imgThresholded.cols; j++) {
-			//cout << p[j] << endl;
-			if (p[j] == pixel)
-				count++;
+		for (int j = 0; j < imgThresholded.cols; j++) {
+			if (p[j] == cv::Vec3b{ 255,255,255 })				//Èç¹ûµ±Ç°ÏñËØÎª(255,255,255)£¬Ôò¼ÆÊıÆ÷¼ÓÒ»
+				count++;										//
 		}
 	}
 
-	if (c == "Red") {
-		if (Face == "B") {
-			iLowH = BRedHSV_H.iLowH;
-			iHighH = BRedHSV_H.iHighH;
-
-			iLowS = BRedHSV_H.iLowS;
-			iHighS = BRedHSV_H.iHighS;
-
-			iLowV = BRedHSV_H.iLowV;
-			iHighV = BRedHSV_H.iHighV;
-		}
-		else if (Face == "U") {
-			iLowH = URedHSV_H.iLowH;
-			iHighH = URedHSV_H.iHighH;
-
-			iLowS = URedHSV_H.iLowS;
-			iHighS = URedHSV_H.iHighS;
-
-			iLowV = URedHSV_H.iLowV;
-			iHighV = URedHSV_H.iHighV;
-		}
-		else if (Face == "R") {
-			iLowH = RRedHSV_H.iLowH;
-			iHighH = RRedHSV_H.iHighH;
-
-			iLowS = RRedHSV_H.iLowS;
-			iHighS = RRedHSV_H.iHighS;
-
-			iLowV = RRedHSV_H.iLowV;
-			iHighV = RRedHSV_H.iHighV;
-		}
-		else if (Face == "F") {
-			iLowH = FRedHSV_H.iLowH;
-			iHighH = FRedHSV_H.iHighH;
-
-			iLowS = FRedHSV_H.iLowS;
-			iHighS = FRedHSV_H.iHighS;
-
-			iLowV = FRedHSV_H.iLowV;
-			iHighV = FRedHSV_H.iHighV;
-		}
-		else if (Face == "L") {
-			iLowH = LRedHSV_H.iLowH;
-			iHighH = LRedHSV_H.iHighH;
-
-			iLowS = LRedHSV_H.iLowS;
-			iHighS = LRedHSV_H.iHighS;
-
-			iLowV = LRedHSV_H.iLowV;
-			iHighV = LRedHSV_H.iHighV;
-		}
-		else if (Face == "D") {
-			iLowH = DRedHSV_H.iLowH;
-			iHighH = DRedHSV_H.iHighH;
-
-			iLowS = DRedHSV_H.iLowS;
-			iHighS = DRedHSV_H.iHighS;
-
-			iLowV = DRedHSV_H.iLowV;
-			iHighV = DRedHSV_H.iHighV;
-		}
-		cv::inRange(imgHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
-		int count2 = 0;
-		for (i = 0; i < imgThresholded.rows; i++) {
-			cv::Vec3b *p = imgThresholded.ptr<cv::Vec3b>(i);
-			for (j = 0; j < imgThresholded.cols; j++) {
-				if (p[j] == pixel)
-					count2++;
-			}
-		}
-		count += count2;
-	}
+	if (color == "red") count += count;
 
 	if (count > totalPixNum*RECOG_SIMILARITY_COE) return 1;		//·ûºÏãĞÖµµÄÏñËØµãËùÕ¼±ÈÀı´óÓÚÔ¤ÉèÏµÊı£¬ÅĞ¶¨È¡É«¿éÎªµ±Ç°ÑÕÉ«
 	return 0;													//·ñÔò£¬ÅĞ¶¨È¡É«¿é²»ÊÇµ±Ç°ÑÕÉ«
 }
 
-void FillBlocks(cv::Mat& A, string color, int num)			//num±íÊ¾µÚ¼¸¸öÉ«¿é
+void judgeColor(cv::Mat image, QString picName, int caseID) {
+	vector<SamRec> vec_samRec1, vec_samRec2;				//·Ö±ğ´æ·ÅpicNameÖ¸¶¨Í¼Æ¬Ëù²ÉÑùµÄÁ½¸öÃæµÄ²ÉÑù¿òÊı¾İ£¬´ÓĞ¡µ½´óĞèÂú×ãkociembaËã·¨ĞòºÅÒªÇó
+	vector<vector<SamRec>> vec_samRec;						//·Ö±ğ´æ·ÅpicNameÖ¸¶¨Í¼Æ¬Ëù²ÉÑùµÄÁ½¸öÃæµÄ²ÉÑù¿òÊı¾İ£¬´ÓĞ¡µ½´óĞèÂú×ãkociembaËã·¨ĞòºÅÒªÇó
+	vector<int> vec_specialBlockID;							//´æ·ÅÌØÊâ¿é£¨ÔÚcase1ÖĞ»á±»ÕÚµ²µÄ¿ì£©µÄĞòºÅ(0~17)
+	//Ê×ÏÈ¸ù¾İkociembaËã·¨¶ÔÄ§·½¿éÅÅĞòµÄÒªÇó£¬½«¶ÔÓ¦ÃæµÄ²ÉÑù¿ò°´ÕÕĞòºÅ·Åµ½vec_samRecÁÙÊ±ÈİÆ÷ÖĞ
+	if (picName == "FR") {
+		//FÃæµÄ²ÉÑù¿òÊı¾İ
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][0]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][1]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][2]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][3]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][4]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][5]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][6]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][7]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][8]);
+		vec_samRec.push_back(vec_samRec1);
+		//RÃæµÄ²ÉÑù¿òÊı¾İ
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][9]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][10]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][11]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][12]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][13]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][14]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][15]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][16]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][17]);
+		vec_samRec.push_back(vec_samRec2);
+		
+		//FÃæµÄ1ºÅºÍ7ºÅ¿é»áÔÚcase1ÖĞ±»ÕÚµ²
+		vec_specialBlockID.push_back(1);
+		vec_specialBlockID.push_back(7);
+	}
+	else if (picName == "UB") {
+		//UÃæ²ÉÑù¿òÊı¾İ
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][9]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][10]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][11]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][12]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][13]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][14]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][15]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][16]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][17]);
+		vec_samRec.push_back(vec_samRec1);
+		//BÃæ²ÉÑù¿òÊı¾İ
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][9]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][10]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][11]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][12]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][13]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][14]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][15]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][16]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][17]);
+		vec_samRec.push_back(vec_samRec2);
+
+		//UÃæµÄ7ºÅ¿é»áÔÚcase1ÖĞ±»ÕÚµ²
+		vec_specialBlockID.push_back(7);
+	}
+	else if (picName == "LD") {
+		//LÃæ²ÉÑù¿òÊı¾İ
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][0]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][1]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][2]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][3]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][4]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][5]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][6]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][7]);
+		vec_samRec1.push_back(map_pic_id_samRec["LD"][8]);
+		vec_samRec.push_back(vec_samRec1);
+		//DÃæ²ÉÑù¿òÊı¾İ
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][0]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][1]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][2]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][3]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][4]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][5]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][6]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][7]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][8]);
+		vec_samRec.push_back(vec_samRec2);
+
+		//DÃæµÄ1ºÅ¿é£¨ÔÚÍ¼ÖĞÎª10ºÅ¿é£©»áÔÚcase1ÖĞ±»ÕÚµ²
+		vec_specialBlockID.push_back(10);
+	}
+
+	//È»ºó¸ù¾İ²»Í¬µÄcase½øĞĞ²»Í¬µÄÊ¶±ğ·½°¸
+	//case1Ê±£¬ºöÂÔspecial¿é£¬½öÊ¶±ğÎ´±»ÕÚµ²µÄ¿é
+	//case2Ê±£¬ºöÂÔcase1ÄÜ¹»´¦ÀíµÄÉ«¿é£¬½öÊ¶±ğspecial¿é
+	cv::Mat mat_t, mat_hsv;
+	QString faceName;
+	vector<SamRec> vec_samRec_t;
+	for (int faceID = 0; faceID < 2; faceID++) {
+		faceName = QString::asprintf("%c", picName[faceID]).toLower();
+		vec_samRec_t = vec_samRec[faceID];
+		for (int i = 0; i < vec_samRec_t.size(); i++) {
+			//ÅĞ¶ÏÊÇ·ñºöÂÔµ±Ç°É«¿é£¬¹Ø¼üµãÊÇÀûÓÃÒÖ»òÌõ¼şÊ¹µÃÁ½ÖÖcaseµÃµ½²»Í¬µÄ½á¹û£º
+			//case1£¬µ±Ç°ĞòºÅÈô´æÔÚÓÚspecialBlockIDÈİÆ÷ÖĞ£¬ÅĞ¶Ï½á¹ûÎª 1^0=1£¬continue½øĞĞºöÂÔ£»·ñÔòÅĞ¶Ï½á¹ûÎª 0^0=0
+			//case2£¬µ±Ç°ĞòºÅÈô²»´æÔÚÓÚspecialBlockIDÈİÆ÷ÖĞ£¬ÅĞ¶Ï½á¹ûÎª 0^1=1£¬continue½øĞĞºöÂÔ£»·ñÔòÅĞ¶Ï½á¹ûÎª 1^1=0
+			if (std::find(vec_specialBlockID.cbegin(), vec_specialBlockID.cend(), (faceID * 9 + i)) != vec_specialBlockID.cend() ^ (caseID == 2)) continue;
+
+			//½ØÈ¡µÃµ½²ÉÑù¿òÄÚµÄÍ¼Æ¬²¢½øĞĞ×ª»»¡¢Ê¶±ğ
+			mat_t = image(cv::Range(vec_samRec_t[i].y1, vec_samRec_t[i].y2), cv::Range(vec_samRec_t[i].x1, vec_samRec_t[i].x2));			
+			cv::cvtColor(mat_t, mat_hsv, cv::COLOR_BGR2HSV);													//×ª»»ÎªHSVÍ¼Æ¬
+			if (isColor(mat_hsv, "red", faceName)) map_face_id_recogRes[faceName][i] = "red";					//Çî¾Ù·¨ÅĞ¶Ïµ±Ç°¿éÊôÓÚÄÄÒ»¸öÑÕÉ«
+			else if (isColor(mat_hsv, "orange", faceName)) map_face_id_recogRes[faceName][i] = "orange";		//
+			else if (isColor(mat_hsv, "blue", faceName)) map_face_id_recogRes[faceName][i] = "blue";			//
+			else if (isColor(mat_hsv, "green", faceName)) map_face_id_recogRes[faceName][i] = "green";			//
+			else if (isColor(mat_hsv, "yellow", faceName)) map_face_id_recogRes[faceName][i] = "yellow";		//
+			else if (isColor(mat_hsv, "white", faceName)) map_face_id_recogRes[faceName][i] = "white";			//
+			else map_face_id_recogRes[faceName][i] = "unkown";													//ÈôÔÚÇî¾Ù·¶Î§ÄÚÃ»ÓĞÕÒµ½½á¹û£¬Ôò´æ´¢Îª"unkown"
+		}
+	}
+}
+
+string recognize() {
+	//¶ÔÈıÕÅÅÄÉãÍ¼Æ¬ÒÀ´Î¶ÁÈ¡²¢½øĞĞÊ¶±ğ£¬Ê¶±ğ½á¹û´æ·Åµ½ map_face_id_recogRes ÖĞ
+	cv::Mat image;
+	
+	image = cv::imread("pic/cam_case1_FR.jpg");
+	judgeColor(image, "FR", 1);
+
+	image = cv::imread("pic/cam_case1_UB.jpg");
+	judgeColor(image, "FR", 1);
+
+	image = cv::imread("pic/cam_case1_LD.jpg");
+	judgeColor(image, "FR", 1);
+
+	image = cv::imread("pic/cam_case2_FR.jpg");
+	judgeColor(image, "FR", 2);
+
+	image = cv::imread("pic/cam_case2_UB.jpg");
+	judgeColor(image, "FR", 2);
+
+	image = cv::imread("pic/cam_case2_LD.jpg");
+	judgeColor(image, "FR", 2);
+
+	//¸ù¾İÊ¶±ğ½á¹û»æÖÆÊ¶±ğ½á¹ûÊ¾ÒâÍ¼£¬´æ·Åµ½±¾µØÎÄ¼ş¼Ğ"./pic_res"
+	//TODO
+	cv::Mat mat_res;
+	for (int i = 0; i < 9; i++) {
+		switch (i) {
+		case(1): rectangle(mat_res, cv::Rect(0, 0, 120, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(2): rectangle(mat_res, cv::Rect(120, 0, 240, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(3): rectangle(mat_res, cv::Rect(240, 0, 360, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(4): rectangle(mat_res, cv::Rect(0, 120, 120, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(5): rectangle(mat_res, cv::Rect(120, 120, 240, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(6): rectangle(mat_res, cv::Rect(240, 120, 360, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(7): rectangle(mat_res, cv::Rect(0, 240, 120, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(8): rectangle(mat_res, cv::Rect(120, 240, 240, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		case(9): rectangle(mat_res, cv::Rect(240, 240, 360, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+		}
+	}
+
+	//¸ù¾İÊ¶±ğ½á¹û½øĞĞÅÅÁĞµÃµ½kociembaËã·¨ËùĞèÒªµÄ×Ö·û´®ĞòÁĞ
+	//TODO
+}
+
+//
+////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
+//
+
+void FillBlocks(cv::Mat& A, QString color, int num)			//num±íÊ¾µÚ¼¸¸öÉ«¿é
 {
 	switch (num) {
-	case(1):					//µÚÒ»¸öÉ«¿é
-		if (color == "White")
-			rectangle(A, cv::Rect(0, 0, 120, 120), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(0, 0, 120, 120), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(0, 0, 120, 120), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(0, 0, 120, 120), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(0, 0, 120, 120), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(0, 0, 120, 120), Orange, -1, 1, 0);
-	case(2):
-		if (color == "White")
-			rectangle(A, cv::Rect(120, 0, 240, 120), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(120, 0, 240, 120), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(120, 0, 240, 120), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(120, 0, 240, 120), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(120, 0, 240, 120), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(120, 0, 240, 120), Orange, -1, 1, 0);
-	case(3):
-		if (color == "White")
-			rectangle(A, cv::Rect(240, 0, 360, 120), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(240, 0, 360, 120), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(240, 0, 360, 120), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(240, 0, 360, 120), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(240, 0, 360, 120), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(240, 0, 360, 120), Orange, -1, 1, 0);
-	case(4):
-		if (color == "White")
-			rectangle(A, cv::Rect(0, 120, 120, 240), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(0, 120, 120, 240), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(0, 120, 120, 240), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(0, 120, 120, 240), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(0, 120, 120, 240), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(0, 120, 120, 240), Orange, -1, 1, 0);
-	case(5):
-		if (color == "White")
-			rectangle(A, cv::Rect(120, 120, 240, 240), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(120, 120, 240, 240), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(120, 120, 240, 240), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(120, 120, 240, 240), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(120, 120, 240, 240), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(120, 120, 240, 240), Orange, -1, 1, 0);
-	case(6):
-		if (color == "White")
-			rectangle(A, cv::Rect(240, 120, 360, 240), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(240, 120, 360, 240), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(240, 120, 360, 240), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(240, 120, 360, 240), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(240, 120, 360, 240), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(240, 120, 360, 240), Orange, -1, 1, 0);
-	case(7):
-		if (color == "White")
-			rectangle(A, cv::Rect(0, 240, 120, 360), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(0, 240, 120, 360), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(0, 240, 120, 360), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(0, 240, 120, 360), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(0, 240, 120, 360), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(0, 240, 120, 360), Orange, -1, 1, 0);
-	case(8):
-		if (color == "White")
-			rectangle(A, cv::Rect(120, 240, 240, 360), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(120, 240, 240, 360), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(120, 240, 240, 360), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(120, 240, 240, 360), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(120, 240, 240, 360), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(120, 240, 240, 360), Orange, -1, 1, 0);
-	case(9):
-		if (color == "White")
-			rectangle(A, cv::Rect(240, 240, 360, 360), White, -1, 1, 0);
-		else if (color == "Red")
-			rectangle(A, cv::Rect(240, 240, 360, 360), Red, -1, 1, 0);
-		else if (color == "Yellow")
-			rectangle(A, cv::Rect(240, 240, 360, 360), Yellow, -1, 1, 0);
-		else if (color == "Blue")
-			rectangle(A, cv::Rect(240, 240, 360, 360), Blue, -1, 1, 0);
-		else if (color == "Green")
-			rectangle(A, cv::Rect(240, 240, 360, 360), Green, -1, 1, 0);
-		else if (color == "Orange")
-			rectangle(A, cv::Rect(240, 240, 360, 360), Orange, -1, 1, 0);
-	default:
-		;
+	case(1): rectangle(A, cv::Rect(0, 0, 120, 120), map_color_scalar[color], -1, 1, 0);
+	case(2): rectangle(A, cv::Rect(120, 0, 240, 120), map_color_scalar[color], -1, 1, 0);
+	case(3): rectangle(A, cv::Rect(240, 0, 360, 120), map_color_scalar[color], -1, 1, 0);
+	case(4): rectangle(A, cv::Rect(0, 120, 120, 240), map_color_scalar[color], -1, 1, 0);
+	case(5): rectangle(A, cv::Rect(120, 120, 240, 240), map_color_scalar[color], -1, 1, 0);
+	case(6): rectangle(A, cv::Rect(240, 120, 360, 240), map_color_scalar[color], -1, 1, 0);
+	case(7): rectangle(A, cv::Rect(0, 240, 120, 360), map_color_scalar[color], -1, 1, 0);
+	case(8): rectangle(A, cv::Rect(120, 240, 240, 360), map_color_scalar[color], -1, 1, 0);
+	case(9): rectangle(A, cv::Rect(240, 240, 360, 360), map_color_scalar[color], -1, 1, 0);
 	}
 }
 
@@ -910,7 +447,7 @@ void PrintHSV(cv::Mat img, string hsv_name) {
 }
 
 void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseName, string color[], vector<SamRec> &Ps) {
-	resize(image, image, cv::Size(700, 500), 0, 0, 3);			//µ÷ÕûÍ¼Æ¬´óĞ¡
+	//resize(image, image, cv::Size(700, 500), 0, 0, 3);			//µ÷ÕûÍ¼Æ¬´óĞ¡
 	int i, j;
 
 	//²ÉÉ«¿é,£¬Á½ÖÖ²ÉÑù·½·¨
@@ -974,7 +511,7 @@ void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseNam
 		if (ColorName == "B") {
 			for (i = 1; i <= 9; i++) {				//¶ÔËùÓĞÉ«¿éthreshold
 				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-				if (Color(imgHSV[i], "Red", "B") == 1)
+				if (Color(imgHSV[i], "red", "b") == 1)
 					color[i] = "Red";
 				else if (Color(imgHSV[i], "Orange", "B") == 1)
 					color[i] = "Orange";
@@ -1129,7 +666,7 @@ void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseNam
 		if (color[i] == "")
 			break;				//´æÔÚÎ´Ê¶±ğ³öÀ´µÄÉ«¿éÊ±£¬Ìø³öÑ­»·
 	if (i > 9)							//Ö»ÓĞÔÚÈ«²¿É«¿éÊ¶±ğ³öÀ´²Å±£´æÊ¶±ğ½á¹ûÍ¼Æ¬
-		imwrite("pic_rec\\rec_" + ColorName + ".png", Blank);
+		imwrite("pic_res\\res_" + ColorName + ".png", Blank);
 	else
 		cout << "Failed to recognize" + ColorName + "the first time" << endl;	//ÌáÊ¾Ò»ÏÂ£¬ËµÃ÷µÚÒ»´ÎÃ»ÓĞÊ¶±ğ³É¹¦£¬Õâ¸öÔÚµ÷ÊÔµÄÊ±ºòÓÃµÃµ½
 }
@@ -1617,8 +1154,9 @@ void Sample_Reset(vector<SamRec> &Sample_RF, vector<SamRec> &Sample_BU, vector<S
 
 string Recognition() {			//Ê¶±ğÄ§·½Ò»¸öÃæµÄÉ«¿é£¬¼Ó²ÎcaseºÍÃæ²ÎÊı£¬¸ù¾İ²»Í¬²ÎÊıÀ´µ÷É«¿é²ÉÑùÎ»ÖÃPs
 
-	vector<cv::Point> center;								//´æ·Å9¸öÉ«¿éµÄÖĞĞÄÎ»ÖÃ,xºÍy£¬Î´À´²ÉÑùÓÃ
-														//³õÊ¼»¯6¸ö¿ÕÃæ
+	//vector<cv::Point> center;								//´æ·Å9¸öÉ«¿éµÄÖĞĞÄÎ»ÖÃ,xºÍy£¬Î´À´²ÉÑùÓÃ
+
+	//³õÊ¼»¯6¸ö¿ÕÃæ
 	cv::Mat B(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//BÃæ
 	cv::Mat D(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//DÃæ
 	cv::Mat F(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//FÃæ
@@ -1633,7 +1171,7 @@ string Recognition() {			//Ê¶±ğÄ§·½Ò»¸öÃæµÄÉ«¿é£¬¼Ó²ÎcaseºÍÃæ²ÎÊı£¬¸ù¾İ²»Í¬²ÎÊıÀ
 
 	Sample_Reset(sampleRec_FR, sampleRec_UB, sampleRec_LD);		// ³õÊ¼»¯²ÎÊı
 
-	image = cv::imread("pic_cam//cam_case1_BU.png");			//BÃæ¿ÉÒÔÒ»´ÎÊ¶±ğ£¬Ê¶±ğÍê¾Í±£´æÍ¼Æ¬
+	image = cv::imread("pic_cam//cam_case1_UB.png");			//BÃæ¿ÉÒÔÒ»´ÎÊ¶±ğ£¬Ê¶±ğÍê¾Í±£´æÍ¼Æ¬
 	JudgeColor(image, B, "B", "case1", Bcolor, sampleRec_UB);
 
 	image = cv::imread("pic_cam//cam_case1_LD.png");			//µÚÒ»´ÎÊ¶±ğ
@@ -1642,19 +1180,19 @@ string Recognition() {			//Ê¶±ğÄ§·½Ò»¸öÃæµÄÉ«¿é£¬¼Ó²ÎcaseºÍÃæ²ÎÊı£¬¸ù¾İ²»Í¬²ÎÊıÀ
 	JudgeColor(image, D, "D", "case2", Dcolor, sampleRec_LD);
 
 
-	image = cv::imread("pic_cam//cam_case2_RF.png");			//Ò»´ÎÊ¶±ğ
+	image = cv::imread("pic_cam//cam_case2_FR.png");			//Ò»´ÎÊ¶±ğ
 	JudgeColor(image, F, "F", "case2", Fcolor, sampleRec_FR);
 
 
 	image = cv::imread("pic_cam//cam_case1_LD.png");			//LÖ»ÒªÊ¶Ò»´Î
 	JudgeColor(image, L, "L", "case1", Lcolor, sampleRec_LD);
 
-	image = cv::imread("pic_cam//cam_case1_RF.png");			//RÖ»ÒªÊ¶±ğÒ»´Î
+	image = cv::imread("pic_cam//cam_case1_FR.png");			//RÖ»ÒªÊ¶±ğÒ»´Î
 	JudgeColor(image, R, "R", "case1", Rcolor, sampleRec_FR);
 
-	image = cv::imread("pic_cam//cam_case1_BU.png");
+	image = cv::imread("pic_cam//cam_case1_UB.png");
 	JudgeColor(image, U, "U", "case1", Ucolor, sampleRec_UB);
-	image = cv::imread("pic_cam//cam_case2_BU.png");			//×öµÚ¶ş´ÎÊ¶±ğ
+	image = cv::imread("pic_cam//cam_case2_UB.png");			//×öµÚ¶ş´ÎÊ¶±ğ
 	JudgeColor(image, U, "U", "case2", Ucolor, sampleRec_UB);
 
 

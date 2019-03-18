@@ -67,6 +67,7 @@ private:
 	QString curPath;					//当前工作目录
 
 	QMap<QString, QGraphicsScene*> map_pic_pScene;	//图片名到scene指针的映射
+	int nImgSaved;
 
 public slots:
 	//界面按钮槽函数
