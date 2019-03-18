@@ -202,7 +202,7 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	while (nImgSaved < 2);				//等待三张图片保存完毕		
 
 	//2.进行识别得到识别字符串
-	//std::string strRec = Recognition();
+	std::string strRec/* = recognize()*/;
 
 	//把识别结果显示在界面上
 	QGraphicsScene* scene_rec_F = new QGraphicsScene;
@@ -214,37 +214,37 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	QImage* image = new QImage();
 	QImage imageTmp;
 
-	image->load(QString("./pic_res/res_R.png"));
+	image->load(QString("./pic_res/res_r.png"));
 	imageTmp = image->scaled(ui.graphicsView_R->width() - 10, ui.graphicsView_R->height() - 10);
 	scene_rec_R->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_R->setScene(scene_rec_R);
 	ui.graphicsView_R->show();
 
-	image->load(QString("./pic_res/res_F.png"));
+	image->load(QString("./pic_res/res_f.png"));
 	imageTmp = image->scaled(ui.graphicsView_F->width() - 10, ui.graphicsView_F->height() - 10);
 	scene_rec_F->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_F->setScene(scene_rec_F);
 	ui.graphicsView_F->show();
 
-	image->load(QString("./pic_res/res_U.png"));
+	image->load(QString("./pic_res/res_u.png"));
 	imageTmp = image->scaled(ui.graphicsView_U->width() - 10, ui.graphicsView_U->height() - 10);
 	scene_rec_U->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_U->setScene(scene_rec_U);
 	ui.graphicsView_U->show();
 
-	image->load(QString("./pic_res/res_B.png"));
+	image->load(QString("./pic_res/res_b.png"));
 	imageTmp = image->scaled(ui.graphicsView_B->width() - 10, ui.graphicsView_B->height() - 10);
 	scene_rec_B->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_B->setScene(scene_rec_B);
 	ui.graphicsView_B->show();
 
-	image->load(QString("./pic_res/res_L.png"));
+	image->load(QString("./pic_res/res_l.png"));
 	imageTmp = image->scaled(ui.graphicsView_L->width() - 10, ui.graphicsView_L->height() - 10);
 	scene_rec_L->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_L->setScene(scene_rec_L);
 	ui.graphicsView_L->show();
 
-	image->load(QString("./pic_res/res_D.png"));
+	image->load(QString("./pic_res/res_d.png"));
 	imageTmp = image->scaled(ui.graphicsView_D->width() - 10, ui.graphicsView_D->height() - 10);
 	scene_rec_D->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_D->setScene(scene_rec_D);

@@ -38,6 +38,11 @@ void iniRecMap();
 QMap<QString, vector<SamRec>>& getSamRecMap();
 void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
 
+void iniRecogVars();
+int isColor(cv::Mat imgHSV, QString color, QString face);
+void judgeColor(cv::Mat image, QString picName, int caseID);
+string recognize();
+
 //Color Recognition
 int Color(cv::Mat imgHSV, QString color, QString Face);
 

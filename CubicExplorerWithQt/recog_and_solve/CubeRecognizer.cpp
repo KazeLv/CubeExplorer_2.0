@@ -43,12 +43,12 @@ void iniHSVMap()
 	map_face_color_hsv.insert("l", map_color_hsv_l);
 	map_face_color_hsv.insert("d", map_color_hsv_d);
 
-	list_faceID.append("f"); list_colorID.append("red");			//初始化两个下标list
+	list_faceID.append("u"); list_colorID.append("red");			//初始化两个下标list
 	list_faceID.append("r"); list_colorID.append("orange");			//
-	list_faceID.append("u"); list_colorID.append("blue");			//
-	list_faceID.append("b"); list_colorID.append("green");			//
+	list_faceID.append("f"); list_colorID.append("blue");			//
+	list_faceID.append("d"); list_colorID.append("green");			//
 	list_faceID.append("l"); list_colorID.append("yellow");			//
-	list_faceID.append("d"); list_colorID.append("white");			//
+	list_faceID.append("b"); list_colorID.append("white");			//
 
 	//从本地文件读取存储的HSV数据
 	QFile file_hsv(QDir::currentPath() + "/data/hsv_threshold.txt");//读取阈值数据文件到 str_hsvData 以进行分割、遍历
@@ -386,44 +386,42 @@ string recognize() {
 	judgeColor(image, "FR", 2);
 
 	//根据识别结果绘制识别结果示意图，存放到本地文件夹"./pic_res"
-	//TODO
-	cv::Mat mat_res;
-	for (int i = 0; i < 9; i++) {
-		switch (i) {
-		case(1): rectangle(mat_res, cv::Rect(0, 0, 120, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(2): rectangle(mat_res, cv::Rect(120, 0, 240, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(3): rectangle(mat_res, cv::Rect(240, 0, 360, 120), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(4): rectangle(mat_res, cv::Rect(0, 120, 120, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(5): rectangle(mat_res, cv::Rect(120, 120, 240, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(6): rectangle(mat_res, cv::Rect(240, 120, 360, 240), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(7): rectangle(mat_res, cv::Rect(0, 240, 120, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(8): rectangle(mat_res, cv::Rect(120, 240, 240, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
-		case(9): rectangle(mat_res, cv::Rect(240, 240, 360, 360), map_color_scalar[map_face_id_recogRes[""][0]], -1, 1, 0);
+	//并对识别结果进行排列得到 kociemba 算法所需要的字符串序列（U-R-F-D-L-B）
+	QString str_res;
+	QMap<QString, QString> map_color_face;
+	for (int i = 0; i < 6; i++) map_color_face.insert(map_face_id_recogRes[list_faceID[i]][4], list_faceID[i]);		//存储各面中心块颜色，用以得到色块序号（U-R-F-D-L-B）
+
+	for (int i = 0; i < map_face_id_recogRes.size(); i++) {
+		vector<QString>& vec_res = map_face_id_recogRes[list_faceID[i]]; 
+		cv::Mat mat_res(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));
+		for (int j = 0; i < vec_res.size(); j++) {
+			switch (j) {
+			case(0): rectangle(mat_res, cv::Rect(0, 0, 120, 120), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(1): rectangle(mat_res, cv::Rect(120, 0, 240, 120), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(2): rectangle(mat_res, cv::Rect(240, 0, 360, 120), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(3): rectangle(mat_res, cv::Rect(0, 120, 120, 240), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(4): rectangle(mat_res, cv::Rect(120, 120, 240, 240), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(5): rectangle(mat_res, cv::Rect(240, 120, 360, 240), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(6): rectangle(mat_res, cv::Rect(0, 240, 120, 360), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(7): rectangle(mat_res, cv::Rect(120, 240, 240, 360), map_color_scalar[vec_res[j]], -1, 1, 0);
+			case(8): rectangle(mat_res, cv::Rect(240, 240, 360, 360), map_color_scalar[vec_res[j]], -1, 1, 0);
+			}
+			str_res.append(map_color_face[vec_res[j]]);		//单个面内从0-8依次排列即可
 		}
+		line(mat_res, cv::Point(0, 120), cv::Point(360, 120), cv::Scalar(0, 0, 0), 1, 8, 0);						//绘制分隔色块的黑线
+		line(mat_res, cv::Point(0, 240), cv::Point(360, 240), cv::Scalar(0, 0, 0), 1, 8, 0);
+		line(mat_res, cv::Point(120, 0), cv::Point(120, 360), cv::Scalar(0, 0, 0), 1, 8, 0);
+		line(mat_res, cv::Point(240, 0), cv::Point(240, 360), cv::Scalar(0, 0, 0), 1, 8, 0);
+
+		imwrite("pic_res/res_" + list_faceID[i].toStdString() + ".png", mat_res);
 	}
 
-	//根据识别结果进行排列得到kociemba算法所需要的字符串序列
-	//TODO
+	return str_res.toLatin1();
 }
 
 //
 ////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
-//
 
-void FillBlocks(cv::Mat& A, QString color, int num)			//num表示第几个色块
-{
-	switch (num) {
-	case(1): rectangle(A, cv::Rect(0, 0, 120, 120), map_color_scalar[color], -1, 1, 0);
-	case(2): rectangle(A, cv::Rect(120, 0, 240, 120), map_color_scalar[color], -1, 1, 0);
-	case(3): rectangle(A, cv::Rect(240, 0, 360, 120), map_color_scalar[color], -1, 1, 0);
-	case(4): rectangle(A, cv::Rect(0, 120, 120, 240), map_color_scalar[color], -1, 1, 0);
-	case(5): rectangle(A, cv::Rect(120, 120, 240, 240), map_color_scalar[color], -1, 1, 0);
-	case(6): rectangle(A, cv::Rect(240, 120, 360, 240), map_color_scalar[color], -1, 1, 0);
-	case(7): rectangle(A, cv::Rect(0, 240, 120, 360), map_color_scalar[color], -1, 1, 0);
-	case(8): rectangle(A, cv::Rect(120, 240, 240, 360), map_color_scalar[color], -1, 1, 0);
-	case(9): rectangle(A, cv::Rect(240, 240, 360, 360), map_color_scalar[color], -1, 1, 0);
-	}
-}
 
 void getHSV(cv::Mat hsv, int x, int y) {
 	cv::Point p(x, y);
@@ -475,25 +473,6 @@ void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseNam
 		P9 = image(cv::Range(Ps[8].y1, Ps[8].y2), cv::Range(Ps[8].x1, Ps[8].x2));
 	}
 
-	cv::Rect ColorBlocks[10];
-	ColorBlocks[1] = cv::Rect(0, 0, 120, 120);					//画出一个360*360的魔方识别结果图
-	ColorBlocks[2] = cv::Rect(120, 0, 240, 120);
-	ColorBlocks[3] = cv::Rect(240, 0, 360, 120);
-	ColorBlocks[4] = cv::Rect(0, 120, 120, 240);
-	ColorBlocks[5] = cv::Rect(120, 120, 240, 240);
-	ColorBlocks[6] = cv::Rect(240, 120, 360, 240);
-	ColorBlocks[7] = cv::Rect(0, 240, 120, 360);
-	ColorBlocks[8] = cv::Rect(120, 240, 240, 360);
-	ColorBlocks[9] = cv::Rect(240, 240, 360, 360);
-	imwrite("P1.png", P1);					//保存小色块
-	imwrite("P2.png", P2);
-	imwrite("P3.png", P3);
-	imwrite("P4.png", P4);
-	imwrite("P5.png", P5);
-	imwrite("P6.png", P6);
-	imwrite("P7.png", P7);
-	imwrite("P8.png", P8);
-	imwrite("P9.png", P9);
 	cv::Mat imgHSV[10];
 	//Mat imgThresholded(200, 200, CV_8UC3);
 
@@ -1234,107 +1213,6 @@ void Empty_Color(string Bcolor[], string Dcolor[], string Fcolor[], string Lcolo
 		Rcolor[i] = "";
 		Ucolor[i] = "";
 	}
-}
-
-void Capture(string Case)
-{
-	cv::VideoCapture  captureB(0);
-	cv::VideoCapture  captureD(1);
-	//VideoCapture  captureF(2);
-	//VideoCapture  captureL(3);
-	//VideoCapture  captureR(4);
-	//VideoCapture  captureU(5);
-	if (!captureB.isOpened())
-	{
-		cout << "摄像头B打开失败！" << endl;
-		return;
-	}
-	if (!captureD.isOpened())
-	{
-		cout << "摄像头D打开失败！" << endl;
-		return;
-	}
-	/*
-	if (!captureF.isOpened())
-	{
-		cout << "摄像头F打开失败！" << endl;
-		return;
-	}
-	if (!captureL.isOpened())
-	{
-		cout << "摄像头L打开失败！" << endl;
-		return;
-	}
-	if (!captureR.isOpened())
-	{
-		cout << "摄像头R打开失败！" << endl;
-		return;
-	}
-	if (!captureU.isOpened())
-	{
-		cout << "摄像头U打开失败！" << endl;
-		return;
-	}
-	*/
-
-	char key;
-	char filename[200];
-	int count = 0;
-	cv::namedWindow("【视频】", 1);
-	cv::Mat frameB, frameD, frameF, frameL, frameR, frameU;		//order: BDFLRU
-
-	while (1)
-	{
-		key = cv::waitKey(50);
-		captureD >> frameD;
-		captureB >> frameB;
-		imshow("【视频B】", frameB);
-		imshow("【视频D】", frameD);
-		/*
-		imshow("【视频F】", frameF);
-		imshow("【视频L】", frameL);
-		imshow("【视频R】", frameR);
-		imshow("【视频U】", frameU);
-		*/
-
-		if (key == 27)
-			break;				//按ESC键退出程序  
-		if (key == 32)//按空格键进行拍照  
-		{
-			if (Case == "Case1") {
-				sprintf(filename, "B.png");
-				imwrite(filename, frameB);//图片保存到本工程目录中  
-				/*
-				sprintf(filename, "cam_case1_D.png");
-				imwrite(filename, frameD);//图片保存到本工程目录中
-				sprintf(filename, "cam_case1_F.png");
-				imwrite(filename, frameF);//图片保存到本工程目录中
-				sprintf(filename, "L.png");
-				imwrite(filename, frameL);//图片保存到本工程目录中
-				sprintf(filename, "cam_case1_R.png");
-				imwrite(filename, frameR);//图片保存到本工程目录中
-				sprintf(filename, "cam_case1_U.png");
-				imwrite(filename, frameU);//图片保存到本工程目录中
-				*/
-				break;					//拍完照以后跳出循环并返回
-			}
-			else if (Case == "Case2") {			//case2只需要拍摄4个面
-				sprintf(filename, "cam_case2_D.png");
-				/*
-				imwrite(filename, frameD);//图片保存到本工程目录中
-				sprintf(filename, "cam_case2_F.png");
-				imwrite(filename, frameF);//图片保存到本工程目录中
-				sprintf(filename, "cam_case2_R.png");
-				imwrite(filename, frameR);//图片保存到本工程目录中
-				sprintf(filename, "cam_case2_U.png");
-				imwrite(filename, frameU);//图片保存到本工程目录中
-				*/
-				break;					//拍完照以后跳出循环并返回
-			}
-		}
-	}
-
-	return;
 }
 
 void Show()
