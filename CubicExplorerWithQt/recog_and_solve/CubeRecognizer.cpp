@@ -32,7 +32,7 @@ static QMap<QString, QMap<QString, HSV>> map_face_color_hsv;		//´æ·ÅhsvãĞÖµÊı¾İµ
 static QList<QString> list_faceID, list_colorID;					//Á½¸öÏÂ±êlist£¬ÓÃÓÚÍ¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄ×Ö·û´®×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_face_color_hsv;
 
 static QMap<QString, vector<SamRec>> map_pic_id_samRec;				//´æ·Å²ÉÑù¿òÊı¾İµÄ map ,ÆäÖĞÃ¿¸öÔªËØÎª´æ´¢ samRec ÀàĞÍµÄvector£¬¶ÔÓ¦Ò»ÕÅÍ¼Æ¬µÄ18¸ö²ÉÑùÎ»ÖÃ
-static QList<QString> list_picID;									//ÓÃÓÚ²ÉÑù¿òmapµÄÏÂ±êlist£¬Í¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄÕÕÆ¬Ãû×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_pic_id_samRec
+QList<QString> list_picID;									//ÓÃÓÚ²ÉÑù¿òmapµÄÏÂ±êlist£¬Í¨¹ıÕûÊı index È¡µÃ¶ÔÓ¦µÄÕÕÆ¬Ãû×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_pic_id_samRec
 
 void iniHSVMap()
 {
@@ -149,6 +149,10 @@ void iniRecMap() {
 						list_rec[3].toInt() });						//y2
 		}
 	}
+}
+
+QMap<QString, vector<SamRec>>& getSamRecMap() {
+	return map_pic_id_samRec;
 }
 
 void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nBlockID) {

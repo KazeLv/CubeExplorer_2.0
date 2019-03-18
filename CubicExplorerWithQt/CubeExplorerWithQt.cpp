@@ -1,5 +1,7 @@
 #include "CubeExplorerWithQt.h"
 
+extern QList<QString> list_picID;
+
 CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	: QMainWindow(parent)
 {
@@ -106,6 +108,10 @@ void CubeExplorerWithQt::iniCamera()
 	scene_LD->addItem(videoItem_LD);
 
 	camera_FR->setViewfinder(videoItem_FR);
+
+	map_pic_pScene.insert("FR", scene_FR);
+	map_pic_pScene.insert("UB", scene_FR);
+	map_pic_pScene.insert("LD", scene_FR);
 }
 
 void CubeExplorerWithQt::Capture(std::string Case) {
@@ -324,7 +330,30 @@ void CubeExplorerWithQt::on_btnCameraClicked() {
 
 void CubeExplorerWithQt::on_btnShowSamRecsClicked()
 {
+	QMap<QString, vector<SamRec>> &map_pic_id_samRec = getSamRecMap();	//获取采样框数据map
+	vector<SamRec> map_id_samRec;
+	QGraphicsScene* scene;
+	QRect rect;
+	QGraphicsRectItem *item;
 
+	QPen pen;															//自定义画笔进行item的绘画
+	pen.setWidth(2);													//
+	pen.setColor(Qt::green);											//
+
+	for (int i = 0; i < map_pic_id_samRec.size(); i++) {				//遍历采样框数据map
+		map_id_samRec = map_pic_id_samRec[list_picID[i]];				//从list_picID获取字符串作为键值从采样框数据map中获取对应图片的采样框
+		scene = map_pic_pScene[list_picID[i]];							//以同样的键值从scene指针map中获取对应图片的scene指针
+		for (int j = 0; j < map_id_samRec.size(); j++) {				//遍历单个图片的采样框数据vector,将SamRec结构转换为符合视野比例的QRect并利用scene指针将采样框绘制到界面上
+			rect = { map_id_samRec[j].x1 / 2 + 5,						//x = x1 / 2 + 5
+					 map_id_samRec[j].y1 / 2 + 5,						//y = y1 / 2 + 5
+					(map_id_samRec[j].x2 - map_id_samRec[j].x1) / 2,	//width = (x2 - x1) / 2
+					(map_id_samRec[j].y2 - map_id_samRec[j].y1) / 2 };	//height = (y2 - y1) / 2
+			
+			item = new QGraphicsRectItem(rect);							//构建RectItem并绘制到指定scene
+			item->setPen(pen);											//
+			scene->addItem(item);										//
+		}
+	}
 }
 
 void CubeExplorerWithQt::on_btnSetHSVClicked()

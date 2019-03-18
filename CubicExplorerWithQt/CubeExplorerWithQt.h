@@ -66,6 +66,8 @@ private:
 	QRect rec_tSelect;					//选取框位置临时记录
 	QString curPath;					//当前工作目录
 
+	QMap<QString, QGraphicsScene*> map_pic_pScene;	//图片名到scene指针的映射
+
 public slots:
 	//界面按钮槽函数
 	void on_btnTightOrLooseClicked();
