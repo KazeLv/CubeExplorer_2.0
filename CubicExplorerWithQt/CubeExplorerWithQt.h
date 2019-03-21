@@ -15,6 +15,7 @@
 #include <qcameraimagecapture.h>
 #include <qgraphicsview.h>
 #include <qgraphicsscene.h>
+#include <qgraphicsitem.h>
 #include <qgraphicsvideoitem.h>
 #include <QMyGraphicsView.h>
 #include "ui_CubicExplorerWithQt.h"
@@ -26,6 +27,9 @@
 extern "C" {
 #include "solve.h"
 }
+
+#define SCENE_VIEW_WIDTH 320
+#define SCENE_VIEW_HEIGHT 240
 
 class CubeExplorerWithQt : public QMainWindow
 {
@@ -65,6 +69,8 @@ private:
 	QGraphicsVideoItem *videoItem_LD;	//
 	QRect rec_tSelect;					//选取框位置临时记录
 	QString curPath;					//当前工作目录
+
+	QList<QGraphicsRectItem*> list_samRecItems;	//存储显示在窗口上的采样框指针
 
 	QMap<QString, QGraphicsScene*> map_pic_pScene;	//图片名到scene指针的映射
 	int nImgSaved;

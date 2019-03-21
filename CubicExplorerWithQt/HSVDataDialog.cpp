@@ -39,13 +39,11 @@ void HSVDataDialog::calculation(string target)
 
 	for (int i = 0; i < m_matHSV.rows; i++) {
 		QSurfaceDataRow *newRow = new QSurfaceDataRow(m_matHSV.cols);
-		/*QSurfaceDataRow *newRow_S = new QSurfaceDataRow(m_matHSV.cols);
-		QSurfaceDataRow *newRow_V = new QSurfaceDataRow(m_matHSV.cols);*/
 		for (int j = 0; j < m_matHSV.cols; j++) {
 			cv::Point p(j, i);
-			if (target == "H")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[0], m_matHSV.rows - i - 1));
-			if (target == "S")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[1], m_matHSV.rows - i - 1));
-			if (target == "V")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[2], m_matHSV.rows - i - 1));
+			if (target == "H")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[0], i));
+			if (target == "S")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[1], i));
+			if (target == "V")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[2], i));
 
 			if (target == "H") {
 				if (m_matHSV.at<cv::Vec3b>(p)[0] > nMax_H) nMax_H = m_matHSV.at<cv::Vec3b>(p)[0];

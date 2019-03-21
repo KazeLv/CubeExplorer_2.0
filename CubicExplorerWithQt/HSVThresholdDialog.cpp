@@ -5,11 +5,11 @@ HSVThresholdDialog::HSVThresholdDialog(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
-	map_hsv_t = map_hsv;
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();	//获取并复制一份hsv map数据
+	map_hsv_t = map_hsv;										//	
 
-	ui.radioBtn_f->setChecked(true);
-	showHSVData(curFace);
+	ui.radioBtn_f->setChecked(true);							//默认显示F面的HSV阈值数据
+	showHSVData(curFace);										//
 	
 	//操作按钮槽函数绑定
 	connect(ui.btn_apply, SIGNAL(clicked()), this, SLOT(on_btnApplyClicked()));
@@ -69,11 +69,10 @@ HSVThresholdDialog::~HSVThresholdDialog()
 
 void HSVThresholdDialog::showHSVData(QString face)
 {
-	return; //data struct not ready
 
 	QMap<QString, HSV> &map_color = map_hsv_t[face];
 
-	ui.spin_red_h_min->setValue(map_color["red"].iLowH);s
+	ui.spin_red_h_min->setValue(map_color["red"].iLowH);
 	ui.spin_red_h_max->setValue(map_color["red"].iHighH);
 	ui.spin_red_s_min->setValue(map_color["red"].iLowS);
 	ui.spin_red_s_max->setValue(map_color["red"].iHighS);
@@ -118,16 +117,16 @@ void HSVThresholdDialog::showHSVData(QString face)
 
 void HSVThresholdDialog::on_btnResetClicked()
 {
-	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
-	map_hsv_t = map_hsv; 
-	showHSVData(curFace);
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();	//获取未被修改的原始数据以重置当前使用的临时HSV数据
+	map_hsv_t = map_hsv;										//
+	showHSVData(curFace);										//展示数据改动
 }
 
 void HSVThresholdDialog::on_btnApplyClicked()
 {
-	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();
-	map_hsv = map_hsv_t;
-	ui.btn_apply->setDisabled(true);	//设置"应用"按钮为不可交互状态
+	QMap<QString, QMap<QString, HSV>>& map_hsv = getHSVMap();	//将当前使用的临时HSV数据赋值给与文件交互的HSV数据map
+	map_hsv = map_hsv_t;										//
+	saveHSVData();												//调用CubeRecognizer.cpp提供的函数保存HSV数据到本地文件
 }
 
 void HSVThresholdDialog::on_btnCancelClicked()
@@ -140,18 +139,16 @@ void HSVThresholdDialog::on_faceRadioToggled(bool checked)
 	if (!checked) return;
 	QChar face = sender()->property("tag_face").toChar();
 	curFace = face;
-	showHSVData(face);
+	showHSVData(curFace);
 }
 
 void HSVThresholdDialog::slot_spinValueChanged(int value)
 {
 	QString str_color = sender()->property("tag_color").toString();	//获取sender的三个动态属性来判断修改哪个值被修改了
-	QChar c_hsv = sender()->property("tag_hsv").toChar();		//
-	bool isMin = sender()->property("tag_min").toBool();		//
+	QChar c_hsv = sender()->property("tag_hsv").toChar();			//
+	bool isMin = sender()->property("min").toBool();				//
 
-	QMap<QString, HSV> &map_color = map_hsv_t[curFace];			//获取当前所在页面的map<color,HSV>引用
-
-	HSV &hsv = map_color[str_color];								//获取对应颜色的HSV引用
+	HSV &hsv = map_hsv_t[curFace][str_color];						//获取对应颜色的HSV引用
 
 	//根据tag_hsv和tag_min两个动态属性判断应该对应HSV结构中的修改哪一个值
 	if (isMin) switch (c_hsv.toLatin1()) {						
@@ -171,6 +168,4 @@ void HSVThresholdDialog::slot_spinValueChanged(int value)
 		break;
 	}
 
-	//if (map_hsv != map_hsv_t) ui.btn_apply->setEnabled(true);	//对比原始数据和临时数据,如果不同,则设置"应用"按钮为可交互状态
-	//else ui.btn_apply->setDisabled(true);						//否则,设置"应用"按钮为不可交互状态
 }

@@ -25,7 +25,7 @@ typedef struct _hsv{
 	int iLowS, iHighS;
 	int iLowV, iHighV;
 
-	bool operator==(struct _hsv& target) {
+	bool operator==(const struct _hsv& target) {
 		return (target.iLowH == this->iLowH) && (target.iHighH == this->iHighH) && (target.iLowS == this->iLowS) && (target.iHighS == this->iHighS) && (target.iLowV == this->iLowV) && (target.iHighV == this->iHighV);
 	}
 }HSV;

@@ -76,20 +76,20 @@ void CubeExplorerWithQt::iniCamera()
 
 	//初始化摄像头显示组件
 	videoItem_FR = new QGraphicsVideoItem;
-	videoItem_FR->setSize(QSize(320, 240));
-	videoItem_FR->setPos(-160, -120);
+	videoItem_FR->setSize(QSize(SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT));
+	videoItem_FR->setPos(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2);
 
 	videoItem_UB = new QGraphicsVideoItem;
-	videoItem_UB->setSize(QSize(320, 240));
-	videoItem_UB->setPos(-160, -120);
+	videoItem_UB->setSize(QSize(SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT));
+	videoItem_UB->setPos(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2);
 
 	videoItem_LD = new QGraphicsVideoItem;
-	videoItem_LD->setSize(QSize(320, 240));
-	videoItem_LD->setPos(-160, -120);
+	videoItem_LD->setSize(QSize(SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT));
+	videoItem_LD->setPos(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2);
 
-	scene_FR = new QGraphicsScene(-160, -120, 320, 240);
-	scene_UB = new QGraphicsScene(-160, -120, 320, 240);
-	scene_LD = new QGraphicsScene(-160, -120, 320, 240);
+	scene_FR = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
+	scene_UB = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
+	scene_LD = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
 
 	ui.graView_cameraFR->setScene(scene_FR);
 	ui.graView_cameraFR->setCursor(Qt::CrossCursor);
@@ -290,6 +290,14 @@ void CubeExplorerWithQt::on_btnCameraClicked() {
 
 void CubeExplorerWithQt::on_btnShowSamRecsClicked()
 {
+	if (!list_samRecItems.isEmpty()) {
+		foreach(QGraphicsRectItem* pItem, list_samRecItems) {
+			pItem->scene()->removeItem(pItem);
+			delete pItem;
+		}
+		list_samRecItems.clear();
+		return;
+	}
 	QMap<QString, vector<SamRec>> &map_pic_id_samRec = getSamRecMap();	//获取采样框数据map
 	vector<SamRec> map_id_samRec;
 	QGraphicsScene* scene;
@@ -304,21 +312,24 @@ void CubeExplorerWithQt::on_btnShowSamRecsClicked()
 		map_id_samRec = map_pic_id_samRec[list_picID[i]];				//从list_picID获取字符串作为键值从采样框数据map中获取对应图片的采样框
 		scene = map_pic_pScene[list_picID[i]];							//以同样的键值从scene指针map中获取对应图片的scene指针
 		for (int j = 0; j < map_id_samRec.size(); j++) {				//遍历单个图片的采样框数据vector,将SamRec结构转换为符合视野比例的QRect并利用scene指针将采样框绘制到界面上
-			rect = { map_id_samRec[j].x1 / 2 + 5,						//x = x1 / 2 + 5
-					 map_id_samRec[j].y1 / 2 + 5,						//y = y1 / 2 + 5
+			rect = { map_id_samRec[j].x1 / 2 + 5 - SCENE_VIEW_WIDTH/2,	//x = x1 / 2 + 5	（-scene宽度的一半是为了映射到scene坐标系）
+					 map_id_samRec[j].y1 / 2 + 5 - SCENE_VIEW_HEIGHT/2,	//y = y1 / 2 + 5	（-scene高度的一半是为了映射到scene坐标系）
 					(map_id_samRec[j].x2 - map_id_samRec[j].x1) / 2,	//width = (x2 - x1) / 2
 					(map_id_samRec[j].y2 - map_id_samRec[j].y1) / 2 };	//height = (y2 - y1) / 2
 			
 			item = new QGraphicsRectItem(rect);							//构建RectItem并绘制到指定scene
 			item->setPen(pen);											//
 			scene->addItem(item);										//
+			list_samRecItems.append(item);								//保存这些矩形的指针，方便进行清除
 		}
 	}
+
 }
 
 void CubeExplorerWithQt::on_btnSetHSVClicked()
 {
 	HSVThresholdDialog td(this);
+	td.setWindowTitle(QStringLiteral("HSV阈值设置"));
 	td.show();
 	td.exec();
 }
@@ -394,6 +405,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 
 		HSVDataDialog HSVDialog(imgBGR, this);
 		HSVDialog.setWindowTitle(QStringLiteral("HSV数据统计"));
+		HSVDialog.setMinimumWidth(700);
 		HSVDialog.show();
 		HSVDialog.exec();
 	}

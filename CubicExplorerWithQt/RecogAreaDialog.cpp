@@ -72,7 +72,7 @@ void RecogAreaDialog::on_btnsClicked() {
 		iFaceID = cFaceID - '0';
 		iBlockID = cBlockID - '0';
 		
-		emit signal_setRecArea(m_strCaller,m_rec, cFaceID, cBlockID);
+		emit signal_setRecArea(m_strCaller,m_rec, iFaceID, iBlockID);
 		this->reject();
 	}
 }
