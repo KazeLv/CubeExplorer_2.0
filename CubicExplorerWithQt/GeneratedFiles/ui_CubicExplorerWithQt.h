@@ -39,28 +39,20 @@ public:
     QVBoxLayout *verticalLayout_2;
     QGroupBox *groupBox_camera;
     QHBoxLayout *horizontalLayout_2;
+    QVBoxLayout *vLay_cameraFR;
+    QComboBox *comboBox_cameraFR;
     QMyGraphicsView *graView_cameraFR;
+    QSpacerItem *horizontalSpacer_12;
+    QVBoxLayout *vLay_cameraUB;
+    QComboBox *comboBox_cameraUB;
     QMyGraphicsView *graView_cameraUB;
+    QSpacerItem *horizontalSpacer_13;
+    QVBoxLayout *vLay_cameraLD;
+    QComboBox *comboBox_cameraLD;
     QMyGraphicsView *graView_cameraLD;
     QGroupBox *groupBox_result;
     QHBoxLayout *horizontalLayout_3;
-    QSpacerItem *horizontalSpacer_10;
-    QHBoxLayout *hLay_resLD;
-    QSpacerItem *horizontalSpacer_7;
-    QVBoxLayout *vLay_resL;
-    QSpacerItem *verticalSpacer_10;
-    QGraphicsView *graphicsView_L;
-    QLabel *label_UI_L;
-    QSpacerItem *verticalSpacer_9;
-    QSpacerItem *horizontalSpacer_8;
-    QVBoxLayout *vLay_resD;
-    QSpacerItem *verticalSpacer_12;
-    QGraphicsView *graphicsView_D;
-    QLabel *label_UI_D;
-    QSpacerItem *verticalSpacer_11;
-    QSpacerItem *horizontalSpacer_9;
     QHBoxLayout *hLay_resFR;
-    QSpacerItem *horizontalSpacer_3;
     QVBoxLayout *vLay_resF;
     QSpacerItem *verticalSpacer;
     QGraphicsView *graphicsView_F;
@@ -74,7 +66,6 @@ public:
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *horizontalSpacer_2;
     QHBoxLayout *hLay_resUB;
-    QSpacerItem *horizontalSpacer_4;
     QVBoxLayout *vLay_resU;
     QSpacerItem *verticalSpacer_5;
     QGraphicsView *graphicsView_U;
@@ -86,8 +77,19 @@ public:
     QGraphicsView *graphicsView_B;
     QLabel *label_UI_B;
     QSpacerItem *verticalSpacer_8;
-    QSpacerItem *horizontalSpacer_6;
     QSpacerItem *horizontalSpacer_11;
+    QHBoxLayout *hLay_resLD;
+    QVBoxLayout *vLay_resL;
+    QSpacerItem *verticalSpacer_10;
+    QGraphicsView *graphicsView_L;
+    QLabel *label_UI_L;
+    QSpacerItem *verticalSpacer_9;
+    QSpacerItem *horizontalSpacer_8;
+    QVBoxLayout *vLay_resD;
+    QSpacerItem *verticalSpacer_12;
+    QGraphicsView *graphicsView_D;
+    QLabel *label_UI_D;
+    QSpacerItem *verticalSpacer_11;
     QGroupBox *groupBox_serialPort;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *hLay_portIni;
@@ -114,7 +116,7 @@ public:
     {
         if (CubicExplorerWithQt->objectName().isEmpty())
             CubicExplorerWithQt->setObjectName(QStringLiteral("CubicExplorerWithQt"));
-        CubicExplorerWithQt->resize(1172, 710);
+        CubicExplorerWithQt->resize(1172, 752);
         CubicExplorerWithQt->setMinimumSize(QSize(1172, 680));
         actSetBlock = new QAction(CubicExplorerWithQt);
         actSetBlock->setObjectName(QStringLiteral("actSetBlock"));
@@ -124,7 +126,7 @@ public:
         actCancel->setObjectName(QStringLiteral("actCancel"));
         layoutWidget = new QWidget(CubicExplorerWithQt);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(9, 9, 1154, 700));
+        layoutWidget->setGeometry(QRect(9, 9, 1154, 734));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
@@ -139,30 +141,71 @@ public:
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        vLay_cameraFR = new QVBoxLayout();
+        vLay_cameraFR->setSpacing(6);
+        vLay_cameraFR->setObjectName(QStringLiteral("vLay_cameraFR"));
+        comboBox_cameraFR = new QComboBox(groupBox_camera);
+        comboBox_cameraFR->setObjectName(QStringLiteral("comboBox_cameraFR"));
+        comboBox_cameraFR->setMaximumSize(QSize(160, 16777215));
+
+        vLay_cameraFR->addWidget(comboBox_cameraFR);
+
         graView_cameraFR = new QMyGraphicsView(groupBox_camera);
         graView_cameraFR->setObjectName(QStringLiteral("graView_cameraFR"));
         graView_cameraFR->setMinimumSize(QSize(330, 250));
         graView_cameraFR->setMaximumSize(QSize(330, 250));
 
-        horizontalLayout_2->addWidget(graView_cameraFR);
+        vLay_cameraFR->addWidget(graView_cameraFR);
+
+
+        horizontalLayout_2->addLayout(vLay_cameraFR);
+
+        horizontalSpacer_12 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_12);
+
+        vLay_cameraUB = new QVBoxLayout();
+        vLay_cameraUB->setSpacing(6);
+        vLay_cameraUB->setObjectName(QStringLiteral("vLay_cameraUB"));
+        comboBox_cameraUB = new QComboBox(groupBox_camera);
+        comboBox_cameraUB->setObjectName(QStringLiteral("comboBox_cameraUB"));
+        comboBox_cameraUB->setMaximumSize(QSize(160, 16777215));
+
+        vLay_cameraUB->addWidget(comboBox_cameraUB);
 
         graView_cameraUB = new QMyGraphicsView(groupBox_camera);
         graView_cameraUB->setObjectName(QStringLiteral("graView_cameraUB"));
         graView_cameraUB->setMinimumSize(QSize(330, 250));
         graView_cameraUB->setMaximumSize(QSize(330, 250));
 
-        horizontalLayout_2->addWidget(graView_cameraUB);
+        vLay_cameraUB->addWidget(graView_cameraUB);
+
+
+        horizontalLayout_2->addLayout(vLay_cameraUB);
+
+        horizontalSpacer_13 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_13);
+
+        vLay_cameraLD = new QVBoxLayout();
+        vLay_cameraLD->setSpacing(6);
+        vLay_cameraLD->setObjectName(QStringLiteral("vLay_cameraLD"));
+        comboBox_cameraLD = new QComboBox(groupBox_camera);
+        comboBox_cameraLD->setObjectName(QStringLiteral("comboBox_cameraLD"));
+        comboBox_cameraLD->setMaximumSize(QSize(160, 16777215));
+
+        vLay_cameraLD->addWidget(comboBox_cameraLD);
 
         graView_cameraLD = new QMyGraphicsView(groupBox_camera);
         graView_cameraLD->setObjectName(QStringLiteral("graView_cameraLD"));
         graView_cameraLD->setMinimumSize(QSize(330, 250));
         graView_cameraLD->setMaximumSize(QSize(330, 250));
 
-        horizontalLayout_2->addWidget(graView_cameraLD);
+        vLay_cameraLD->addWidget(graView_cameraLD);
 
-        graView_cameraUB->raise();
-        graView_cameraLD->raise();
-        graView_cameraFR->raise();
+
+        horizontalLayout_2->addLayout(vLay_cameraLD);
+
 
         verticalLayout_2->addWidget(groupBox_camera);
 
@@ -172,99 +215,9 @@ public:
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        horizontalSpacer_10 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_3->addItem(horizontalSpacer_10);
-
-        hLay_resLD = new QHBoxLayout();
-        hLay_resLD->setSpacing(6);
-        hLay_resLD->setObjectName(QStringLiteral("hLay_resLD"));
-        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resLD->addItem(horizontalSpacer_7);
-
-        vLay_resL = new QVBoxLayout();
-        vLay_resL->setSpacing(6);
-        vLay_resL->setObjectName(QStringLiteral("vLay_resL"));
-        verticalSpacer_10 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        vLay_resL->addItem(verticalSpacer_10);
-
-        graphicsView_L = new QGraphicsView(groupBox_result);
-        graphicsView_L->setObjectName(QStringLiteral("graphicsView_L"));
-        graphicsView_L->setMinimumSize(QSize(150, 150));
-        graphicsView_L->setMaximumSize(QSize(150, 150));
-
-        vLay_resL->addWidget(graphicsView_L);
-
-        label_UI_L = new QLabel(groupBox_result);
-        label_UI_L->setObjectName(QStringLiteral("label_UI_L"));
-        QFont font;
-        font.setFamily(QStringLiteral("Adobe Arabic"));
-        font.setPointSize(20);
-        label_UI_L->setFont(font);
-        label_UI_L->setAlignment(Qt::AlignCenter);
-
-        vLay_resL->addWidget(label_UI_L);
-
-        verticalSpacer_9 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        vLay_resL->addItem(verticalSpacer_9);
-
-
-        hLay_resLD->addLayout(vLay_resL);
-
-        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resLD->addItem(horizontalSpacer_8);
-
-        vLay_resD = new QVBoxLayout();
-        vLay_resD->setSpacing(6);
-        vLay_resD->setObjectName(QStringLiteral("vLay_resD"));
-        verticalSpacer_12 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        vLay_resD->addItem(verticalSpacer_12);
-
-        graphicsView_D = new QGraphicsView(groupBox_result);
-        graphicsView_D->setObjectName(QStringLiteral("graphicsView_D"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(graphicsView_D->sizePolicy().hasHeightForWidth());
-        graphicsView_D->setSizePolicy(sizePolicy);
-        graphicsView_D->setMinimumSize(QSize(150, 150));
-        graphicsView_D->setMaximumSize(QSize(150, 150));
-
-        vLay_resD->addWidget(graphicsView_D);
-
-        label_UI_D = new QLabel(groupBox_result);
-        label_UI_D->setObjectName(QStringLiteral("label_UI_D"));
-        label_UI_D->setFont(font);
-        label_UI_D->setAlignment(Qt::AlignCenter);
-
-        vLay_resD->addWidget(label_UI_D);
-
-        verticalSpacer_11 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        vLay_resD->addItem(verticalSpacer_11);
-
-
-        hLay_resLD->addLayout(vLay_resD);
-
-        horizontalSpacer_9 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resLD->addItem(horizontalSpacer_9);
-
-
-        horizontalLayout_3->addLayout(hLay_resLD);
-
         hLay_resFR = new QHBoxLayout();
         hLay_resFR->setSpacing(6);
         hLay_resFR->setObjectName(QStringLiteral("hLay_resFR"));
-        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resFR->addItem(horizontalSpacer_3);
-
         vLay_resF = new QVBoxLayout();
         vLay_resF->setSpacing(6);
         vLay_resF->setObjectName(QStringLiteral("vLay_resF"));
@@ -274,11 +227,11 @@ public:
 
         graphicsView_F = new QGraphicsView(groupBox_result);
         graphicsView_F->setObjectName(QStringLiteral("graphicsView_F"));
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(graphicsView_F->sizePolicy().hasHeightForWidth());
-        graphicsView_F->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(graphicsView_F->sizePolicy().hasHeightForWidth());
+        graphicsView_F->setSizePolicy(sizePolicy);
         graphicsView_F->setMinimumSize(QSize(150, 150));
         graphicsView_F->setMaximumSize(QSize(150, 150));
         graphicsView_F->setResizeAnchor(QGraphicsView::AnchorViewCenter);
@@ -287,6 +240,9 @@ public:
 
         label_UI_F = new QLabel(groupBox_result);
         label_UI_F->setObjectName(QStringLiteral("label_UI_F"));
+        QFont font;
+        font.setFamily(QStringLiteral("Adobe Arabic"));
+        font.setPointSize(20);
         label_UI_F->setFont(font);
         label_UI_F->setAlignment(Qt::AlignCenter);
 
@@ -331,20 +287,16 @@ public:
 
         hLay_resFR->addLayout(vLay_resR);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resFR->addItem(horizontalSpacer_2);
-
 
         horizontalLayout_3->addLayout(hLay_resFR);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer_2);
 
         hLay_resUB = new QHBoxLayout();
         hLay_resUB->setSpacing(6);
         hLay_resUB->setObjectName(QStringLiteral("hLay_resUB"));
-        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resUB->addItem(horizontalSpacer_4);
-
         vLay_resU = new QVBoxLayout();
         vLay_resU->setSpacing(6);
         vLay_resU->setObjectName(QStringLiteral("vLay_resU"));
@@ -405,16 +357,83 @@ public:
 
         hLay_resUB->addLayout(vLay_resB);
 
-        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        hLay_resUB->addItem(horizontalSpacer_6);
-
 
         horizontalLayout_3->addLayout(hLay_resUB);
 
         horizontalSpacer_11 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_3->addItem(horizontalSpacer_11);
+
+        hLay_resLD = new QHBoxLayout();
+        hLay_resLD->setSpacing(6);
+        hLay_resLD->setObjectName(QStringLiteral("hLay_resLD"));
+        vLay_resL = new QVBoxLayout();
+        vLay_resL->setSpacing(6);
+        vLay_resL->setObjectName(QStringLiteral("vLay_resL"));
+        verticalSpacer_10 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        vLay_resL->addItem(verticalSpacer_10);
+
+        graphicsView_L = new QGraphicsView(groupBox_result);
+        graphicsView_L->setObjectName(QStringLiteral("graphicsView_L"));
+        graphicsView_L->setMinimumSize(QSize(150, 150));
+        graphicsView_L->setMaximumSize(QSize(150, 150));
+
+        vLay_resL->addWidget(graphicsView_L);
+
+        label_UI_L = new QLabel(groupBox_result);
+        label_UI_L->setObjectName(QStringLiteral("label_UI_L"));
+        label_UI_L->setFont(font);
+        label_UI_L->setAlignment(Qt::AlignCenter);
+
+        vLay_resL->addWidget(label_UI_L);
+
+        verticalSpacer_9 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        vLay_resL->addItem(verticalSpacer_9);
+
+
+        hLay_resLD->addLayout(vLay_resL);
+
+        horizontalSpacer_8 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        hLay_resLD->addItem(horizontalSpacer_8);
+
+        vLay_resD = new QVBoxLayout();
+        vLay_resD->setSpacing(6);
+        vLay_resD->setObjectName(QStringLiteral("vLay_resD"));
+        verticalSpacer_12 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        vLay_resD->addItem(verticalSpacer_12);
+
+        graphicsView_D = new QGraphicsView(groupBox_result);
+        graphicsView_D->setObjectName(QStringLiteral("graphicsView_D"));
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(graphicsView_D->sizePolicy().hasHeightForWidth());
+        graphicsView_D->setSizePolicy(sizePolicy1);
+        graphicsView_D->setMinimumSize(QSize(150, 150));
+        graphicsView_D->setMaximumSize(QSize(150, 150));
+
+        vLay_resD->addWidget(graphicsView_D);
+
+        label_UI_D = new QLabel(groupBox_result);
+        label_UI_D->setObjectName(QStringLiteral("label_UI_D"));
+        label_UI_D->setFont(font);
+        label_UI_D->setAlignment(Qt::AlignCenter);
+
+        vLay_resD->addWidget(label_UI_D);
+
+        verticalSpacer_11 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        vLay_resD->addItem(verticalSpacer_11);
+
+
+        hLay_resLD->addLayout(vLay_resD);
+
+
+        horizontalLayout_3->addLayout(hLay_resLD);
 
 
         verticalLayout_2->addWidget(groupBox_result);
@@ -587,12 +606,12 @@ public:
 #endif // QT_NO_TOOLTIP
         groupBox_camera->setTitle(QApplication::translate("CubicExplorerWithQt", "\346\221\204\345\203\217\345\244\264", Q_NULLPTR));
         groupBox_result->setTitle(QApplication::translate("CubicExplorerWithQt", "\350\257\206\345\210\253\347\273\223\346\236\234", Q_NULLPTR));
-        label_UI_L->setText(QApplication::translate("CubicExplorerWithQt", "L", Q_NULLPTR));
-        label_UI_D->setText(QApplication::translate("CubicExplorerWithQt", "D", Q_NULLPTR));
         label_UI_F->setText(QApplication::translate("CubicExplorerWithQt", "F", Q_NULLPTR));
         label_UI_R->setText(QApplication::translate("CubicExplorerWithQt", "R", Q_NULLPTR));
         label_UI_U->setText(QApplication::translate("CubicExplorerWithQt", "U", Q_NULLPTR));
         label_UI_B->setText(QApplication::translate("CubicExplorerWithQt", "B", Q_NULLPTR));
+        label_UI_L->setText(QApplication::translate("CubicExplorerWithQt", "L", Q_NULLPTR));
+        label_UI_D->setText(QApplication::translate("CubicExplorerWithQt", "D", Q_NULLPTR));
         groupBox_serialPort->setTitle(QApplication::translate("CubicExplorerWithQt", "\344\270\262\345\217\243", Q_NULLPTR));
         btn_portRefresh->setText(QApplication::translate("CubicExplorerWithQt", "\345\210\267\346\226\260", Q_NULLPTR));
         btn_portOpen_close->setText(QApplication::translate("CubicExplorerWithQt", "\346\211\223\345\274\200/\345\205\263\351\227\255", Q_NULLPTR));

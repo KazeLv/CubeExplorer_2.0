@@ -169,10 +169,10 @@ void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nBlock
 		for (int j = 0; j < vec_pic.size(); j++) {
 			rec = vec_pic[j];
 			data2write.append(
-				QString(rec.x1) + "_" +
-				QString(rec.x2) + "_" +
-				QString(rec.y1) + "_" +
-				QString(rec.y2));
+				QString::number(rec.x1) + "_" +
+				QString::number(rec.x2) + "_" +
+				QString::number(rec.y1) + "_" +
+				QString::number(rec.y2));
 
 			if (j != vec_pic.size() - 1) data2write.append('-');
 		}

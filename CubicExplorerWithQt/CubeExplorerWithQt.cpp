@@ -53,6 +53,10 @@ CubeExplorerWithQt::~CubeExplorerWithQt() {
 
 void CubeExplorerWithQt::iniCamera()
 {
+	connect(ui.comboBox_cameraFR, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_cameraInfoChanged(QString)));
+	connect(ui.comboBox_cameraUB, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_cameraInfoChanged(QString)));
+	connect(ui.comboBox_cameraLD, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_cameraInfoChanged(QString)));
+
 	//摄像头显示区鼠标响应槽绑定
 	connect(ui.graView_cameraFR, SIGNAL(mouseReleased(QRect)), this, SLOT(slot_mouseReleasedInCameraViews(QRect)));
 	connect(ui.graView_cameraUB, SIGNAL(mouseReleased(QRect)), this, SLOT(slot_mouseReleasedInCameraViews(QRect)));
@@ -64,15 +68,21 @@ void CubeExplorerWithQt::iniCamera()
 
 	//获取可用摄像头信息
 	list_cameraInfo.clear();
+	int i = 0;
 	foreach(QCameraInfo info, QCameraInfo::availableCameras()) {
 		list_cameraInfo.append(info);
+
+		QCamera* camera_t = new QCamera(info);																//构建camera对象，存放到list_pCamera中
+		QCameraImageCapture* capture_t = new QCameraImageCapture(camera_t);									//并构建对应于当前摄像头的capture对象，存放到list_pCapture中
+		connect(capture_t, SIGNAL(imageSaved(int, QString)), this, SLOT(slot_imageSaved(int, QString)));	//
+		list_pCamera.append(camera_t);																		//
+		list_pCapture.append(capture_t);																	//
+
+		ui.comboBox_cameraFR->addItem(QString::number(i));
+		ui.comboBox_cameraUB->addItem(QString::number(i));
+		ui.comboBox_cameraLD->addItem(QString::number(i));
+		i++;
 	}
-
-	camera_FR = new QCamera(list_cameraInfo.at(0));
-	capture_FR = new QCameraImageCapture(camera_FR);
-
-	//Capture响应槽绑定
-	connect(capture_FR, SIGNAL(imageSaved(int, QString)), this, SLOT(slot_imageSaved(int, QString)));
 
 	//初始化摄像头显示组件
 	videoItem_FR = new QGraphicsVideoItem;
@@ -87,9 +97,17 @@ void CubeExplorerWithQt::iniCamera()
 	videoItem_LD->setSize(QSize(SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT));
 	videoItem_LD->setPos(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2);
 
+	map_pic_pItem.insert("FR", videoItem_FR);
+	map_pic_pItem.insert("UB", videoItem_UB);
+	map_pic_pItem.insert("LD", videoItem_LD);
+
 	scene_FR = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
 	scene_UB = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
 	scene_LD = new QGraphicsScene(-SCENE_VIEW_WIDTH / 2, -SCENE_VIEW_HEIGHT / 2, SCENE_VIEW_WIDTH, SCENE_VIEW_HEIGHT);
+
+	map_pic_pScene.insert("FR", scene_FR);			//在map中添加三个scene指针
+	map_pic_pScene.insert("UB", scene_UB);			//
+	map_pic_pScene.insert("LD", scene_LD);			//
 
 	ui.graView_cameraFR->setScene(scene_FR);
 	ui.graView_cameraFR->setCursor(Qt::CrossCursor);
@@ -107,23 +125,25 @@ void CubeExplorerWithQt::iniCamera()
 	scene_UB->addItem(videoItem_UB);				//
 	scene_LD->addItem(videoItem_LD);				//
 
-	camera_FR->setViewfinder(videoItem_FR);			//设置摄像头显示对象
+	list_pCamera[1]->setViewfinder(videoItem_FR);
+	list_pCamera[2]->setViewfinder(videoItem_UB);
+	list_pCamera[3]->setViewfinder(videoItem_LD);
 
-	map_pic_pScene.insert("FR", scene_FR);			//在map中添加三个scene指针
-	map_pic_pScene.insert("UB", scene_UB);			//
-	map_pic_pScene.insert("LD", scene_LD);			//
+	ui.comboBox_cameraFR->setCurrentIndex(1);
+	ui.comboBox_cameraUB->setCurrentIndex(2);
+	ui.comboBox_cameraLD->setCurrentIndex(3);
 }
 
 void CubeExplorerWithQt::Capture(std::string Case) {
 	if (Case == "Case1") {
-		capture_FR->capture(curPath + "/pic_cam/cam_case1_FR");
-		capture_UB->capture(curPath + "/pic_cam/cam_case1_UB");
-		capture_LD->capture(curPath + "/pic_cam/cam_case1_LD");
+		list_pCapture[map_pic_cameraIndex["FR"]]->capture(curPath + "/pic_cam/cam_case1_FR");
+		list_pCapture[map_pic_cameraIndex["UB"]]->capture(curPath + "/pic_cam/cam_case1_UB");
+		list_pCapture[map_pic_cameraIndex["LD"]]->capture(curPath + "/pic_cam/cam_case1_LD");
 	}
 	else if (Case == "Case2") {
-		capture_FR->capture(curPath + "/pic_cam/cam_case2_FR");
-		capture_UB->capture(curPath + "/pic_cam/cam_case2_UB");
-		capture_LD->capture(curPath + "/pic_cam/cam_case2_LD");
+		list_pCapture[map_pic_cameraIndex["FR"]]->capture(curPath + "/pic_cam/cam_case2_FR");
+		list_pCapture[map_pic_cameraIndex["UB"]]->capture(curPath + "/pic_cam/cam_case2_UB");
+		list_pCapture[map_pic_cameraIndex["LD"]]->capture(curPath + "/pic_cam/cam_case2_LD");
 	}
 }
 
@@ -255,7 +275,6 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	strcpy(cp, strRec.c_str());
 	char* res = cube_solve(cp, NULL);
 	if (!res) {
-		//ui.label_UI_tip->setText(QStringLiteral("错误：错误的识别序列！！"));
 		return;
 	}
 	cubeExplorer.SetTarget(res);
@@ -274,18 +293,8 @@ void CubeExplorerWithQt::on_btnDebugClicked() {
 }
 
 void CubeExplorerWithQt::on_btnCameraClicked() {
-	if (camera_FR != nullptr) {
-		if (camera_FR->status() == QCamera::ActiveStatus) camera_FR->stop();
-		else camera_FR->start();
-	}
-	if (camera_UB != nullptr) {
-		if (camera_UB->status() == QCamera::ActiveStatus) camera_UB->stop();
-		else camera_UB->start();
-	}
-	if (camera_LD != nullptr) {
-		if (camera_LD->status() == QCamera::ActiveStatus) camera_LD->stop();
-		else camera_LD->start();
-	}
+	for (int i = 0; i < list_pCamera.length(); i++) 
+		if (list_pCamera[i]->status() != QCamera::ActiveStatus) list_pCamera[i]->start();
 }
 
 void CubeExplorerWithQt::on_btnShowSamRecsClicked()
@@ -383,7 +392,7 @@ void CubeExplorerWithQt::slot_menuShowHSVTriggered()
 	caller.append(t[t.length() - 2]);
 	caller.append(t[t.length() - 1]);
 
-	capture_FR->capture(curPath+"/pic_cam/"+caller+"_temp_for_showHSV");
+	list_pCapture[map_pic_cameraIndex[caller]]->capture(curPath+"/pic_cam/"+caller+"_temp_for_showHSV");
 }
 
 
@@ -399,10 +408,10 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 {
 	if (fileName.indexOf("HSV")!=-1) {		//确认当前操作是统计HSV数值
 		cv::Mat mat_t = cv::imread(fileName.toStdString());
+		cv::resize(mat_t, mat_t, cv::Size(640, 480));
 		int x = (rec_tSelect.x() - 5) * 2;
 		int y = (rec_tSelect.y() - 5) * 2;
 		cv::Mat imgBGR = mat_t(cv::Range(y, y + rec_tSelect.height() * 2), cv::Range(x, x + rec_tSelect.width() * 2));
-
 		HSVDataDialog HSVDialog(imgBGR, this);
 		HSVDialog.setWindowTitle(QStringLiteral("HSV数据统计"));
 		HSVDialog.setMinimumWidth(700);
@@ -424,12 +433,12 @@ void CubeExplorerWithQt::on_btnPortRefreshClicked()
 void CubeExplorerWithQt::on_btnPortOpenClicked()
 {
 	if (serialPort->isOpen()) {
-		if (serialPort->open(QIODevice::ReadWrite)) ui.label_portMessage->setText (QStringLiteral("打开串口成功..."));
-		else ui.label_portMessage->setText(QStringLiteral("打开串口失败..."));
-	}
-	else {
 		serialPort->close();
 		ui.label_portMessage->setText(QStringLiteral("已关闭串口..."));
+	}
+	else {
+		if (serialPort->open(QIODevice::ReadWrite)) ui.label_portMessage->setText(QStringLiteral("打开串口成功..."));
+		else ui.label_portMessage->setText(QStringLiteral("打开串口失败..."));
 	}
 }
 
@@ -445,4 +454,14 @@ void CubeExplorerWithQt::on_btnPortSendClicked()
 void CubeExplorerWithQt::slot_portInfoChanged(const QString & text)
 {
 	serialPort->setPortName(text);
+}
+
+void CubeExplorerWithQt::slot_cameraInfoChanged(const QString & text)
+{
+	QString str_t = sender()->objectName();
+	QString picName = QString(str_t[str_t.length() - 2]) + str_t[str_t.length() - 1];
+	int index = text.toInt();
+	list_pCamera[index]->setViewfinder(map_pic_pItem[picName]);
+
+	map_pic_cameraIndex.insert(picName, index);
 }

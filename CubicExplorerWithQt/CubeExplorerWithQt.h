@@ -30,6 +30,8 @@ extern "C" {
 
 #define SCENE_VIEW_WIDTH 320
 #define SCENE_VIEW_HEIGHT 240
+#define PICTURE_WIDTH 800
+#define PICTURE_HEIGHT 600
 
 class CubeExplorerWithQt : public QMainWindow
 {
@@ -55,12 +57,12 @@ private:
 
 	//摄像头处理
 	QList<QCameraInfo> list_cameraInfo;	//摄像头信息
-	QCamera *camera_FR = nullptr;		//摄像头对象
-	QCamera *camera_UB = nullptr;		//
-	QCamera *camera_LD = nullptr;		//
-	QCameraImageCapture *capture_FR;	//摄像头抓取
-	QCameraImageCapture *capture_UB;	//
-	QCameraImageCapture *capture_LD;	//
+	//QCamera *camera_FR = nullptr;		//摄像头对象
+	//QCamera *camera_UB = nullptr;		//
+	//QCamera *camera_LD = nullptr;		//
+	//QCameraImageCapture *capture_FR;	//摄像头抓取
+	//QCameraImageCapture *capture_UB;	//
+	//QCameraImageCapture *capture_LD;	//
 	QGraphicsScene *scene_FR;			//摄像头显示场景
 	QGraphicsScene *scene_UB;			//
 	QGraphicsScene *scene_LD;			//
@@ -70,10 +72,18 @@ private:
 	QRect rec_tSelect;					//选取框位置临时记录
 	QString curPath;					//当前工作目录
 
-	QList<QGraphicsRectItem*> list_samRecItems;	//存储显示在窗口上的采样框指针
+	///////////////////////////////
 
-	QMap<QString, QGraphicsScene*> map_pic_pScene;	//图片名到scene指针的映射
+	QList<QCamera*> list_pCamera;							//摄像头列表和摄像头捕获对象列表，两者下标对应
+	QList<QCameraImageCapture*> list_pCapture;				//
+	QMap<QString, int> map_pic_cameraIndex;					//图片名到摄像头对象指针的映射
+	QMap<QString, QGraphicsVideoItem*> map_pic_pItem;		//图片名到videoItem指针的映射
+	QMap<QString, QGraphicsScene*> map_pic_pScene;			//图片名到scene指针的映射
 	int nImgSaved;
+	///////////////////////////////
+
+	QList<QGraphicsRectItem*> list_samRecItems;				//存储显示在窗口上的采样框指针
+
 
 public slots:
 	//界面按钮槽函数
@@ -97,4 +107,6 @@ public slots:
 	void on_btnPortOpenClicked();
 	void on_btnPortSendClicked();
 	void slot_portInfoChanged(const QString &text);
+	//摄像头分配槽函数
+	void slot_cameraInfoChanged(const QString &text);
 };
