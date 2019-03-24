@@ -125,13 +125,13 @@ void CubeExplorerWithQt::iniCamera()
 	scene_UB->addItem(videoItem_UB);				//
 	scene_LD->addItem(videoItem_LD);				//
 
-	list_pCamera[1]->setViewfinder(videoItem_FR);
-	list_pCamera[2]->setViewfinder(videoItem_UB);
+	list_pCamera[0]->setViewfinder(videoItem_FR);
+	/*list_pCamera[2]->setViewfinder(videoItem_UB);
 	list_pCamera[3]->setViewfinder(videoItem_LD);
 
 	ui.comboBox_cameraFR->setCurrentIndex(1);
 	ui.comboBox_cameraUB->setCurrentIndex(2);
-	ui.comboBox_cameraLD->setCurrentIndex(3);
+	ui.comboBox_cameraLD->setCurrentIndex(3);*/
 }
 
 void CubeExplorerWithQt::Capture(std::string Case) {
@@ -321,8 +321,8 @@ void CubeExplorerWithQt::on_btnShowSamRecsClicked()
 		map_id_samRec = map_pic_id_samRec[list_picID[i]];				//从list_picID获取字符串作为键值从采样框数据map中获取对应图片的采样框
 		scene = map_pic_pScene[list_picID[i]];							//以同样的键值从scene指针map中获取对应图片的scene指针
 		for (int j = 0; j < map_id_samRec.size(); j++) {				//遍历单个图片的采样框数据vector,将SamRec结构转换为符合视野比例的QRect并利用scene指针将采样框绘制到界面上
-			rect = { map_id_samRec[j].x1 / 2 + 5 - SCENE_VIEW_WIDTH/2,	//x = x1 / 2 + 5	（-scene宽度的一半是为了映射到scene坐标系）
-					 map_id_samRec[j].y1 / 2 + 5 - SCENE_VIEW_HEIGHT/2,	//y = y1 / 2 + 5	（-scene高度的一半是为了映射到scene坐标系）
+			rect = { map_id_samRec[j].x1 / 2 - SCENE_VIEW_WIDTH/2,		//x = x1 / 2	（-scene宽度的一半是为了映射到scene坐标系）
+					 map_id_samRec[j].y1 / 2 - SCENE_VIEW_HEIGHT/2,		//y = y1 / 2	（-scene高度的一半是为了映射到scene坐标系）
 					(map_id_samRec[j].x2 - map_id_samRec[j].x1) / 2,	//width = (x2 - x1) / 2
 					(map_id_samRec[j].y2 - map_id_samRec[j].y1) / 2 };	//height = (y2 - y1) / 2
 			
@@ -367,7 +367,7 @@ void CubeExplorerWithQt::slot_mouseReleasedInCameraViews(QRect rec_select)
 	popMenu->addSeparator();
 	popMenu->addAction(ui.actCancel);
 	popMenu->exec(QCursor::pos());
-	view_sender->scene()->removeItem(item);
+	//view_sender->scene()->removeItem(item);
 	delete popMenu;
 	popMenu = nullptr;
 }
