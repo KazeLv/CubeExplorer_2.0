@@ -43,12 +43,13 @@ void iniHSVMap()
 	map_face_color_hsv.insert("l", map_color_hsv_l);
 	map_face_color_hsv.insert("d", map_color_hsv_d);
 
-	list_faceID.append("u"); list_colorID.append("red");			//初始化两个下标list
-	list_faceID.append("r"); list_colorID.append("orange");			//
-	list_faceID.append("f"); list_colorID.append("blue");			//
-	list_faceID.append("d"); list_colorID.append("green");			//
-	list_faceID.append("l"); list_colorID.append("yellow");			//
-	list_faceID.append("b"); list_colorID.append("white");			//
+	list_colorID.append("red_h");	list_faceID.append("u"); 		//初始化两个下标list
+	list_colorID.append("red_l");	list_faceID.append("r"); 		//
+	list_colorID.append("orange");	list_faceID.append("f"); 		//
+	list_colorID.append("blue");	list_faceID.append("d"); 		//
+	list_colorID.append("green");	list_faceID.append("l"); 		//
+	list_colorID.append("yellow");	list_faceID.append("b"); 		//
+	list_colorID.append("white");
 
 	//从本地文件读取存储的HSV数据
 	QFile file_hsv(QDir::currentPath() + "/data/hsv_threshold.txt");//读取阈值数据文件到 str_hsvData 以进行分割、遍历
@@ -212,7 +213,9 @@ void iniRecogVars() {
 
 int isColor(cv::Mat imgHSV, QString color, QString face)
 {
-	HSV hsv = map_face_color_hsv[face][color];
+	HSV hsv;
+	if (color == "red") hsv = map_face_color_hsv[face]["red_l"];
+	else hsv = map_face_color_hsv[face][color];
 
 	cv::Mat imgThresholded;
 
@@ -229,7 +232,19 @@ int isColor(cv::Mat imgHSV, QString color, QString face)
 		}
 	}
 
-	if (color == "red") count += count;
+	if (color == "red") {						//红色HSV阈值有两个区间，需要分别进行计算累加
+		hsv = map_face_color_hsv[face]["red_h"];
+		cv::inRange(imgHSV, cv::Scalar(hsv.iLowH, hsv.iLowS, hsv.iLowV), cv::Scalar(hsv.iHighH, hsv.iHighS, hsv.iHighV), imgThresholded);
+		int count1 = 0;
+		for (int i = 0; i < imgThresholded.rows; i++) {				//遍历阈值化处理后的图片
+			cv::Vec3b *p = imgThresholded.ptr<cv::Vec3b>(i);
+			for (int j = 0; j < imgThresholded.cols; j++) {
+				if (p[j] == cv::Vec3b{ 255,255,255 })				//如果当前像素为(255,255,255)，则计数器加一
+					count1++;										//
+			}
+		}
+		count += count1;
+	}
 
 	if (count > totalPixNum*RECOG_SIMILARITY_COE) return 1;		//符合阈值的像素点所占比例大于预设系数，判定取色块为当前颜色
 	return 0;													//否则，判定取色块不是当前颜色
@@ -357,21 +372,27 @@ string recognize() {
 	cv::Mat image;
 	
 	image = cv::imread("pic/cam_case1_FR.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
 	image = cv::imread("pic/cam_case1_UB.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
 	image = cv::imread("pic/cam_case1_LD.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
 	image = cv::imread("pic/cam_case2_FR.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
 	image = cv::imread("pic/cam_case2_UB.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
 	image = cv::imread("pic/cam_case2_LD.jpg");
+	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
 	//根据识别结果绘制识别结果示意图，存放到本地文件夹"./pic_res"

@@ -151,7 +151,7 @@ void HSVDataDialog::on_radioBtnHToggled(bool checked)
 
 		//显示S数据数组
 		proxy->resetArray(dataArray_H);
-		surface_graph->axisY()->setRange(0, 180);
+		surface_graph->axisY()->setRange(0, 200);
 		surface_graph->axisY()->setLabelFormat("%d H");
 
 		//显示统计结果(最大/最小/均值)

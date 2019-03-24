@@ -29,7 +29,7 @@ QT_BEGIN_NAMESPACE
 class Ui_HSVThresholdDialog
 {
 public:
-    QVBoxLayout *verticalLayout_3;
+    QVBoxLayout *verticalLayout_2;
     QGroupBox *groupBox_face;
     QHBoxLayout *horizontalLayout_3;
     QRadioButton *radioBtn_f;
@@ -42,6 +42,7 @@ public:
     QGroupBox *groupBox_color;
     QVBoxLayout *verticalLayout;
     QLabel *label;
+    QLabel *label_25;
     QLabel *label_5;
     QLabel *label_6;
     QLabel *label_7;
@@ -50,9 +51,13 @@ public:
     QGroupBox *groupBox_H;
     QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout_2;
-    QSpinBox *spin_red_h_min;
+    QSpinBox *spin_redH_h_min;
     QLabel *label_2;
-    QSpinBox *spin_red_h_max;
+    QSpinBox *spin_redH_h_max;
+    QHBoxLayout *horizontalLayout_21;
+    QSpinBox *spin_redL_h_min;
+    QLabel *label_26;
+    QSpinBox *spin_redL_h_max;
     QHBoxLayout *horizontalLayout_6;
     QSpinBox *spin_orange_h_min;
     QLabel *label_10;
@@ -76,9 +81,13 @@ public:
     QGroupBox *groupBox_S;
     QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_4;
-    QSpinBox *spin_red_s_min;
+    QSpinBox *spin_redH_s_min;
     QLabel *label_3;
-    QSpinBox *spin_red_s_max;
+    QSpinBox *spin_redH_s_max;
+    QHBoxLayout *horizontalLayout_22;
+    QSpinBox *spin_redL_s_min;
+    QLabel *label_27;
+    QSpinBox *spin_redL_s_max;
     QHBoxLayout *horizontalLayout_11;
     QSpinBox *spin_orange_s_min;
     QLabel *label_15;
@@ -102,9 +111,13 @@ public:
     QGroupBox *groupBox_V;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_5;
-    QSpinBox *spin_red_v_min;
+    QSpinBox *spin_redH_v_min;
     QLabel *label_4;
-    QSpinBox *spin_red_v_max;
+    QSpinBox *spin_redH_v_max;
+    QHBoxLayout *horizontalLayout_23;
+    QSpinBox *spin_redL_v_min;
+    QLabel *label_28;
+    QSpinBox *spin_redL_v_max;
     QHBoxLayout *horizontalLayout_16;
     QSpinBox *spin_orange_v_min;
     QLabel *label_20;
@@ -136,11 +149,11 @@ public:
     {
         if (HSVThresholdDialog->objectName().isEmpty())
             HSVThresholdDialog->setObjectName(QStringLiteral("HSVThresholdDialog"));
-        HSVThresholdDialog->resize(624, 295);
-        verticalLayout_3 = new QVBoxLayout(HSVThresholdDialog);
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        HSVThresholdDialog->resize(624, 323);
+        verticalLayout_2 = new QVBoxLayout(HSVThresholdDialog);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         groupBox_face = new QGroupBox(HSVThresholdDialog);
         groupBox_face->setObjectName(QStringLiteral("groupBox_face"));
         groupBox_face->setMaximumSize(QSize(16777215, 40));
@@ -185,7 +198,7 @@ public:
         horizontalLayout_3->addWidget(radioBtn_d);
 
 
-        verticalLayout_3->addWidget(groupBox_face);
+        verticalLayout_2->addWidget(groupBox_face);
 
         hLay_hsv = new QHBoxLayout();
         hLay_hsv->setSpacing(6);
@@ -201,6 +214,11 @@ public:
         label->setObjectName(QStringLiteral("label"));
 
         verticalLayout->addWidget(label);
+
+        label_25 = new QLabel(groupBox_color);
+        label_25->setObjectName(QStringLiteral("label_25"));
+
+        verticalLayout->addWidget(label_25);
 
         label_5 = new QLabel(groupBox_color);
         label_5->setObjectName(QStringLiteral("label_5"));
@@ -240,13 +258,13 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        spin_red_h_min = new QSpinBox(groupBox_H);
-        spin_red_h_min->setObjectName(QStringLiteral("spin_red_h_min"));
-        spin_red_h_min->setMaximum(180);
-        spin_red_h_min->setProperty("min", QVariant(true));
-        spin_red_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
+        spin_redH_h_min = new QSpinBox(groupBox_H);
+        spin_redH_h_min->setObjectName(QStringLiteral("spin_redH_h_min"));
+        spin_redH_h_min->setMaximum(180);
+        spin_redH_h_min->setProperty("min", QVariant(true));
+        spin_redH_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
 
-        horizontalLayout_2->addWidget(spin_red_h_min);
+        horizontalLayout_2->addWidget(spin_redH_h_min);
 
         label_2 = new QLabel(groupBox_H);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -256,16 +274,46 @@ public:
 
         horizontalLayout_2->addWidget(label_2);
 
-        spin_red_h_max = new QSpinBox(groupBox_H);
-        spin_red_h_max->setObjectName(QStringLiteral("spin_red_h_max"));
-        spin_red_h_max->setMaximum(180);
-        spin_red_h_max->setProperty("min", QVariant(false));
-        spin_red_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
+        spin_redH_h_max = new QSpinBox(groupBox_H);
+        spin_redH_h_max->setObjectName(QStringLiteral("spin_redH_h_max"));
+        spin_redH_h_max->setMaximum(180);
+        spin_redH_h_max->setProperty("min", QVariant(false));
+        spin_redH_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
 
-        horizontalLayout_2->addWidget(spin_red_h_max);
+        horizontalLayout_2->addWidget(spin_redH_h_max);
 
 
         verticalLayout_5->addLayout(horizontalLayout_2);
+
+        horizontalLayout_21 = new QHBoxLayout();
+        horizontalLayout_21->setSpacing(6);
+        horizontalLayout_21->setObjectName(QStringLiteral("horizontalLayout_21"));
+        spin_redL_h_min = new QSpinBox(groupBox_H);
+        spin_redL_h_min->setObjectName(QStringLiteral("spin_redL_h_min"));
+        spin_redL_h_min->setMaximum(180);
+        spin_redL_h_min->setProperty("min", QVariant(true));
+        spin_redL_h_min->setProperty("tag_hsv", QVariant(QChar(104)));
+
+        horizontalLayout_21->addWidget(spin_redL_h_min);
+
+        label_26 = new QLabel(groupBox_H);
+        label_26->setObjectName(QStringLiteral("label_26"));
+        label_26->setScaledContents(true);
+        label_26->setAlignment(Qt::AlignCenter);
+        label_26->setWordWrap(false);
+
+        horizontalLayout_21->addWidget(label_26);
+
+        spin_redL_h_max = new QSpinBox(groupBox_H);
+        spin_redL_h_max->setObjectName(QStringLiteral("spin_redL_h_max"));
+        spin_redL_h_max->setMaximum(180);
+        spin_redL_h_max->setProperty("min", QVariant(false));
+        spin_redL_h_max->setProperty("tag_hsv", QVariant(QChar(104)));
+
+        horizontalLayout_21->addWidget(spin_redL_h_max);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_21);
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setSpacing(6);
@@ -430,13 +478,13 @@ public:
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        spin_red_s_min = new QSpinBox(groupBox_S);
-        spin_red_s_min->setObjectName(QStringLiteral("spin_red_s_min"));
-        spin_red_s_min->setMaximum(255);
-        spin_red_s_min->setProperty("min", QVariant(true));
-        spin_red_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
+        spin_redH_s_min = new QSpinBox(groupBox_S);
+        spin_redH_s_min->setObjectName(QStringLiteral("spin_redH_s_min"));
+        spin_redH_s_min->setMaximum(255);
+        spin_redH_s_min->setProperty("min", QVariant(true));
+        spin_redH_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
-        horizontalLayout_4->addWidget(spin_red_s_min);
+        horizontalLayout_4->addWidget(spin_redH_s_min);
 
         label_3 = new QLabel(groupBox_S);
         label_3->setObjectName(QStringLiteral("label_3"));
@@ -446,16 +494,46 @@ public:
 
         horizontalLayout_4->addWidget(label_3);
 
-        spin_red_s_max = new QSpinBox(groupBox_S);
-        spin_red_s_max->setObjectName(QStringLiteral("spin_red_s_max"));
-        spin_red_s_max->setMaximum(255);
-        spin_red_s_max->setProperty("min", QVariant(false));
-        spin_red_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
+        spin_redH_s_max = new QSpinBox(groupBox_S);
+        spin_redH_s_max->setObjectName(QStringLiteral("spin_redH_s_max"));
+        spin_redH_s_max->setMaximum(255);
+        spin_redH_s_max->setProperty("min", QVariant(false));
+        spin_redH_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
-        horizontalLayout_4->addWidget(spin_red_s_max);
+        horizontalLayout_4->addWidget(spin_redH_s_max);
 
 
         verticalLayout_6->addLayout(horizontalLayout_4);
+
+        horizontalLayout_22 = new QHBoxLayout();
+        horizontalLayout_22->setSpacing(6);
+        horizontalLayout_22->setObjectName(QStringLiteral("horizontalLayout_22"));
+        spin_redL_s_min = new QSpinBox(groupBox_S);
+        spin_redL_s_min->setObjectName(QStringLiteral("spin_redL_s_min"));
+        spin_redL_s_min->setMaximum(180);
+        spin_redL_s_min->setProperty("min", QVariant(true));
+        spin_redL_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
+
+        horizontalLayout_22->addWidget(spin_redL_s_min);
+
+        label_27 = new QLabel(groupBox_S);
+        label_27->setObjectName(QStringLiteral("label_27"));
+        label_27->setScaledContents(true);
+        label_27->setAlignment(Qt::AlignCenter);
+        label_27->setWordWrap(false);
+
+        horizontalLayout_22->addWidget(label_27);
+
+        spin_redL_s_max = new QSpinBox(groupBox_S);
+        spin_redL_s_max->setObjectName(QStringLiteral("spin_redL_s_max"));
+        spin_redL_s_max->setMaximum(180);
+        spin_redL_s_max->setProperty("min", QVariant(false));
+        spin_redL_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
+
+        horizontalLayout_22->addWidget(spin_redL_s_max);
+
+
+        verticalLayout_6->addLayout(horizontalLayout_22);
 
         horizontalLayout_11 = new QHBoxLayout();
         horizontalLayout_11->setSpacing(6);
@@ -620,13 +698,13 @@ public:
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        spin_red_v_min = new QSpinBox(groupBox_V);
-        spin_red_v_min->setObjectName(QStringLiteral("spin_red_v_min"));
-        spin_red_v_min->setMaximum(255);
-        spin_red_v_min->setProperty("min", QVariant(true));
-        spin_red_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
+        spin_redH_v_min = new QSpinBox(groupBox_V);
+        spin_redH_v_min->setObjectName(QStringLiteral("spin_redH_v_min"));
+        spin_redH_v_min->setMaximum(255);
+        spin_redH_v_min->setProperty("min", QVariant(true));
+        spin_redH_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
-        horizontalLayout_5->addWidget(spin_red_v_min);
+        horizontalLayout_5->addWidget(spin_redH_v_min);
 
         label_4 = new QLabel(groupBox_V);
         label_4->setObjectName(QStringLiteral("label_4"));
@@ -636,16 +714,46 @@ public:
 
         horizontalLayout_5->addWidget(label_4);
 
-        spin_red_v_max = new QSpinBox(groupBox_V);
-        spin_red_v_max->setObjectName(QStringLiteral("spin_red_v_max"));
-        spin_red_v_max->setMaximum(255);
-        spin_red_v_max->setProperty("min", QVariant(false));
-        spin_red_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
+        spin_redH_v_max = new QSpinBox(groupBox_V);
+        spin_redH_v_max->setObjectName(QStringLiteral("spin_redH_v_max"));
+        spin_redH_v_max->setMaximum(255);
+        spin_redH_v_max->setProperty("min", QVariant(false));
+        spin_redH_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 
-        horizontalLayout_5->addWidget(spin_red_v_max);
+        horizontalLayout_5->addWidget(spin_redH_v_max);
 
 
         verticalLayout_7->addLayout(horizontalLayout_5);
+
+        horizontalLayout_23 = new QHBoxLayout();
+        horizontalLayout_23->setSpacing(6);
+        horizontalLayout_23->setObjectName(QStringLiteral("horizontalLayout_23"));
+        spin_redL_v_min = new QSpinBox(groupBox_V);
+        spin_redL_v_min->setObjectName(QStringLiteral("spin_redL_v_min"));
+        spin_redL_v_min->setMaximum(180);
+        spin_redL_v_min->setProperty("min", QVariant(true));
+        spin_redL_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
+
+        horizontalLayout_23->addWidget(spin_redL_v_min);
+
+        label_28 = new QLabel(groupBox_V);
+        label_28->setObjectName(QStringLiteral("label_28"));
+        label_28->setScaledContents(true);
+        label_28->setAlignment(Qt::AlignCenter);
+        label_28->setWordWrap(false);
+
+        horizontalLayout_23->addWidget(label_28);
+
+        spin_redL_v_max = new QSpinBox(groupBox_V);
+        spin_redL_v_max->setObjectName(QStringLiteral("spin_redL_v_max"));
+        spin_redL_v_max->setMaximum(180);
+        spin_redL_v_max->setProperty("min", QVariant(false));
+        spin_redL_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
+
+        horizontalLayout_23->addWidget(spin_redL_v_max);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_23);
 
         horizontalLayout_16 = new QHBoxLayout();
         horizontalLayout_16->setSpacing(6);
@@ -801,11 +909,11 @@ public:
         hLay_hsv->addWidget(groupBox_V);
 
 
-        verticalLayout_3->addLayout(hLay_hsv);
+        verticalLayout_2->addLayout(hLay_hsv);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout_3->addItem(verticalSpacer);
+        verticalLayout_2->addItem(verticalSpacer);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
@@ -833,7 +941,7 @@ public:
         horizontalLayout->addWidget(btn_cancel);
 
 
-        verticalLayout_3->addLayout(horizontalLayout);
+        verticalLayout_2->addLayout(horizontalLayout);
 
 
         retranslateUi(HSVThresholdDialog);
@@ -851,16 +959,20 @@ public:
         radioBtn_l->setText(QApplication::translate("HSVThresholdDialog", "L", Q_NULLPTR));
         radioBtn_d->setText(QApplication::translate("HSVThresholdDialog", "D", Q_NULLPTR));
         groupBox_color->setTitle(QApplication::translate("HSVThresholdDialog", "\351\242\234\350\211\262", Q_NULLPTR));
-        label->setText(QApplication::translate("HSVThresholdDialog", "\347\272\242", Q_NULLPTR));
+        label->setText(QApplication::translate("HSVThresholdDialog", "\347\272\242H", Q_NULLPTR));
+        label_25->setText(QApplication::translate("HSVThresholdDialog", "\347\272\242L", Q_NULLPTR));
         label_5->setText(QApplication::translate("HSVThresholdDialog", "\346\251\231", Q_NULLPTR));
         label_6->setText(QApplication::translate("HSVThresholdDialog", "\350\223\235", Q_NULLPTR));
         label_7->setText(QApplication::translate("HSVThresholdDialog", "\347\273\277", Q_NULLPTR));
         label_8->setText(QApplication::translate("HSVThresholdDialog", "\351\273\204", Q_NULLPTR));
         label_9->setText(QApplication::translate("HSVThresholdDialog", "\347\231\275", Q_NULLPTR));
         groupBox_H->setTitle(QApplication::translate("HSVThresholdDialog", "H (0-180)", Q_NULLPTR));
-        spin_red_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
         label_2->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
-        spin_red_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
+        spin_redL_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
+        label_26->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_redL_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
         spin_orange_h_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_10->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
         spin_orange_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
@@ -877,9 +989,12 @@ public:
         label_14->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
         spin_white_h_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         groupBox_S->setTitle(QApplication::translate("HSVThresholdDialog", "S (0-255)", Q_NULLPTR));
-        spin_red_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
         label_3->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
-        spin_red_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
+        spin_redL_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
+        label_27->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_redL_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
         spin_orange_s_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_15->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
         spin_orange_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
@@ -896,9 +1011,12 @@ public:
         label_19->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
         spin_white_s_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "white", Q_NULLPTR)));
         groupBox_V->setTitle(QApplication::translate("HSVThresholdDialog", "V (0-255)", Q_NULLPTR));
-        spin_red_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
         label_4->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
-        spin_red_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red", Q_NULLPTR)));
+        spin_redH_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_h", Q_NULLPTR)));
+        spin_redL_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
+        label_28->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
+        spin_redL_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "red_l", Q_NULLPTR)));
         spin_orange_v_min->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));
         label_20->setText(QApplication::translate("HSVThresholdDialog", "--", Q_NULLPTR));
         spin_orange_v_max->setProperty("tag_color", QVariant(QApplication::translate("HSVThresholdDialog", "orange", Q_NULLPTR)));

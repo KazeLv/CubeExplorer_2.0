@@ -25,12 +25,18 @@ HSVThresholdDialog::HSVThresholdDialog(QWidget *parent)
 	connect(ui.radioBtn_d, SIGNAL(toggled(bool)), this, SLOT(on_faceRadioToggled(bool)));
 
 	//数据框槽函数绑定
-	connect(ui.spin_red_h_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
-	connect(ui.spin_red_h_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
-	connect(ui.spin_red_s_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
-	connect(ui.spin_red_s_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
-	connect(ui.spin_red_v_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
-	connect(ui.spin_red_v_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_h_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_h_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_s_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_s_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_v_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redH_v_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_h_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_h_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_s_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_s_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_v_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
+	connect(ui.spin_redL_v_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
 	connect(ui.spin_orange_h_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
 	connect(ui.spin_orange_h_max, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
 	connect(ui.spin_orange_s_min, SIGNAL(valueChanged(int)), this, SLOT(slot_spinValueChanged(int)));
@@ -72,12 +78,18 @@ void HSVThresholdDialog::showHSVData(QString face)
 
 	QMap<QString, HSV> &map_color = map_hsv_t[face];
 
-	ui.spin_red_h_min->setValue(map_color["red"].iLowH);
-	ui.spin_red_h_max->setValue(map_color["red"].iHighH);
-	ui.spin_red_s_min->setValue(map_color["red"].iLowS);
-	ui.spin_red_s_max->setValue(map_color["red"].iHighS);
-	ui.spin_red_v_min->setValue(map_color["red"].iLowV);
-	ui.spin_red_v_max->setValue(map_color["red"].iHighV);
+	ui.spin_redL_h_min->setValue(map_color["red_l"].iLowH);
+	ui.spin_redL_h_max->setValue(map_color["red_l"].iHighH);
+	ui.spin_redL_s_min->setValue(map_color["red_l"].iLowS);
+	ui.spin_redL_s_max->setValue(map_color["red_l"].iHighS);
+	ui.spin_redL_v_min->setValue(map_color["red_l"].iLowV);
+	ui.spin_redL_v_max->setValue(map_color["red_l"].iHighV);
+	ui.spin_redH_h_min->setValue(map_color["red_h"].iLowH);
+	ui.spin_redH_h_max->setValue(map_color["red_h"].iHighH);
+	ui.spin_redH_s_min->setValue(map_color["red_h"].iLowS);
+	ui.spin_redH_s_max->setValue(map_color["red_h"].iHighS);
+	ui.spin_redH_v_min->setValue(map_color["red_h"].iLowV);
+	ui.spin_redH_v_max->setValue(map_color["red_h"].iHighV);
 
 	ui.spin_orange_h_min->setValue(map_color["orange"].iLowH);
 	ui.spin_orange_h_max->setValue(map_color["orange"].iHighH);
