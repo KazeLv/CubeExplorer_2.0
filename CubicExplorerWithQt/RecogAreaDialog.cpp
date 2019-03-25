@@ -15,7 +15,7 @@ RecogAreaDialog::RecogAreaDialog(QString caller,QRect rect,QWidget *parent)
 	this->setLayout(gridLayout);
 
 	//根据不同的拍摄面进行不同的布局	
-	if (caller[1] == 'L') {
+	if (caller[1] == 'D') {
 		gridLayout->addWidget(ui.groupBtnBox_1, 0, 0);
 		gridLayout->addWidget(ui.groupBtnBox_2, 1, 0);
 		resize(200, 400);

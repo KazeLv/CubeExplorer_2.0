@@ -647,7 +647,7 @@
           <item>
            <widget class="QSpinBox" name="spin_redL_s_min">
             <property name="maximum">
-             <number>180</number>
+             <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
              <string>red_l</string>
@@ -681,7 +681,7 @@
           <item>
            <widget class="QSpinBox" name="spin_redL_s_max">
             <property name="maximum">
-             <number>180</number>
+             <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
              <string>red_l</string>
@@ -1054,7 +1054,7 @@
           <item>
            <widget class="QSpinBox" name="spin_redL_v_min">
             <property name="maximum">
-             <number>180</number>
+             <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
              <string>red_l</string>
@@ -1088,7 +1088,7 @@
           <item>
            <widget class="QSpinBox" name="spin_redL_v_max">
             <property name="maximum">
-             <number>180</number>
+             <number>255</number>
             </property>
             <property name="tag_color" stdset="0">
              <string>red_l</string>

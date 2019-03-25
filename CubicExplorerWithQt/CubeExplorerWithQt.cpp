@@ -126,12 +126,12 @@ void CubeExplorerWithQt::iniCamera()
 	scene_LD->addItem(videoItem_LD);				//
 
 	list_pCamera[0]->setViewfinder(videoItem_FR);
-	/*list_pCamera[2]->setViewfinder(videoItem_UB);
+	list_pCamera[2]->setViewfinder(videoItem_UB);
 	list_pCamera[3]->setViewfinder(videoItem_LD);
 
 	ui.comboBox_cameraFR->setCurrentIndex(1);
 	ui.comboBox_cameraUB->setCurrentIndex(2);
-	ui.comboBox_cameraLD->setCurrentIndex(3);*/
+	ui.comboBox_cameraLD->setCurrentIndex(3);
 }
 
 void CubeExplorerWithQt::Capture(std::string Case) {
@@ -367,7 +367,7 @@ void CubeExplorerWithQt::slot_mouseReleasedInCameraViews(QRect rec_select)
 	popMenu->addSeparator();
 	popMenu->addAction(ui.actCancel);
 	popMenu->exec(QCursor::pos());
-	//view_sender->scene()->removeItem(item);
+	view_sender->scene()->removeItem(item);
 	delete popMenu;
 	popMenu = nullptr;
 }

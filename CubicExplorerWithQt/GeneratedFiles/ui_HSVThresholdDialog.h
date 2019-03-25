@@ -510,7 +510,7 @@ public:
         horizontalLayout_22->setObjectName(QStringLiteral("horizontalLayout_22"));
         spin_redL_s_min = new QSpinBox(groupBox_S);
         spin_redL_s_min->setObjectName(QStringLiteral("spin_redL_s_min"));
-        spin_redL_s_min->setMaximum(180);
+        spin_redL_s_min->setMaximum(255);
         spin_redL_s_min->setProperty("min", QVariant(true));
         spin_redL_s_min->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -526,7 +526,7 @@ public:
 
         spin_redL_s_max = new QSpinBox(groupBox_S);
         spin_redL_s_max->setObjectName(QStringLiteral("spin_redL_s_max"));
-        spin_redL_s_max->setMaximum(180);
+        spin_redL_s_max->setMaximum(255);
         spin_redL_s_max->setProperty("min", QVariant(false));
         spin_redL_s_max->setProperty("tag_hsv", QVariant(QChar(115)));
 
@@ -730,7 +730,7 @@ public:
         horizontalLayout_23->setObjectName(QStringLiteral("horizontalLayout_23"));
         spin_redL_v_min = new QSpinBox(groupBox_V);
         spin_redL_v_min->setObjectName(QStringLiteral("spin_redL_v_min"));
-        spin_redL_v_min->setMaximum(180);
+        spin_redL_v_min->setMaximum(255);
         spin_redL_v_min->setProperty("min", QVariant(true));
         spin_redL_v_min->setProperty("tag_hsv", QVariant(QChar(118)));
 
@@ -746,7 +746,7 @@ public:
 
         spin_redL_v_max = new QSpinBox(groupBox_V);
         spin_redL_v_max->setObjectName(QStringLiteral("spin_redL_v_max"));
-        spin_redL_v_max->setMaximum(180);
+        spin_redL_v_max->setMaximum(255);
         spin_redL_v_max->setProperty("min", QVariant(false));
         spin_redL_v_max->setProperty("tag_hsv", QVariant(QChar(118)));
 

@@ -257,26 +257,26 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 	//首先根据kociemba算法对魔方块排序的要求，将对应面的采样框按照序号放到vec_samRec临时容器中
 	if (picName == "FR") {
 		//F面的采样框数据
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][0]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][1]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][2]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][3]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][4]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][5]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][6]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][7]);
-		vec_samRec1.push_back(map_pic_id_samRec["FR"][8]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][17]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][16]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][15]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][14]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][13]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][12]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][11]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][10]);
+		vec_samRec1.push_back(map_pic_id_samRec["FR"][9]);
 		vec_samRec.push_back(vec_samRec1);
 		//R面的采样框数据
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][9]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][10]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][11]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][12]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][13]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][14]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][15]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][16]);
-		vec_samRec2.push_back(map_pic_id_samRec["FR"][17]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][8]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][7]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][6]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][5]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][4]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][3]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][2]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][1]);
+		vec_samRec2.push_back(map_pic_id_samRec["FR"][0]);
 		vec_samRec.push_back(vec_samRec2);
 		
 		//F面的1号和7号块会在case1中被遮挡
@@ -285,26 +285,26 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 	}
 	else if (picName == "UB") {
 		//U面采样框数据
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][9]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][10]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][11]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][12]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][13]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][14]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][15]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][16]);
-		vec_samRec1.push_back(map_pic_id_samRec["UB"][17]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][2]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][5]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][8]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][1]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][4]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][7]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][0]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][3]);
+		vec_samRec1.push_back(map_pic_id_samRec["UB"][6]);
 		vec_samRec.push_back(vec_samRec1);
 		//B面采样框数据
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][9]);
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][10]);
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][11]);
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][12]);
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][13]);
-		vec_samRec2.push_back(map_pic_id_samRec["UB"][14]);
 		vec_samRec2.push_back(map_pic_id_samRec["UB"][15]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][12]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][9]);
 		vec_samRec2.push_back(map_pic_id_samRec["UB"][16]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][13]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][10]);
 		vec_samRec2.push_back(map_pic_id_samRec["UB"][17]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][14]);
+		vec_samRec2.push_back(map_pic_id_samRec["UB"][11]);
 		vec_samRec.push_back(vec_samRec2);
 
 		//U面的7号块会在case1中被遮挡
@@ -323,15 +323,15 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 		vec_samRec1.push_back(map_pic_id_samRec["LD"][8]);
 		vec_samRec.push_back(vec_samRec1);
 		//D面采样框数据
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][0]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][1]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][2]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][3]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][4]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][5]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][6]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][7]);
-		vec_samRec2.push_back(map_pic_id_samRec["LD"][8]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][11]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][14]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][17]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][10]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][13]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][16]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][9]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][12]);
+		vec_samRec2.push_back(map_pic_id_samRec["LD"][15]);
 		vec_samRec.push_back(vec_samRec2);
 
 		//D面的1号块（在图中为10号块）会在case1中被遮挡
