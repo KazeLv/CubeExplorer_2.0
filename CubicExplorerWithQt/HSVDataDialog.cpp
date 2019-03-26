@@ -36,6 +36,7 @@ void HSVDataDialog::calculation(string target)
 	if (target == "S") nMin_V = nMax_V = m_matHSV.at<cv::Vec3b>(cv::Point(0, 0))[2];	//
 
 	int sum = 0;				//HSV各像素和赋初值为0
+	int n = 0;
 
 	for (int i = 0; i < m_matHSV.rows; i++) {
 		QSurfaceDataRow *newRow = new QSurfaceDataRow(m_matHSV.cols);
@@ -46,30 +47,29 @@ void HSVDataDialog::calculation(string target)
 			if (target == "V")(*newRow)[j].setPosition(QVector3D(j, m_matHSV.at<cv::Vec3b>(p)[2], i));
 
 			if (target == "H") {
-				if (m_matHSV.at<cv::Vec3b>(p)[0] > nMax_H) nMax_H = m_matHSV.at<cv::Vec3b>(p)[0];
-				else if (m_matHSV.at<cv::Vec3b>(p)[0] < nMin_H)nMin_H = m_matHSV.at<cv::Vec3b>(p)[0];
+				if (m_matHSV.at<cv::Vec3b>(p)[0] > nMax_H&&m_matHSV.at<cv::Vec3b>(p)[0] <= 180) nMax_H = m_matHSV.at<cv::Vec3b>(p)[0];
+				else if (m_matHSV.at<cv::Vec3b>(p)[0] < nMin_H&&m_matHSV.at<cv::Vec3b>(p)[0] >= 0)nMin_H = m_matHSV.at<cv::Vec3b>(p)[0];
 			}
 
 			if (target == "S") {
-				if (m_matHSV.at<cv::Vec3b>(p)[1] > nMax_S) nMax_S = m_matHSV.at<cv::Vec3b>(p)[1];
-				else if (m_matHSV.at<cv::Vec3b>(p)[1] < nMin_S)nMin_S = m_matHSV.at<cv::Vec3b>(p)[1];
+				if (m_matHSV.at<cv::Vec3b>(p)[1] > nMax_S&&m_matHSV.at<cv::Vec3b>(p)[1] <= 255) nMax_S = m_matHSV.at<cv::Vec3b>(p)[1];
+				else if (m_matHSV.at<cv::Vec3b>(p)[1] < nMin_S&&m_matHSV.at<cv::Vec3b>(p)[1] >= 0)nMin_S = m_matHSV.at<cv::Vec3b>(p)[1];
 			}
 
 			if (target == "V") {
-				if (m_matHSV.at<cv::Vec3b>(p)[2] > nMax_V) nMax_V = m_matHSV.at<cv::Vec3b>(p)[2];
-				else if (m_matHSV.at<cv::Vec3b>(p)[2] < nMin_V)nMin_V = m_matHSV.at<cv::Vec3b>(p)[2];
+				if (m_matHSV.at<cv::Vec3b>(p)[2] > nMax_V&&m_matHSV.at<cv::Vec3b>(p)[2] <= 255) nMax_V = m_matHSV.at<cv::Vec3b>(p)[2];
+				else if (m_matHSV.at<cv::Vec3b>(p)[2] < nMin_V&&m_matHSV.at<cv::Vec3b>(p)[2] >= 0)nMin_V = m_matHSV.at<cv::Vec3b>(p)[2];
 			}
 
-			if (target == "H")sum += m_matHSV.at<cv::Vec3b>(p)[0];
-			if (target == "S")sum += m_matHSV.at<cv::Vec3b>(p)[1];
-			if (target == "V")sum += m_matHSV.at<cv::Vec3b>(p)[2];
+			if (target == "H" && (m_matHSV.at<cv::Vec3b>(p)[0] >= 0 && m_matHSV.at<cv::Vec3b>(p)[0] <= 180))sum += m_matHSV.at<cv::Vec3b>(p)[0]; n++;
+			if (target == "S" && (m_matHSV.at<cv::Vec3b>(p)[1] >= 0 && m_matHSV.at<cv::Vec3b>(p)[1] <= 255))sum += m_matHSV.at<cv::Vec3b>(p)[1]; n++;
+			if (target == "V" && (m_matHSV.at<cv::Vec3b>(p)[2] >= 0 && m_matHSV.at<cv::Vec3b>(p)[2] <= 255))sum += m_matHSV.at<cv::Vec3b>(p)[2]; n++;
 		}
 		if (target == "H")*dataArray_H << newRow;
 		if (target == "S")*dataArray_S << newRow;
 		if (target == "V")*dataArray_V << newRow;
 	}
 
-	int n = m_matHSV.cols*m_matHSV.rows;
 	if (target == "H")nMean_H = sum / n;
 	if (target == "S")nMean_S = sum / n;
 	if (target == "V")nMean_V = sum / n;

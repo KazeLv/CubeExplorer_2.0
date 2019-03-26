@@ -40,7 +40,7 @@ public:
 	virtual ~CubeExplorerWithQt();
 	//void openCamera();
 	void iniCamera();
-	void Capture(std::string);
+	void capture(std::string);
 	void SendOperationSerial();
 	void Sleep(int);
 
@@ -72,6 +72,8 @@ private:
 
 	QList<QGraphicsRectItem*> list_samRecItems;			//存储显示在窗口上的采样框指针
 
+signals:
+	void signal_captreFinished();
 
 public slots:
 	//界面按钮槽函数
@@ -97,4 +99,6 @@ public slots:
 	void slot_portInfoChanged(const QString &text);
 	//摄像头分配槽函数
 	void slot_cameraInfoChanged(const QString &text);
+
+	void slot_continueRestore();
 };

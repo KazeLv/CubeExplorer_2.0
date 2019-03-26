@@ -43,37 +43,37 @@ DebugWidget::DebugWidget(QSerialPort* serialPort, QWidget *parent)
 	QImage* image = new QImage();
 	QImage imageTmp;
 
-	image->load(QString("./pic_cam/cam_case1_RF.png"));
+	image->load(QString("./pic_cam/cam_case1_FR.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case1_FR->width() - 10, ui.graphicsView_case1_FR->height() - 10);
 	scene_case1_FR->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case1_FR->setScene(scene_case1_FR);
 	ui.graphicsView_case1_FR->show();
 
-	image->load(QString("./pic_cam/cam_case1_BU.png"));
+	image->load(QString("./pic_cam/cam_case1_UB.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case1_UB->width() - 10, ui.graphicsView_case1_UB->height() - 10);
 	scene_case1_UB->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case1_UB->setScene(scene_case1_UB);
 	ui.graphicsView_case1_UB->show();
 
-	image->load(QString("./pic_cam/cam_case1_LD.png"));
+	image->load(QString("./pic_cam/cam_case1_LD.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case1_LD->width() - 10, ui.graphicsView_case1_LD->height() - 10);
 	scene_case1_LD->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case1_LD->setScene(scene_case1_LD);
 	ui.graphicsView_case1_LD->show();
 
-	image->load(QString("./pic_cam/cam_case2_RF.png"));
+	image->load(QString("./pic_cam/cam_case2_FR.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case2_FR->width() - 10, ui.graphicsView_case2_FR->height() - 10);
 	scene_case2_FR->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case2_FR->setScene(scene_case2_FR);
 	ui.graphicsView_case2_FR->show();
 
-	image->load(QString("./pic_cam/cam_case2_BU.png"));
+	image->load(QString("./pic_cam/cam_case2_UB.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case2_UB->width() - 10, ui.graphicsView_case2_UB->height() - 10);
 	scene_case2_UB->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case2_UB->setScene(scene_case2_UB);
 	ui.graphicsView_case2_UB->show();
 
-	image->load(QString("./pic_cam/cam_case2_LD.png"));
+	image->load(QString("./pic_cam/cam_case2_LD.jpg"));
 	imageTmp = image->scaled(ui.graphicsView_case2_LD->width() - 10, ui.graphicsView_case2_LD->height() - 10);
 	scene_case2_LD->addPixmap(QPixmap::fromImage(imageTmp));
 	ui.graphicsView_case2_LD->setScene(scene_case2_LD);

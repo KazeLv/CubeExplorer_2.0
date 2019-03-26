@@ -345,7 +345,7 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 	QString faceName;
 	vector<SamRec> vec_samRec_t;
 	for (int faceID = 0; faceID < 2; faceID++) {
-		faceName = QString::asprintf("%c", picName[faceID]).toLower();
+		faceName = picName[faceID].toLower();
 		vec_samRec_t = vec_samRec[faceID];
 		for (int i = 0; i < vec_samRec_t.size(); i++) {
 			//判断是否忽略当前色块，关键点是利用抑或条件使得两种case得到不同的结果：
@@ -371,27 +371,27 @@ string recognize() {
 	//对三张拍摄图片依次读取并进行识别，识别结果存放到 map_face_id_recogRes 中
 	cv::Mat image;
 	
-	image = cv::imread("pic/cam_case1_FR.jpg");
+	image = cv::imread("pic_cam/cam_case1_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
-	image = cv::imread("pic/cam_case1_UB.jpg");
+	image = cv::imread("pic_cam/cam_case1_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
-	image = cv::imread("pic/cam_case1_LD.jpg");
+	image = cv::imread("pic_cam/cam_case1_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
 
-	image = cv::imread("pic/cam_case2_FR.jpg");
+	image = cv::imread("pic_cam/cam_case2_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
-	image = cv::imread("pic/cam_case2_UB.jpg");
+	image = cv::imread("pic_cam/cam_case2_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
-	image = cv::imread("pic/cam_case2_LD.jpg");
+	image = cv::imread("pic_cam/cam_case2_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 2);
 
@@ -404,7 +404,7 @@ string recognize() {
 	for (int i = 0; i < map_face_id_recogRes.size(); i++) {
 		vector<QString>& vec_res = map_face_id_recogRes[list_faceID[i]]; 
 		cv::Mat mat_res(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));
-		for (int j = 0; i < vec_res.size(); j++) {
+		for (int j = 0; j < vec_res.size(); j++) {
 			switch (j) {
 			case(0): rectangle(mat_res, cv::Rect(0, 0, 120, 120), map_color_scalar[vec_res[j]], -1, 1, 0);
 			case(1): rectangle(mat_res, cv::Rect(120, 0, 240, 120), map_color_scalar[vec_res[j]], -1, 1, 0);
