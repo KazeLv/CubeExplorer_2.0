@@ -4,6 +4,9 @@ DebugWidget::DebugWidget(QSerialPort* serialPort, QWidget *parent)
 	: serialPortDebug(serialPort), QDialog(parent), ui(Ui::DebugWidget())
 {
 	ui.setupUi(this);
+
+	connect(ui.btn_showLastSample, SIGNAL(clicked()), this, SLOT(on_btnShowLastSampleClicked()));
+
 	connect(ui.btn_left_close, SIGNAL(clicked()), this, SLOT(ClickBtnLeftClose()));
 	connect(ui.btn_left_close_small, SIGNAL(clicked()), this, SLOT(ClickBtnLeftCloseSmall()));
 	connect(ui.btn_left_close_half, SIGNAL(clicked()), this, SLOT(ClickBtnLeftHalfClose()));
@@ -82,6 +85,13 @@ DebugWidget::DebugWidget(QSerialPort* serialPort, QWidget *parent)
 
 DebugWidget::~DebugWidget()
 {
+}
+
+void DebugWidget::on_btnShowLastSampleClicked() {
+	LastSampleDialog lsd(this);
+	lsd.setWindowTitle(QStringLiteral("识别采样"));
+	lsd.show();
+	lsd.exec();
 }
 
 void DebugWidget::ClickBtnLeftClose() {

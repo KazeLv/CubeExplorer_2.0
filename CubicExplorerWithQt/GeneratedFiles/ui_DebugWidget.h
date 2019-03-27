@@ -31,6 +31,7 @@ class Ui_DebugWidget
 public:
     QVBoxLayout *verticalLayout_7;
     QGroupBox *groupBox_cams;
+    QVBoxLayout *verticalLayout_8;
     QHBoxLayout *horizontalLayout_3;
     QGroupBox *groupBox_case1;
     QHBoxLayout *horizontalLayout;
@@ -54,6 +55,9 @@ public:
     QVBoxLayout *verticalLayout_6;
     QGraphicsView *graphicsView_case2_LD;
     QLabel *label_LD_2;
+    QHBoxLayout *horizontalLayout_6;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *btn_showLastSample;
     QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_5;
     QGroupBox *groupBox_left;
@@ -103,7 +107,7 @@ public:
     {
         if (DebugWidget->objectName().isEmpty())
             DebugWidget->setObjectName(QStringLiteral("DebugWidget"));
-        DebugWidget->resize(1320, 534);
+        DebugWidget->resize(1322, 550);
         verticalLayout_7 = new QVBoxLayout(DebugWidget);
         verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
         groupBox_cams = new QGroupBox(DebugWidget);
@@ -112,7 +116,9 @@ public:
         font.setFamily(QStringLiteral("Agency FB"));
         font.setPointSize(10);
         groupBox_cams->setFont(font);
-        horizontalLayout_3 = new QHBoxLayout(groupBox_cams);
+        verticalLayout_8 = new QVBoxLayout(groupBox_cams);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         groupBox_case1 = new QGroupBox(groupBox_cams);
         groupBox_case1->setObjectName(QStringLiteral("groupBox_case1"));
@@ -251,6 +257,26 @@ public:
 
 
         horizontalLayout_3->addWidget(groupBox_case2);
+
+
+        verticalLayout_8->addLayout(horizontalLayout_3);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_6->addItem(horizontalSpacer);
+
+        btn_showLastSample = new QPushButton(groupBox_cams);
+        btn_showLastSample->setObjectName(QStringLiteral("btn_showLastSample"));
+        btn_showLastSample->setMinimumSize(QSize(150, 0));
+        btn_showLastSample->setMaximumSize(QSize(150, 30));
+        btn_showLastSample->setLayoutDirection(Qt::LeftToRight);
+
+        horizontalLayout_6->addWidget(btn_showLastSample);
+
+
+        verticalLayout_8->addLayout(horizontalLayout_6);
 
 
         verticalLayout_7->addWidget(groupBox_cams);
@@ -565,6 +591,7 @@ public:
         label_FR_2->setText(QApplication::translate("DebugWidget", "FR", Q_NULLPTR));
         label_UB_2->setText(QApplication::translate("DebugWidget", "UB", Q_NULLPTR));
         label_LD_2->setText(QApplication::translate("DebugWidget", "LD", Q_NULLPTR));
+        btn_showLastSample->setText(QApplication::translate("DebugWidget", "\346\237\245\347\234\213\351\207\207\346\240\267 H S V \346\225\260\346\215\256", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("DebugWidget", "\346\234\272\346\242\260\347\210\252\346\223\215\344\275\234", Q_NULLPTR));
         groupBox_left->setTitle(QApplication::translate("DebugWidget", "\345\267\246\347\210\252", Q_NULLPTR));
         groupBox_left_rotation->setTitle(QApplication::translate("DebugWidget", "\346\227\213\350\275\254", Q_NULLPTR));

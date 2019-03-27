@@ -39,25 +39,9 @@ QMap<QString, vector<SamRec>>& getSamRecMap();
 void setSampleRec(QString strFaceGroup, SamRec rect2set, int nFaceID, int nFockID);
 
 void iniRecogVars();
+QMap<QString, vector<cv::Mat>>& getLastRecogMatMap();
 int isColor(cv::Mat imgHSV, QString color, QString face);
 void judgeColor(cv::Mat image, QString picName, int caseID);
 string recognize();
-
-//Color Recognition
-int Color(cv::Mat imgHSV, QString color, QString Face);
-
-//unused
-void ColorTest(cv::Mat imgHSV, string c);
-void FillBlocks(cv::Mat& A, string color, int num);
-void getHSV(cv::Mat hsv, int x, int y);
-void PrintHSV(cv::Mat img, string hsv_name);
-void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseName, string color[], vector<SamRec> &Ps);
-string Print_str(string color[10], vector <string> standardcolor);
-void Sample_Reset(vector<SamRec> &Sample_RF, vector<SamRec> &Sample_BU, vector<SamRec> &Sample_LD);
-string Recognition();
-void Empty_Color(string Bcolor[], string Dcolor[], string Fcolor[], string Lcolor[], string Rcolor[], string Ucolor[]);
-void Capture(string Case);
-void Show();
-void DrawLine(cv::Mat image, string c, vector<SamRec> &Sample_RF, vector<SamRec> &Sample_BU, vector<SamRec> &Sample_LD);
 
 #endif

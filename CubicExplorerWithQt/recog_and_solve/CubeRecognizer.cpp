@@ -1,26 +1,5 @@
 #include "CubeRecognizer.h"
 
-////B D F L R U
-//SamRec P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18;			//Ã¿ÕÅÍ¼Æ¬¶¼¶ÔÓ¦18¸ö²ÉÑùµÄÎ»ÖÃ
-//
-//static vector<SamRec> sampleRec_FR, sampleRec_UB, sampleRec_LD;	//´æ´¢ÈýÕÅÕÕÆ¬µÄ²ÉÑù¿ò
-//static string Bcolor[10];				//Ê¶±ð½á¹û
-//static string Dcolor[10];				//
-//static string Fcolor[10];				//
-//static string Lcolor[10];				//
-//static string Rcolor[10];				//
-//static string Ucolor[10];				//
-//static HSV BWhiteHSV, UWhiteHSV, RWhiteHSV, FWhiteHSV, LWhiteHSV, DWhiteHSV;
-//static HSV BRedHSV_L, URedHSV_L, RRedHSV_L, FRedHSV_L, LRedHSV_L, DRedHSV_L;
-//static HSV BRedHSV_H, URedHSV_H, RRedHSV_H, FRedHSV_H, LRedHSV_H, DRedHSV_H;
-//static HSV BYellowHSV, UYellowHSV, RYellowHSV, FYellowHSV, LYellowHSV, DYellowHSV;
-//static HSV BBlueHSV, UBlueHSV, RBlueHSV, FBlueHSV, LBlueHSV, DBlueHSV;
-//static HSV BGreenHSV, UGreenHSV, RGreenHSV, FGreenHSV, LGreenHSV, DGreenHSV;
-//static HSV BOrangeHSV, UOrangeHSV, ROrangeHSV, FOrangeHSV, LOrangeHSV, DOrangeHSV;
-
-////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
-//
-
 static QMap<QString, QMap<QString, HSV>> map_face_color_hsv;		//´æ·ÅhsvãÐÖµÊý¾ÝµÄÇ¶Ì× map,·ÃÎÊ·½Ê½Îª map[faceName][colorName]
 static QList<QString> list_faceID, list_colorID;					//Á½¸öÏÂ±êlist£¬ÓÃÓÚÍ¨¹ýÕûÊý index È¡µÃ¶ÔÓ¦µÄ×Ö·û´®×÷Îª map µÄkeyÖµÀ´·ÃÎÊ map_face_color_hsv;
 
@@ -29,7 +8,8 @@ QList<QString> list_picID;											//ÓÃÓÚ²ÉÑù¿òmapµÄÏÂ±êlist£¬Í¨¹ýÕûÊý index È
 
 static QMap<QString, vector<QString>> map_face_id_recogRes;			//´æ·ÅÊ¶±ð½á¹û£¬·ÃÎÊ·½Ê½Îª map[face][blockID]
 static QMap<QString, cv::Scalar> map_color_scalar;					//´æ·ÅÔ¤ÉèÑÕÉ«Öµ£¬ÓÃÓÚ»æÖÆÊ¶±ð½á¹ûÍ¼
-//static vector<cv::Rect> vec_rect_drawResult;						//´æ·Å¾ØÐÎÊý¾Ý£¬ÓÃÓÚ»æÖÆÊ¶±ð½á¹ûÍ¼µÄ¸÷¸öÉ«¿é
+
+static QMap<QString, vector<cv::Mat>> map_face_id_lastRecogMat;		//±£´æµ±Ç°Ê¶±ð¹ý³ÌÖÐµÄ²ÉÑùÍ¼Æ¬£¬·½±ãÊ¶±ð½áÊøÊ±²é¿´¶Ô±ÈHSVÊý¾Ý
 
 //HSVÄ£¿é
 void iniHSVMap()
@@ -209,6 +189,20 @@ void iniRecogVars() {
 	map_color_scalar.insert("green", cv::Scalar(0, 255, 0));
 	map_color_scalar.insert("yellow", cv::Scalar(0, 255, 255));
 	map_color_scalar.insert("white", cv::Scalar(255, 255, 255));
+
+	//³õÊ¼»¯Ê¶±ð²ÉÑùÍ¼´æ´¢map
+	vector<cv::Mat> vec_mat_fill;
+	vec_mat_fill.resize(9);
+	map_face_id_lastRecogMat.insert("f", vec_mat_fill);
+	map_face_id_lastRecogMat.insert("r", vec_mat_fill);
+	map_face_id_lastRecogMat.insert("u", vec_mat_fill);
+	map_face_id_lastRecogMat.insert("b", vec_mat_fill);
+	map_face_id_lastRecogMat.insert("l", vec_mat_fill);
+	map_face_id_lastRecogMat.insert("d", vec_mat_fill);
+}
+
+QMap<QString, vector<cv::Mat>>& getLastRecogMatMap() {
+	return map_face_id_lastRecogMat;
 }
 
 int isColor(cv::Mat imgHSV, QString color, QString face)
@@ -280,7 +274,9 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 		vec_samRec.push_back(vec_samRec2);
 		
 		//FÃæµÄ1ºÅºÍ7ºÅ¿é»áÔÚcase1ÖÐ±»ÕÚµ²
+		vec_specialBlockID.push_back(0);
 		vec_specialBlockID.push_back(1);
+		vec_specialBlockID.push_back(6);
 		vec_specialBlockID.push_back(7);
 	}
 	else if (picName == "UB") {
@@ -354,7 +350,8 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 			if (std::find(vec_specialBlockID.cbegin(), vec_specialBlockID.cend(), (faceID * 9 + i)) != vec_specialBlockID.cend() ^ (caseID == 2)) continue;
 
 			//½ØÈ¡µÃµ½²ÉÑù¿òÄÚµÄÍ¼Æ¬²¢½øÐÐ×ª»»¡¢Ê¶±ð
-			mat_t = image(cv::Range(vec_samRec_t[i].y1, vec_samRec_t[i].y2), cv::Range(vec_samRec_t[i].x1, vec_samRec_t[i].x2));			
+			mat_t = image(cv::Range(vec_samRec_t[i].y1, vec_samRec_t[i].y2), cv::Range(vec_samRec_t[i].x1, vec_samRec_t[i].x2));	
+			map_face_id_lastRecogMat[faceName][i] = mat_t;														//½«²ÉÑùÍ¼±£´æµ½map£¬ÒÔ¹©Ê¶±ð½áÊøÖ®ºóµÄµ÷ÊÔÊ¹ÓÃ
 			cv::cvtColor(mat_t, mat_hsv, cv::COLOR_BGR2HSV);													//×ª»»ÎªHSVÍ¼Æ¬
 			if (isColor(mat_hsv, "red", faceName)) map_face_id_recogRes[faceName][i] = "red";					//Çî¾Ù·¨ÅÐ¶Ïµ±Ç°¿éÊôÓÚÄÄÒ»¸öÑÕÉ«
 			else if (isColor(mat_hsv, "orange", faceName)) map_face_id_recogRes[faceName][i] = "orange";		//
@@ -428,395 +425,3 @@ string recognize() {
 
 	return str_res.toStdString();
 }
-
-//
-////////////////////////////////////////////////////////////////new things////////////////////////////////////////////////////////////////
-
-//
-//void getHSV(cv::Mat hsv, int x, int y) {
-//	cv::Point p(x, y);
-//	printf("H=%d\t", hsv.at<cv::Vec3b>(p)[0]);
-//	printf("S=%d\t", hsv.at<cv::Vec3b>(p)[1]);
-//	printf("V=%d\n", hsv.at<cv::Vec3b>(p)[2]);
-//	return;
-//}
-//
-//void PrintHSV(cv::Mat img, string hsv_name) {
-//	int i, j;
-//	fstream fout;
-//	fout.open("pic_hsv\\" + hsv_name + ".txt", ios::out);
-//	for (i = 0; i < img.rows; i++) {			//print HSV
-//		for (j = 0; j < img.cols; j++) {
-//			cv::Point p(i, j);
-//			fout << "H=" << int(img.at<cv::Vec3b>(p)[0]) << "\t" << "S=" << int(img.at<cv::Vec3b>(p)[1]) << "\t" << "V=" << int(img.at<cv::Vec3b>(p)[2]) << endl;
-//		}
-//	}
-//	fout.close();
-//}
-//
-//void JudgeColor(cv::Mat &image, cv::Mat& Blank, string ColorName, string CaseName, string color[], vector<SamRec> &Ps) {
-//	//resize(image, image, cv::Size(700, 500), 0, 0, 3);			//µ÷ÕûÍ¼Æ¬´óÐ¡
-//	int i, j;
-//
-//	//²ÉÉ«¿é,£¬Á½ÖÖ²ÉÑù·½·¨
-//	cv::Mat P1, P2, P3, P4, P5, P6, P7, P8, P9;
-//	if (ColorName == "U" || ColorName == "D" || ColorName == "F") {
-//		P1 = image(cv::Range(Ps[9].y1, Ps[9].y2), cv::Range(Ps[9].x1, Ps[9].x2));
-//		P2 = image(cv::Range(Ps[10].y1, Ps[10].y2), cv::Range(Ps[10].x1, Ps[10].x2));
-//		P3 = image(cv::Range(Ps[11].y1, Ps[11].y2), cv::Range(Ps[11].x1, Ps[11].x2));
-//		P4 = image(cv::Range(Ps[12].y1, Ps[12].y2), cv::Range(Ps[12].x1, Ps[12].x2));
-//		P5 = image(cv::Range(Ps[13].y1, Ps[13].y2), cv::Range(Ps[13].x1, Ps[13].x2));
-//		P6 = image(cv::Range(Ps[14].y1, Ps[14].y2), cv::Range(Ps[14].x1, Ps[14].x2));
-//		P7 = image(cv::Range(Ps[15].y1, Ps[15].y2), cv::Range(Ps[15].x1, Ps[15].x2));
-//		P8 = image(cv::Range(Ps[16].y1, Ps[16].y2), cv::Range(Ps[16].x1, Ps[16].x2));
-//		P9 = image(cv::Range(Ps[17].y1, Ps[17].y2), cv::Range(Ps[17].x1, Ps[17].x2));
-//	}
-//	else if (ColorName == "B" || ColorName == "L" || ColorName == "R") {
-//		P1 = image(cv::Range(Ps[0].y1, Ps[0].y2), cv::Range(Ps[0].x1, Ps[0].x2));
-//		P2 = image(cv::Range(Ps[1].y1, Ps[1].y2), cv::Range(Ps[1].x1, Ps[1].x2));
-//		P3 = image(cv::Range(Ps[2].y1, Ps[2].y2), cv::Range(Ps[2].x1, Ps[2].x2));
-//		P4 = image(cv::Range(Ps[3].y1, Ps[3].y2), cv::Range(Ps[3].x1, Ps[3].x2));
-//		P5 = image(cv::Range(Ps[4].y1, Ps[4].y2), cv::Range(Ps[4].x1, Ps[4].x2));
-//		P6 = image(cv::Range(Ps[5].y1, Ps[5].y2), cv::Range(Ps[5].x1, Ps[5].x2));
-//		P7 = image(cv::Range(Ps[6].y1, Ps[6].y2), cv::Range(Ps[6].x1, Ps[6].x2));
-//		P8 = image(cv::Range(Ps[7].y1, Ps[7].y2), cv::Range(Ps[7].x1, Ps[7].x2));
-//		P9 = image(cv::Range(Ps[8].y1, Ps[8].y2), cv::Range(Ps[8].x1, Ps[8].x2));
-//	}
-//
-//	cv::Mat imgHSV[10];
-//	//Mat imgThresholded(200, 200, CV_8UC3);
-//
-//	cvtColor(P1, imgHSV[1], cv::COLOR_BGR2HSV);
-//	cvtColor(P2, imgHSV[2], cv::COLOR_BGR2HSV);
-//	cvtColor(P3, imgHSV[3], cv::COLOR_BGR2HSV);
-//	cvtColor(P4, imgHSV[4], cv::COLOR_BGR2HSV);
-//	cvtColor(P5, imgHSV[5], cv::COLOR_BGR2HSV);
-//	cvtColor(P6, imgHSV[6], cv::COLOR_BGR2HSV);
-//	cvtColor(P7, imgHSV[7], cv::COLOR_BGR2HSV);
-//	cvtColor(P8, imgHSV[8], cv::COLOR_BGR2HSV);
-//	cvtColor(P9, imgHSV[9], cv::COLOR_BGR2HSV);
-//
-//	if (CaseName == "case1") {
-//		if (ColorName == "B") {
-//			for (i = 1; i <= 9; i++) {				//¶ÔËùÓÐÉ«¿éthreshold
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "red", "b") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "B") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "B") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "B") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "B") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "B") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "R") {
-//			for (i = 1; i <= 9; i++) {				//¶ÔËùÓÐÉ«¿éthreshold
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "R") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "R") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "R") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "R") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "R") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "R") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "D") {
-//			for (i = 1; i <= 9; i++) {				//¶Ô7¸öÉ«¿éthreshold
-//				if (i == 2 || i == 3)
-//					continue;
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "D") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "D") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "D") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "D") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "D") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "D") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "L") {
-//			for (i = 1; i <= 9; i++) {				//¶ÔËùÓÐÉ«¿éthreshold
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "L") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "L") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "L") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "L") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "L") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "L") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "U") {
-//			for (i = 1; i <= 9; i++) {				//¶Ô8¸öÉ«¿é×öthreshold
-//				if (i == 8)
-//					continue;
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "U") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "U") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "U") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "U") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "U") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "U") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//	}
-//	else if (CaseName == "case2") {
-//		if (ColorName == "D") {
-//			for (i = 1; i <= 9; i++) {				//¶Ô2¸öÉ«¿éthreshold
-//				if (i != 2 && i != 3)
-//					continue;
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "D") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "D") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "D") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "D") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "D") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "D") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "F") {
-//			for (i = 1; i <= 9; i++) {				//¶ÔËùÓÐÉ«¿éthreshold
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "F") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "F") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "F") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "F") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "F") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "F") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//		else if (ColorName == "U") {
-//			for (i = 1; i <= 9; i++) {				//¶ÔÒ»¸öÉ«¿éthreshold
-//				if (i != 8)
-//					continue;
-//				PrintHSV(imgHSV[i], ColorName + "_" + CaseName + "_" + to_string(i));
-//				if (Color(imgHSV[i], "Red", "U") == 1)
-//					color[i] = "Red";
-//				else if (Color(imgHSV[i], "Orange", "U") == 1)
-//					color[i] = "Orange";
-//				else if (Color(imgHSV[i], "Yellow", "U") == 1)
-//					color[i] = "Yellow";
-//				else if (Color(imgHSV[i], "Blue", "U") == 1)
-//					color[i] = "Blue";
-//				else if (Color(imgHSV[i], "Green", "U") == 1)
-//					color[i] = "Green";
-//				else if (Color(imgHSV[i], "White", "U") == 1)
-//					color[i] = "White";
-//			}
-//		}
-//	}
-//
-//	for (i = 1; i <= 9; i++)				//É«¿éÌî³ä
-//		FillBlocks(Blank, color[i], i);
-//	line(Blank, cv::Point(0, 120), cv::Point(360, 120), cv::Scalar(0, 0, 0), 1, 8, 0);		//»æÖÆ·Ö¸ôÉ«¿éµÄºÚÏß
-//	line(Blank, cv::Point(0, 240), cv::Point(360, 240), cv::Scalar(0, 0, 0), 1, 8, 0);
-//	line(Blank, cv::Point(120, 0), cv::Point(120, 360), cv::Scalar(0, 0, 0), 1, 8, 0);
-//	line(Blank, cv::Point(240, 0), cv::Point(240, 360), cv::Scalar(0, 0, 0), 1, 8, 0);
-//	for (i = 1; i <= 9; i++)
-//		if (color[i] == "")
-//			break;				//´æÔÚÎ´Ê¶±ð³öÀ´µÄÉ«¿éÊ±£¬Ìø³öÑ­»·
-//	if (i > 9)							//Ö»ÓÐÔÚÈ«²¿É«¿éÊ¶±ð³öÀ´²Å±£´æÊ¶±ð½á¹ûÍ¼Æ¬
-//		imwrite("pic_res\\res_" + ColorName + ".png", Blank);
-//	else
-//		cout << "Failed to recognize" + ColorName + "the first time" << endl;	//ÌáÊ¾Ò»ÏÂ£¬ËµÃ÷µÚÒ»´ÎÃ»ÓÐÊ¶±ð³É¹¦£¬Õâ¸öÔÚµ÷ÊÔµÄÊ±ºòÓÃµÃµ½
-//}
-//
-//string Print_str(string color[10], vector<string> standardcolor)		//order URFDLB
-//{
-//	int i;
-//	string str;
-//	for (i = 1; i <= 9; i++) {
-//		if (color[i] == standardcolor[0])
-//			str += "U";
-//		else if (color[i] == standardcolor[1])
-//			str += "R";
-//		else if (color[i] == standardcolor[2])
-//			str += "F";
-//		else if (color[i] == standardcolor[3])
-//			str += "D";
-//		else if (color[i] == standardcolor[4])
-//			str += "L";
-//		else if (color[i] == standardcolor[5])
-//			str += "B";
-//	}
-//	return str;
-//}
-//
-//string Recognition() {			//Ê¶±ðÄ§·½Ò»¸öÃæµÄÉ«¿é£¬¼Ó²ÎcaseºÍÃæ²ÎÊý£¬¸ù¾Ý²»Í¬²ÎÊýÀ´µ÷É«¿é²ÉÑùÎ»ÖÃPs
-//
-//	//vector<cv::Point> center;								//´æ·Å9¸öÉ«¿éµÄÖÐÐÄÎ»ÖÃ,xºÍy£¬Î´À´²ÉÑùÓÃ
-//
-//	//³õÊ¼»¯6¸ö¿ÕÃæ
-//	cv::Mat B(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//BÃæ
-//	cv::Mat D(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//DÃæ
-//	cv::Mat F(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//FÃæ
-//	cv::Mat L(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//LÃæ
-//	cv::Mat R(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//RÃæ
-//	cv::Mat U(360, 360, CV_8UC3, cv::Scalar(255, 255, 255));		//UÃæ
-//	int i;
-//	cv::Mat image;
-//	vector <string> standardcolor;
-//	string tmp[6];				//½ÓÊÜ·µ»ØµÄ×Ö·û´®
-//	string color_def;
-//
-//	Sample_Reset(sampleRec_FR, sampleRec_UB, sampleRec_LD);		// ³õÊ¼»¯²ÎÊý
-//
-//	image = cv::imread("pic_cam//cam_case1_UB.png");			//BÃæ¿ÉÒÔÒ»´ÎÊ¶±ð£¬Ê¶±ðÍê¾Í±£´æÍ¼Æ¬
-//	JudgeColor(image, B, "B", "case1", Bcolor, sampleRec_UB);
-//
-//	image = cv::imread("pic_cam//cam_case1_LD.png");			//µÚÒ»´ÎÊ¶±ð
-//	JudgeColor(image, D, "D", "case1", Dcolor, sampleRec_LD);
-//	image = cv::imread("pic_cam//cam_case2_LD.png");			//×öµÚ¶þ´ÎÊ¶±ð
-//	JudgeColor(image, D, "D", "case2", Dcolor, sampleRec_LD);
-//
-//
-//	image = cv::imread("pic_cam//cam_case2_FR.png");			//Ò»´ÎÊ¶±ð
-//	JudgeColor(image, F, "F", "case2", Fcolor, sampleRec_FR);
-//
-//
-//	image = cv::imread("pic_cam//cam_case1_LD.png");			//LÖ»ÒªÊ¶Ò»´Î
-//	JudgeColor(image, L, "L", "case1", Lcolor, sampleRec_LD);
-//
-//	image = cv::imread("pic_cam//cam_case1_FR.png");			//RÖ»ÒªÊ¶±ðÒ»´Î
-//	JudgeColor(image, R, "R", "case1", Rcolor, sampleRec_FR);
-//
-//	image = cv::imread("pic_cam//cam_case1_UB.png");
-//	JudgeColor(image, U, "U", "case1", Ucolor, sampleRec_UB);
-//	image = cv::imread("pic_cam//cam_case2_UB.png");			//×öµÚ¶þ´ÎÊ¶±ð
-//	JudgeColor(image, U, "U", "case2", Ucolor, sampleRec_UB);
-//
-//
-//	//ÏÂÃæµÄ²Ù×÷ÓÃÀ´Éú³É×Ö·û´®
-//	string Ustandard = Ucolor[5];
-//	string Rstandard = Rcolor[5];
-//	string Fstandard = Fcolor[5];
-//	string Dstandard = Dcolor[5];
-//	string Lstandard = Lcolor[5];
-//	string Bstandard = Bcolor[5];
-//	standardcolor.push_back(Ustandard);
-//	standardcolor.push_back(Rstandard);
-//	standardcolor.push_back(Fstandard);
-//	standardcolor.push_back(Dstandard);
-//	standardcolor.push_back(Lstandard);
-//	standardcolor.push_back(Bstandard);
-//
-//	tmp[0] = Print_str(Ucolor, standardcolor);
-//	tmp[1] = Print_str(Rcolor, standardcolor);
-//	tmp[2] = Print_str(Fcolor, standardcolor);
-//	tmp[3] = Print_str(Dcolor, standardcolor);
-//	tmp[4] = Print_str(Lcolor, standardcolor);
-//	tmp[5] = Print_str(Bcolor, standardcolor);
-//
-//	for (i = 0; i < 6; i++)
-//		color_def += tmp[i];
-//
-//	return color_def;			//ÑÕÉ«×Ö·û´®
-//}
-//
-//void Empty_Color(string Bcolor[], string Dcolor[], string Fcolor[], string Lcolor[], string Rcolor[], string Ucolor[])
-//{
-//	int i;
-//	for (i = 0; i <= 9; i++) {
-//		Bcolor[i] = "";
-//		Dcolor[i] = "";
-//		Fcolor[i] = "";
-//		Lcolor[i] = "";
-//		Rcolor[i] = "";
-//		Ucolor[i] = "";
-//	}
-//}
-//
-//void Show()
-//{
-//	cv::Mat image;
-//	Sample_Reset(sampleRec_FR, sampleRec_UB, sampleRec_LD);
-//
-//	image = cv::imread("pic_cam//cam_case1_RF.png");
-//	resize(image, image, cv::Size(700, 500), 0, 0, 3);
-//	DrawLine(image, "RF", sampleRec_FR, sampleRec_UB, sampleRec_LD);
-//	imshow("My_pic_RF", image);
-//
-//	image = cv::imread("pic_cam//cam_case1_LD.png");
-//	resize(image, image, cv::Size(700, 500), 0, 0, 3);
-//	DrawLine(image, "LD", sampleRec_FR, sampleRec_UB, sampleRec_LD);
-//	imshow("My_pic_LD", image);
-//
-//	image = cv::imread("pic_cam//cam_case1_BU.png");
-//	resize(image, image, cv::Size(700, 500), 0, 0, 3);
-//	DrawLine(image, "BU", sampleRec_FR, sampleRec_UB, sampleRec_LD);
-//	imshow("My_pic_BU", image);
-//
-//	cv::waitKey(0);
-//}
-//
-//void DrawLine(cv::Mat image, string c, vector<SamRec> &Sample_RF, vector<SamRec> &Sample_BU, vector<SamRec> &Sample_LD)
-//{
-//	int i;
-//	cv::Point p1, p2;
-//	if (c == "RF") {
-//		for (i = 0; i < 18; i++) {
-//			p1.x = Sample_RF[i].x1;
-//			p1.y = Sample_RF[i].y1;
-//			p2.x = Sample_RF[i].x2;
-//			p2.y = Sample_RF[i].y2;
-//			line(image, p1, p2, cv::Scalar(0, 0, 0), 2);
-//		}
-//	}
-//	else if (c == "LD") {
-//		for (i = 0; i < 18; i++) {
-//			p1.x = Sample_LD[i].x1;
-//			p1.y = Sample_LD[i].y1;
-//			p2.x = Sample_LD[i].x2;
-//			p2.y = Sample_LD[i].y2;
-//			line(image, p1, p2, cv::Scalar(0, 0, 0), 2);
-//		}
-//	}
-//	else if (c == "BU") {
-//		for (i = 0; i < 18; i++) {
-//			p1.x = Sample_BU[i].x1;
-//			p1.y = Sample_BU[i].y1;
-//			p2.x = Sample_BU[i].x2;
-//			p2.y = Sample_BU[i].y2;
-//			line(image, p1, p2, cv::Scalar(0, 0, 0), 2);
-//		}
-//	}
-//}

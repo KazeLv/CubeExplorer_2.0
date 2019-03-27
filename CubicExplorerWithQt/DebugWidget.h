@@ -11,6 +11,7 @@
 #include "ui_CubicExplorerWithQt.h"
 #include "ui_DebugWidget.h"
 #include "CubeExplorerWithQt.h"
+#include "LastSampleDialog.h"
 
 class DebugWidget : public QDialog
 {
@@ -21,6 +22,9 @@ public:
 	~DebugWidget();
 
 public slots:
+	//查看上次识别采样数据槽函数
+	void on_btnShowLastSampleClicked();
+
 	//左爪开合
 	void ClickBtnLeftClose();
 	void ClickBtnLeftCloseSmall();
