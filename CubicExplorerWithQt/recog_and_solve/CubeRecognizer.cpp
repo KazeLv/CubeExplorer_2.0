@@ -377,11 +377,11 @@ string recognize() {
 
 	image = cv::imread("pic_cam/cam_case1_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
-	judgeColor(image, "FR", 1);
+	judgeColor(image, "UB", 1);
 
 	image = cv::imread("pic_cam/cam_case1_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
-	judgeColor(image, "FR", 1);
+	judgeColor(image, "LD", 1);
 
 	image = cv::imread("pic_cam/cam_case2_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
@@ -389,11 +389,11 @@ string recognize() {
 
 	image = cv::imread("pic_cam/cam_case2_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
-	judgeColor(image, "FR", 2);
+	judgeColor(image, "UB", 2);
 
 	image = cv::imread("pic_cam/cam_case2_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
-	judgeColor(image, "FR", 2);
+	judgeColor(image, "LD", 2);
 
 	//根据识别结果绘制识别结果示意图，存放到本地文件夹"./pic_res"
 	//并对识别结果进行排列得到 kociemba 算法所需要的字符串序列（U-R-F-D-L-B）

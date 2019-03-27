@@ -23,7 +23,7 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	connect(ui.btn_portSend, SIGNAL(clicked()), this, SLOT(on_btnPortSendClicked()));
 	connect(ui.comboBox_coms, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_portInfoChanged(QString)));
 	
-	connect(this, SIGNAL(signal_captreFinished()), this, SLOT(slot_continueRestore()));
+	connect(this, SIGNAL(signal_captureFinished()), this, SLOT(slot_continueRestore()));
 	//初始化摄像头
 	iniCamera();
 
@@ -126,16 +126,16 @@ void CubeExplorerWithQt::iniCamera()
 	scene_UB->addItem(videoItem_UB);				//
 	scene_LD->addItem(videoItem_LD);				//
 
-	list_pCamera[1]->setViewfinder(videoItem_FR);	//指针数组下标填充
-	list_pCamera[2]->setViewfinder(videoItem_UB);	//
-	list_pCamera[3]->setViewfinder(videoItem_LD);	//
-	map_pic_cameraIndex.insert("FR", 1);			//
-	map_pic_cameraIndex.insert("UB", 2);			//
-	map_pic_cameraIndex.insert("LD", 3);			//
+	//list_pCamera[1]->setViewfinder(videoItem_FR);	//指针数组下标填充
+	//list_pCamera[2]->setViewfinder(videoItem_UB);	//
+	//list_pCamera[3]->setViewfinder(videoItem_LD);	//
+	//map_pic_cameraIndex.insert("FR", 1);			//
+	//map_pic_cameraIndex.insert("UB", 2);			//
+	//map_pic_cameraIndex.insert("LD", 3);			//
 
-	ui.comboBox_cameraFR->setCurrentIndex(1);
-	ui.comboBox_cameraUB->setCurrentIndex(2);
-	ui.comboBox_cameraLD->setCurrentIndex(3);
+	//ui.comboBox_cameraFR->setCurrentIndex(1);
+	//ui.comboBox_cameraUB->setCurrentIndex(2);
+	//ui.comboBox_cameraLD->setCurrentIndex(3);
 }
 
 void CubeExplorerWithQt::capture(std::string Case) {
@@ -191,19 +191,22 @@ void CubeExplorerWithQt::on_btnResetClicked() {
 }
 
 void CubeExplorerWithQt::on_btnRestoreClicked() {
-	nImgSaved = 0;						//重置拍照计数
-	cubeExplorer.Reset();
-	serialPort->write(QString("#2P1T200\r\n").toLatin1());
-	serialPort->write(QString("#4P1T200\r\n").toLatin1());
-	//1.拍照case1，得到strCase1；拍照case2，得到strCase2
-	//a.左手夹紧，右手松开
-	serialPort->write(QString("#4P5T200\r\n").toLatin1());
-	serialPort->flush();
-	cubeExplorer.handState.right.isTight = false;
-	Sleep(600);
+	//nImgSaved = 0;						//重置拍照计数
+	//cubeExplorer.Reset();
+	//serialPort->write(QString("#2P1T200\r\n").toLatin1());
+	//serialPort->write(QString("#4P1T200\r\n").toLatin1());
+	////1.拍照case1，得到strCase1；拍照case2，得到strCase2
+	////a.左手夹紧，右手松开
+	//serialPort->write(QString("#4P5T200\r\n").toLatin1());
+	//serialPort->flush();
+	//cubeExplorer.handState.right.isTight = false;
+	//Sleep(600);
 
-	//b.拍照
-	capture("case1");
+	////b.拍照
+	//capture("case1");
+
+	//Debug
+	emit(signal_captureFinished());
 }
 
 void CubeExplorerWithQt::on_btnDebugClicked() {
@@ -352,7 +355,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		capture("case2");
 	}
 		//三张图片保存完毕，case1拍照成功，进行case2拍照
-	if (nImgSaved == 6) emit(signal_captreFinished());			//六张图片保存完毕，case2拍照成功，发送信号进行后续复原操作
+	if (nImgSaved == 6) emit(signal_captureFinished());			//六张图片保存完毕，case2拍照成功，发送信号进行后续复原操作
 }
 
 //串口模块响应槽函数
