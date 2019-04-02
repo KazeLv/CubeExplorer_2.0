@@ -200,7 +200,7 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
 	serialPort->flush();
 	cubeExplorer.handState.right.isTight = false;
-	Sleep(600);
+	Sleep(1000);
 
 	//b.拍照
 	capture("case1");
@@ -350,7 +350,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		serialPort->flush();
 		cubeExplorer.handState.left.isTight = false;
 		cubeExplorer.handState.right.isTight = true;
-		Sleep(600);
+		Sleep(1000);
 
 		capture("case2");
 	}
@@ -459,6 +459,7 @@ void CubeExplorerWithQt::slot_continueRestore()
 	strcpy(cp, strRec.c_str());
 	char* res = cube_solve(cp, NULL);
 	if (!res) {
+		ui.label_UI_message->setText(QStringLiteral("识别序列有误！"));
 		return;
 	}
 	cubeExplorer.SetTarget(res);
@@ -467,5 +468,5 @@ void CubeExplorerWithQt::slot_continueRestore()
 	cubeExplorer.GetShortestWay();
 
 	//5.通过串口通信把串口序列传递给控制机，并使用listView控件实时显示操作序列传输情况
-	//SendOperationSerial();
+	SendOperationSerial();
 }

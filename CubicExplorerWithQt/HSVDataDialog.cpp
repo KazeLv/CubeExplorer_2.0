@@ -61,9 +61,18 @@ void HSVDataDialog::calculation(string target)
 				else if (m_matHSV.at<cv::Vec3b>(p)[2] < nMin_V&&m_matHSV.at<cv::Vec3b>(p)[2] >= 0)nMin_V = m_matHSV.at<cv::Vec3b>(p)[2];
 			}
 
-			if (target == "H" && (m_matHSV.at<cv::Vec3b>(p)[0] >= 0 && m_matHSV.at<cv::Vec3b>(p)[0] <= 180))sum += m_matHSV.at<cv::Vec3b>(p)[0]; n++;
-			if (target == "S" && (m_matHSV.at<cv::Vec3b>(p)[1] >= 0 && m_matHSV.at<cv::Vec3b>(p)[1] <= 255))sum += m_matHSV.at<cv::Vec3b>(p)[1]; n++;
-			if (target == "V" && (m_matHSV.at<cv::Vec3b>(p)[2] >= 0 && m_matHSV.at<cv::Vec3b>(p)[2] <= 255))sum += m_matHSV.at<cv::Vec3b>(p)[2]; n++;
+			if (target == "H" && (m_matHSV.at<cv::Vec3b>(p)[0] >= 0 && m_matHSV.at<cv::Vec3b>(p)[0] <= 180)) {
+				sum += m_matHSV.at<cv::Vec3b>(p)[0]; 
+				n++;
+			}
+			if (target == "S" && (m_matHSV.at<cv::Vec3b>(p)[1] >= 0 && m_matHSV.at<cv::Vec3b>(p)[1] <= 255)) {
+				sum += m_matHSV.at<cv::Vec3b>(p)[1];
+				n++;
+			}
+			if (target == "V" && (m_matHSV.at<cv::Vec3b>(p)[2] >= 0 && m_matHSV.at<cv::Vec3b>(p)[2] <= 255)) {
+				sum += m_matHSV.at<cv::Vec3b>(p)[2];
+				n++;
+			}
 		}
 		if (target == "H")*dataArray_H << newRow;
 		if (target == "S")*dataArray_S << newRow;

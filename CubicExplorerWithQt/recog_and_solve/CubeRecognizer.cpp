@@ -332,6 +332,7 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 
 		//D面的1号块（在图中为10号块）会在case1中被遮挡
 		vec_specialBlockID.push_back(10);
+		vec_specialBlockID.push_back(11);
 	}
 
 	//然后根据不同的case进行不同的识别方案
@@ -423,5 +424,5 @@ string recognize() {
 		imwrite("pic_res/res_" + list_faceID[i].toStdString() + ".png", mat_res);
 	}
 
-	return str_res.toStdString();
+	return str_res.toUpper().toStdString();
 }
