@@ -7,42 +7,42 @@ void CubeExplorer::SetTarget(string str) { target = str; }
 vector<string>& CubeExplorer::GetVecStrSerial() { return vecStrSerial; }
 
 void CubeExplorer::OnR(vector<string>::iterator& iter) {
-	RightTight();
-	GetLeftReadyAndTight();
-	macVec.push_back(Operation::R);
-	handState.right.isReady = !handState.right.isReady;
+	//RightTight();											//右爪夹紧
+	GetLeftReadyAndTight();									//左爪调整至90/270°且夹紧
+	macVec.push_back(Operation::R);							//右爪顺时针转动90°（存储到容器内，之后进行发送）
+	handState.right.isReady = !handState.right.isReady;		//设置右爪状态参数
 }
 
 void CubeExplorer::On_R(vector<string>::iterator& iter) {
-	RightTight();
+	//RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::_R);
 	handState.right.isReady = !handState.right.isReady;
 }
 
 void CubeExplorer::OnF(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F);
 	handState.left.isReady = !handState.left.isReady;
 }
 
 void CubeExplorer::On_F(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::_F);
 	handState.left.isReady = !handState.left.isReady;
 }
 
 void CubeExplorer::OnRR(vector<string>::iterator& iter) {
-	RightTight();
-	LeftLoose();
-	LeftReady();
-	macVec.push_back(Operation::R);
-	handState.right.isReady = !handState.right.isReady;
-	for (auto it = iter + 1; it != strNorVec.end(); it++) {
-		if (*it == "U") *it = "B";
-		else if (*it == "B") *it = "D";
+	//RightTight();											//右爪夹紧
+	LeftLoose();											//左爪松开
+	LeftReady();											//左爪转动至90/270°状态
+	macVec.push_back(Operation::R);							//右爪顺时针转动90°
+	handState.right.isReady = !handState.right.isReady;		//设置右爪状态参数
+	for (auto it = iter + 1; it != strNorVec.end(); it++) {	//由于魔方整体转动后，面的定义发生变化，
+		if (*it == "U") *it = "B";							//因此需要遍历之后的操作，全部调整为转变后的定义
+		else if (*it == "B") *it = "D";						//
 		else if (*it == "D") *it = "F";
 		else if (*it == "F") *it = "U";
 		else if (*it == "U'") *it = "B'";
@@ -57,7 +57,7 @@ void CubeExplorer::OnRR(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::On_RR(vector<string>::iterator& iter) {
-	RightTight();
+	//RightTight();
 	LeftLoose();
 	LeftReady();
 	macVec.push_back(Operation::_R);
@@ -79,7 +79,7 @@ void CubeExplorer::On_RR(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnFF(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::F);
@@ -101,7 +101,7 @@ void CubeExplorer::OnFF(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::On_FF(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::_F);
@@ -123,7 +123,7 @@ void CubeExplorer::On_FF(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
-	RightTight();
+	//RightTight();
 	LeftLoose();
 	LeftReady();
 	macVec.push_back(Operation::R2);
@@ -145,7 +145,7 @@ void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::F2);
@@ -166,13 +166,13 @@ void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnR2(vector<string>::iterator& iter) {
-	RightTight();
+	//RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::R2);
 }
 
 void CubeExplorer::OnF2(vector<string>::iterator& iter) {
-	LeftTight();
+	//LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F2);
 }
@@ -285,15 +285,15 @@ void CubeExplorer::GetShortestWay() {
 	}
 
 	for (auto iter = strNorVec.begin(); iter != strNorVec.end(); iter++) {
-		if (*iter == "R") OnR(iter);
-		else if (*iter == "F") OnF(iter);
-		else if (*iter == "R'") On_R(iter);
-		else if (*iter == "F'") On_F(iter);
-		else if (*iter == "R2") OnR2(iter);
-		else if (*iter == "F2") OnF2(iter);
+		if (*iter == "R") OnR(iter);				//F和R面系列操作，无需魔方的整体转动就可以直接操作
+		else if (*iter == "F") OnF(iter);			//
+		else if (*iter == "R'") On_R(iter);			//
+		else if (*iter == "F'") On_F(iter);			//
+		else if (*iter == "R2") OnR2(iter);			//
+		else if (*iter == "F2") OnF2(iter);			//
 		else if (*iter == "B") {
-			OnRR2(iter);
-			OnF(iter);
+			OnRR2(iter);							//通用公式“B“，首先要魔方整体沿R方向旋转180°
+			OnF(iter);								//此时原来的B面成为F面，F面顺时针转动90°即可完成操作
 		}
 		else if (*iter == "L") {
 			OnFF2(iter);
