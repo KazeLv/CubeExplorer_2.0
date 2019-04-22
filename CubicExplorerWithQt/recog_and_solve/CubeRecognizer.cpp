@@ -368,7 +368,8 @@ void judgeColor(cv::Mat image, QString picName, int caseID) {
 string recognize() {
 	//对三张拍摄图片依次读取并进行识别，识别结果存放到 map_face_id_recogRes 中
 	cv::Mat image;
-	
+
+//策略1--------------------------------------------------------------------------------
 	image = cv::imread("pic_cam/cam_case1_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "FR", 1);
@@ -392,6 +393,21 @@ string recognize() {
 	image = cv::imread("pic_cam/cam_case2_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	judgeColor(image, "LD", 2);
+//-------------------------------------------------------------------------------------
+
+//策略2--------------------------------------------------------------------------------
+	//image = cv::imread("pic_cam/cam_FR.jpg");
+	//cv::resize(image, image, cv::Size(640, 480));
+	//judgeColor(image, "FR");
+
+	//image = cv::imread("pic_cam/cam_UB.jpg");
+	//cv::resize(image, image, cv::Size(640, 480));
+	//judgeColor(image, "UB");
+
+	//image = cv::imread("pic_cam/cam_LD.jpg");
+	//cv::resize(image, image, cv::Size(640, 480));
+	//judgeColor(image, "LD");
+//-------------------------------------------------------------------------------------
 
 	//根据识别结果绘制识别结果示意图，存放到本地文件夹"./pic_res"
 	//并对识别结果进行排列得到 kociemba 算法所需要的字符串序列（U-R-F-D-L-B）

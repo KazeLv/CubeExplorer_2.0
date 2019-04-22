@@ -23,7 +23,8 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	connect(ui.btn_portSend, SIGNAL(clicked()), this, SLOT(on_btnPortSendClicked()));
 	connect(ui.comboBox_coms, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_portInfoChanged(QString)));
 	
-	connect(this, SIGNAL(signal_captureFinished()), this, SLOT(slot_continueRestore()));
+	//connect(this, SIGNAL(signal_captureFinished()), this, SLOT(slot_continueRestore()));
+
 	//初始化摄像头
 	iniCamera();
 
@@ -139,9 +140,17 @@ void CubeExplorerWithQt::iniCamera()
 }
 
 void CubeExplorerWithQt::capture(std::string Case) {
+//策略1--------------------------------------------------------------------------------
 	list_pCapture[map_pic_cameraIndex["FR"]]->capture(curPath + "/pic_cam/cam_" + QString::fromStdString(Case) + "_FR");
 	list_pCapture[map_pic_cameraIndex["UB"]]->capture(curPath + "/pic_cam/cam_" + QString::fromStdString(Case) + "_UB");
 	list_pCapture[map_pic_cameraIndex["LD"]]->capture(curPath + "/pic_cam/cam_" + QString::fromStdString(Case) + "_LD");
+//-------------------------------------------------------------------------------------
+
+//策略2--------------------------------------------------------------------------------
+	//list_pCapture[map_pic_cameraIndex["FR"]]->capture(curPath + "/pic_cam/cam_" + "_FR");
+	//list_pCapture[map_pic_cameraIndex["UB"]]->capture(curPath + "/pic_cam/cam_" + "_UB");
+	//list_pCapture[map_pic_cameraIndex["LD"]]->capture(curPath + "/pic_cam/cam_" + "_LD");
+//-------------------------------------------------------------------------------------
 }
 
 void CubeExplorerWithQt::Sleep(int sec) {
@@ -193,8 +202,11 @@ void CubeExplorerWithQt::on_btnResetClicked() {
 void CubeExplorerWithQt::on_btnRestoreClicked() {
 	nImgSaved = 0;						//重置拍照计数
 	cubeExplorer.Reset();
-	serialPort->write(QString("#2P1T200\r\n").toLatin1());
-	serialPort->write(QString("#4P1T200\r\n").toLatin1());
+	serialPort->write(QString("#2P1T200\r\n").toLatin1());		//两爪夹紧
+	serialPort->write(QString("#4P1T200\r\n").toLatin1());		//
+	serialPort->flush();
+
+//策略1 两爪依次张合，拍摄两组照片以获取所有色块信息----------------------------------------
 	//1.拍照case1，得到strCase1；拍照case2，得到strCase2
 	//a.左手夹紧，右手松开
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
@@ -204,9 +216,11 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 
 	//b.拍照
 	capture("case1");
+//-------------------------------------------------------------------------------------
 
-	//Debug
-	//emit(signal_captureFinished());
+//策略2，基于特别修改过的机械爪夹头，直接拍摄一组照片进行识别-------------------------------
+	//capture();
+//-------------------------------------------------------------------------------------
 }
 
 void CubeExplorerWithQt::on_btnDebugClicked() {
@@ -330,7 +344,7 @@ void CubeExplorerWithQt::slot_setRecArea(QString groupName,QRect rect,int faceID
 
 void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 {
-	if (fileName.indexOf("HSV")!=-1) {		//确认当前操作是统计HSV数值
+	if (fileName.indexOf("HSV")!=-1) {				//确认当前操作是统计HSV数值
 		cv::Mat mat_t = cv::imread(fileName.toStdString());
 		cv::resize(mat_t, mat_t, cv::Size(640, 480));
 		int x = (rec_tSelect.x() - 5) * 2;
@@ -342,8 +356,11 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		HSVDialog.show();
 		HSVDialog.exec();
 	}
-	else nImgSaved++;											//拍照计数器递增，用于在复原前判断截图保存是否完成
+	else nImgSaved++;								//拍照计数器递增，用于在复原前判断截图保存是否完成
+
+//策略1--------------------------------------------------------------------------------
 	if (nImgSaved == 3) {
+
 		//c.右手夹紧，左手松开，为下次拍照做好准备
 		serialPort->write(QString("#4P1T200\r\n").toLatin1());
 		serialPort->write(QString("#2P5T200\r\n").toLatin1());
@@ -352,10 +369,16 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		cubeExplorer.handState.right.isTight = true;
 		Sleep(1000);
 
-		capture("case2");
+		capture("case2");							//三张图片保存完毕，case1拍照成功，进行case2拍照
 	}
-		//三张图片保存完毕，case1拍照成功，进行case2拍照
-	if (nImgSaved == 6) emit(signal_captureFinished());			//六张图片保存完毕，case2拍照成功，发送信号进行后续复原操作
+	if (nImgSaved == 6) continueRestore();			//六张图片保存完毕，case2拍照成功，发送信号进行后续复原操作
+//-------------------------------------------------------------------------------------
+
+//策略2--------------------------------------------------------------------------------
+	//if (nImgSaved == 3) {							//拍照完成，进行采样识别等后续步骤
+	//	continueRestore();
+	//}
+//-------------------------------------------------------------------------------------
 }
 
 //串口模块响应槽函数
@@ -403,7 +426,7 @@ void CubeExplorerWithQt::slot_cameraInfoChanged(const QString & text)
 	map_pic_cameraIndex.insert(picName, index);
 }
 
-void CubeExplorerWithQt::slot_continueRestore()
+void CubeExplorerWithQt::continueRestore()
 {
 	//2.进行识别得到识别字符串
 	std::string strRec = recognize();

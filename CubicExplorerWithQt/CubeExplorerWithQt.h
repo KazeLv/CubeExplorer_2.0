@@ -72,9 +72,6 @@ private:
 
 	QList<QGraphicsRectItem*> list_samRecItems;			//存储显示在窗口上的采样框指针
 
-signals:
-	void signal_captureFinished();
-
 public slots:
 	//界面按钮槽函数
 	void on_btnTightOrLooseClicked();
@@ -100,5 +97,5 @@ public slots:
 	//摄像头分配槽函数
 	void slot_cameraInfoChanged(const QString &text);
 
-	void slot_continueRestore();
+	void continueRestore();
 };
