@@ -395,7 +395,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		cubeExplorer.handState.right.isTight = true;
 		Sleep(1000);
 
-		capture("case2");							//三张图片保存完毕，case1拍照成功，进行case2拍照
+		capture("case2");							//三张图片保存完毕，case1拍照成功，进行case2的拍照
 	}
 	if (nImgSaved == 6) continueRestore();			//六张图片保存完毕，case2拍照成功，发送信号进行后续复原操作
 //-------------------------------------------------------------------------------------
