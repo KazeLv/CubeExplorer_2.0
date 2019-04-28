@@ -105,12 +105,13 @@ public:
     QSpacerItem *verticalSpacer_14;
     QPushButton *btn_camSwitch;
     QPushButton *btn_showSamRecs;
+    QPushButton *btn_recog;
     QPushButton *btn_tightOrLoose;
     QPushButton *btn_reset;
-    QPushButton *btn_restore;
     QPushButton *btn_debug;
     QPushButton *btn_setHSV;
     QSpacerItem *verticalSpacer_13;
+    QPushButton *btn_restore;
 
     void setupUi(QWidget *CubicExplorerWithQt)
     {
@@ -536,6 +537,14 @@ public:
 
         vLay_btns->addWidget(btn_showSamRecs);
 
+        btn_recog = new QPushButton(layoutWidget);
+        btn_recog->setObjectName(QStringLiteral("btn_recog"));
+        btn_recog->setMinimumSize(QSize(100, 30));
+        btn_recog->setMaximumSize(QSize(100, 30));
+        btn_recog->setFont(font2);
+
+        vLay_btns->addWidget(btn_recog);
+
         btn_tightOrLoose = new QPushButton(layoutWidget);
         btn_tightOrLoose->setObjectName(QStringLiteral("btn_tightOrLoose"));
         btn_tightOrLoose->setMinimumSize(QSize(100, 30));
@@ -551,14 +560,6 @@ public:
         btn_reset->setFont(font2);
 
         vLay_btns->addWidget(btn_reset);
-
-        btn_restore = new QPushButton(layoutWidget);
-        btn_restore->setObjectName(QStringLiteral("btn_restore"));
-        btn_restore->setMinimumSize(QSize(100, 30));
-        btn_restore->setMaximumSize(QSize(100, 30));
-        btn_restore->setFont(font2);
-
-        vLay_btns->addWidget(btn_restore);
 
         btn_debug = new QPushButton(layoutWidget);
         btn_debug->setObjectName(QStringLiteral("btn_debug"));
@@ -579,6 +580,14 @@ public:
         verticalSpacer_13 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         vLay_btns->addItem(verticalSpacer_13);
+
+        btn_restore = new QPushButton(layoutWidget);
+        btn_restore->setObjectName(QStringLiteral("btn_restore"));
+        btn_restore->setMinimumSize(QSize(100, 30));
+        btn_restore->setMaximumSize(QSize(100, 30));
+        btn_restore->setFont(font2);
+
+        vLay_btns->addWidget(btn_restore);
 
 
         horizontalLayout->addLayout(vLay_btns);
@@ -620,11 +629,12 @@ public:
         label_UI_message->setText(QApplication::translate("CubicExplorerWithQt", "message", Q_NULLPTR));
         btn_camSwitch->setText(QApplication::translate("CubicExplorerWithQt", "\346\221\204\345\203\217\345\244\264\345\274\200\345\205\263", Q_NULLPTR));
         btn_showSamRecs->setText(QApplication::translate("CubicExplorerWithQt", "\346\230\276\347\244\272\351\207\207\346\240\267\346\241\206", Q_NULLPTR));
+        btn_recog->setText(QApplication::translate("CubicExplorerWithQt", "\350\257\206\345\210\253\350\211\262\345\235\227", Q_NULLPTR));
         btn_tightOrLoose->setText(QApplication::translate("CubicExplorerWithQt", "\346\235\276\345\274\200/\345\244\271\347\264\247", Q_NULLPTR));
         btn_reset->setText(QApplication::translate("CubicExplorerWithQt", "\347\210\252\345\244\215\344\275\215", Q_NULLPTR));
-        btn_restore->setText(QApplication::translate("CubicExplorerWithQt", "\345\274\200\345\247\213\345\244\215\345\216\237", Q_NULLPTR));
         btn_debug->setText(QApplication::translate("CubicExplorerWithQt", "\350\260\203\350\257\225", Q_NULLPTR));
         btn_setHSV->setText(QApplication::translate("CubicExplorerWithQt", "HSV\350\256\276\347\275\256", Q_NULLPTR));
+        btn_restore->setText(QApplication::translate("CubicExplorerWithQt", "\345\274\200\345\247\213\345\244\215\345\216\237", Q_NULLPTR));
     } // retranslateUi
 
 };

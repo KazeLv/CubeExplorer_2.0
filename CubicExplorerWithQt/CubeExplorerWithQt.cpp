@@ -16,6 +16,7 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	connect(ui.btn_debug, SIGNAL(clicked()), this, SLOT(on_btnDebugClicked()));
 	connect(ui.btn_camSwitch, SIGNAL(clicked()), this, SLOT(on_btnCameraClicked()));
 	connect(ui.btn_showSamRecs, SIGNAL(clicked()), this, SLOT(on_btnShowSamRecsClicked()));
+	connect(ui.btn_recog, SIGNAL(clicked()), this, SLOT(on_btnRecogClicked()));
 	connect(ui.btn_setHSV, SIGNAL(clicked()), this, SLOT(on_btnSetHSVClicked()));
 	
 	connect(ui.btn_portOpen_close, SIGNAL(clicked()), this, SLOT(on_btnPortOpenClicked()));
@@ -200,6 +201,7 @@ void CubeExplorerWithQt::on_btnResetClicked() {
 }
 
 void CubeExplorerWithQt::on_btnRestoreClicked() {
+	bRestore = true;
 	nImgSaved = 0;						//重置拍照计数
 	cubeExplorer.Reset();
 	serialPort->write(QString("#2P1T200\r\n").toLatin1());		//两爪夹紧
@@ -271,6 +273,30 @@ void CubeExplorerWithQt::on_btnShowSamRecsClicked()
 		}
 	}
 
+}
+
+void CubeExplorerWithQt::on_btnRecogClicked() {
+	bRestore = false;
+	nImgSaved = 0;						//重置拍照计数
+	cubeExplorer.Reset();
+	serialPort->write(QString("#2P1T200\r\n").toLatin1());		//两爪夹紧
+	serialPort->write(QString("#4P1T200\r\n").toLatin1());		//
+
+	//策略1 两爪依次张合，拍摄两组照片以获取所有色块信息----------------------------------------
+		//1.拍照case1，得到strCase1；拍照case2，得到strCase2
+		//a.左手夹紧，右手松开
+	serialPort->write(QString("#4P5T200\r\n").toLatin1());
+	serialPort->flush();
+	cubeExplorer.handState.right.isTight = false;
+	Sleep(1000);
+
+	//b.拍照
+	capture("case1");
+	//-------------------------------------------------------------------------------------
+
+	//策略2，基于特别修改过的机械爪夹头，直接拍摄一组照片进行识别-------------------------------
+		//capture();
+	//-------------------------------------------------------------------------------------
 }
 
 void CubeExplorerWithQt::on_btnSetHSVClicked()
@@ -491,5 +517,5 @@ void CubeExplorerWithQt::continueRestore()
 	cubeExplorer.GetShortestWay();
 
 	//5.通过串口通信把串口序列传递给控制机，并使用listView控件实时显示操作序列传输情况
-	SendOperationSerial();
+	if (bRestore) SendOperationSerial();
 }

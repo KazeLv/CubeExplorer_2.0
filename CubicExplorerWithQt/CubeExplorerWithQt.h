@@ -47,6 +47,8 @@ public:
 private:
 	Ui::CubicExplorerWithQt ui;
 
+	bool bRestore = false;
+
 	CubeExplorer cubeExplorer;							//魔方解算
 
 	QSerialPort *serialPort;							//串口控制
@@ -80,6 +82,7 @@ public slots:
 	void on_btnDebugClicked();
 	void on_btnCameraClicked();
 	void on_btnShowSamRecsClicked();
+	void on_btnRecogClicked();
 	void on_btnSetHSVClicked();
 	//摄像头View鼠标响应槽函数
 	void slot_mouseReleasedInCameraViews(QRect rec_select);
