@@ -14,17 +14,9 @@ RecogAreaDialog::RecogAreaDialog(QString caller,QRect rect,QWidget *parent)
 	gridLayout = new QGridLayout;
 	this->setLayout(gridLayout);
 
-	//根据不同的拍摄面进行不同的布局	
-	if (caller[1] == 'D') {
-		gridLayout->addWidget(ui.groupBtnBox_1, 0, 0);
-		gridLayout->addWidget(ui.groupBtnBox_2, 1, 0);
-		resize(200, 400);
-	}
-	else {
-		gridLayout->addWidget(ui.groupBtnBox_1, 0, 0);
-		gridLayout->addWidget(ui.groupBtnBox_2, 0, 1);
-		resize(400, 200);
-	}
+	gridLayout->addWidget(ui.groupBtnBox_1, 0, 0);
+	gridLayout->addWidget(ui.groupBtnBox_2, 0, 1);
+	resize(400, 200);
 
 	//按钮槽绑定
 	connect(ui.btn_block1_1, SIGNAL(clicked()), this, SLOT(on_btnsClicked()));

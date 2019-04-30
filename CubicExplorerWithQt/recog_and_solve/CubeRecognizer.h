@@ -30,6 +30,14 @@ typedef struct _hsv{
 	}
 }HSV;
 
+struct CubeBlock {
+	int index;
+	cv::Mat matSample;
+	int meanH;
+	int meanS;
+	bool bJudged = false;
+};
+
 void iniHSVMap();
 QMap<QString, QMap<QString, HSV>>& getHSVMap();
 void saveHSVData();
