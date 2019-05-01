@@ -454,6 +454,9 @@ string recognize() {
 
 //HSV排序法识别
 string recognizeNew() {
+	string strResult('u',54);
+	int cntWhite = 9, cntRed = 9, cntOrange = 9, cntYellow = 9, cntGreen = 9, cntBlue = 9;
+
 ////获取所有的采样块并按kociemba要求的顺序存储到容器中
 	cv::Mat image;
 	int startIndex;
@@ -556,6 +559,8 @@ string recognizeNew() {
 	}
 
 ////计算得到各个采样图的HSV均值
+	int cntH150 = 0;
+
 	for (int index = 0; index < vec_samBlocks.size(); index++) {
 		int sumH = 0, sumS = 0;
 		int cntH = 0, cntS = 0;
@@ -567,6 +572,7 @@ string recognizeNew() {
 				if (mat_hsv.at<cv::Vec3b>(p)[0] >= 0 && mat_hsv.at<cv::Vec3b>(p)[0] <= 180) {
 					sumH += mat_hsv.at<cv::Vec3b>(p)[0];
 					cntH++;
+					if (mat_hsv.at<cv::Vec3b>(p)[0] >= 150) cntH150++;
 				}
 				if (mat_hsv.at<cv::Vec3b>(p)[1] >= 0 && mat_hsv.at<cv::Vec3b>(p)[1] <= 255) {
 					sumS += mat_hsv.at<cv::Vec3b>(p)[1];
@@ -576,10 +582,58 @@ string recognizeNew() {
 		}
 		vec_samBlocks[index].meanH = (float)sumH / cntH;
 		vec_samBlocks[index].meanH = (float)sumS / cntS;
+
+		if ((float)cntH150 / cntH > 0.03) {							//挑选出H在170-180之间的红色块，避免区间跳跃导致的均值失真
+			vec_samBlocks[index].bJudged = true;
+			strResult[index] = 'r';
+		}
 	}
 
 ////对S进行排序，取最小的6个作为白色块
-
 	sort(vec_samBlocks.begin(), vec_samBlocks.end(), [](CubeBlock &a, CubeBlock &b) {return a.meanS < b.meanS; });
 
+	int i = 0;									
+	while (cntWhite > 0) {
+		if (vec_samBlocks[i].bJudged == false) {
+			strResult[vec_samBlocks[i].index] = 'w';
+			cntWhite--;
+		}
+		i++;
+	}
+
+////对H进行排序，从小到大以此为红色（可能有）、橙色、黄色、绿色、蓝色
+	sort(vec_samBlocks.begin(), vec_samBlocks.end(), [](CubeBlock &a, CubeBlock &b) {return a.meanH < a.meanS; });
+
+	for (int i = 0; i < vec_samBlocks.size(); i++) {
+		if (vec_samBlocks[i].bJudged == false) {
+			if (cntRed > 0) {
+				vec_samBlocks[i].bJudged == true;
+				strResult[vec_samBlocks[i].index] = 'r';
+				cntRed--;
+			}
+			else if (cntOrange > 0) {
+				vec_samBlocks[i].bJudged == true;
+				strResult[vec_samBlocks[i].index] = 'o';
+				cntOrange--;
+			}
+			else if (cntYellow > 0) {
+				vec_samBlocks[i].bJudged == true;
+				strResult[vec_samBlocks[i].index] = 'y';
+				cntYellow--;
+			}
+			else if (cntGreen > 0) {
+				vec_samBlocks[i].bJudged == true;
+				strResult[vec_samBlocks[i].index] = 'g';
+				cntGreen--;
+			}
+			else if (cntBlue > 0) {
+				vec_samBlocks[i].bJudged == true;
+				strResult[vec_samBlocks[i].index] = 'b';
+				cntBlue--;
+			}
+		}
+	
+	}
+
+	return strResult;
 }
