@@ -78,6 +78,7 @@ public slots:
 	//界面按钮槽函数
 	void on_btnTightOrLooseClicked();
 	void on_btnRestoreClicked();
+	void on_btnSendSingleClicked();
 	void on_btnResetClicked();
 	void on_btnDebugClicked();
 	void on_btnCameraClicked();

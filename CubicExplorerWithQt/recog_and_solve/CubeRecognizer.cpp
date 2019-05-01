@@ -12,7 +12,9 @@ static QMap<QString, cv::Scalar> map_color_scalar;					//´æ·ÅÔ¤ÉèÑÕÉ«Öµ£¬ÓÃÓÚ»æÖ
 static QMap<QString, vector<cv::Mat>> map_face_id_lastRecogMat;		//±£´æµ±Ç°Ê¶±ð¹ý³ÌÖÐµÄ²ÉÑùÍ¼Æ¬£¬·½±ãÊ¶±ð½áÊøÊ±²é¿´¶Ô±ÈHSVÊý¾Ý
 
 //new things-----------------------------------------------------------
-static vector<CubeBlock> vec_samBlocks;									//±£´æÅÄÉã²ÉÑùµÄÉ«¿é
+static vector<CubeBlock> vec_samBlocks;								//±£´æÅÄÉã²ÉÑùµÄÉ«¿é
+
+vector<pair<string, int>> vec_index_blockPair;
 
 //---------------------------------------------------------------------
 
@@ -451,10 +453,9 @@ string recognize() {
 	return str_res.toUpper().toStdString();
 }
 
-
 //HSVÅÅÐò·¨Ê¶±ð
 string recognizeNew() {
-	string strResult('u',54);
+	string strResult(54,'u');
 	int cntWhite = 9, cntRed = 9, cntOrange = 9, cntYellow = 9, cntGreen = 9, cntBlue = 9;
 
 ////»ñÈ¡ËùÓÐµÄ²ÉÑù¿é²¢°´kociembaÒªÇóµÄË³Ðò´æ´¢µ½ÈÝÆ÷ÖÐ
@@ -462,108 +463,109 @@ string recognizeNew() {
 	int startIndex;
 
 	//FR
-	vector<SamRec>& vec_samRect = map_pic_id_samRec["FR"];
+	vector<SamRec> vec_samRect = map_pic_id_samRec["FR"];
 	//case1
 	image = cv::imread("pic_cam/cam_case1_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	startIndex = 18;										//FÃæ
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y1), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y1), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y1), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y1), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y1), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y2), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y2), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y2), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y2), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y2), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
 	startIndex = 9;											//RÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y1), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y1), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y1), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[12].y1, vec_samRect[12].y1), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y1), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y1), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[15].y1, vec_samRect[15].y1), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y1), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y1), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y2), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y2), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y2), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[12].y1, vec_samRect[12].y2), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y2), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y2), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[15].y1, vec_samRect[15].y2), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y2), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y2), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
 
 	//case2£¬²¹³äÖ®Ç°±»ÕÚµ²µÄÉ«¿é
 	image = cv::imread("pic_cam/cam_case2_FR.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	startIndex = 18;										//FÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y1), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y1), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y1), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y1), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y2), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y2), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y2), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y2), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
 
 	//UB
-	vector<SamRec>& vec_samRect = map_pic_id_samRec["UB"];
+	vec_samRect = map_pic_id_samRec["UB"];
 	//case1
 	image = cv::imread("pic_cam/cam_case1_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	startIndex = 0;											//UÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y1), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y1), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y1), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y1), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y1), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y1), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y1), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y1), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y2), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y2), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y2), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y2), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y2), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y2), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y2), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y2), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
 	startIndex = 45;										//BÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[15].y1, vec_samRect[15].y1), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[12].y1, vec_samRect[12].y1), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y1), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y1), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y1), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y1), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y1), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y1), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y1), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[15].y1, vec_samRect[15].y2), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[12].y1, vec_samRect[12].y2), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y2), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y2), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y2), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y2), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y2), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y2), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y2), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
 
 	//case2£¬²¹³äÖ®Ç°±»ÕÚµ²µÄÉ«¿é
 	image = cv::imread("pic_cam/cam_case2_UB.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	startIndex = 0;											//UÃæ
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y1), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y2), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
 
 	//LD
-	vector<SamRec>& vec_samRect = map_pic_id_samRec["LD"];
+	vec_samRect = map_pic_id_samRec["LD"];
 	//case1
 	image = cv::imread("pic_cam/cam_case1_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
 	startIndex = 36;										//LÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y1), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y1), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y1), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y1), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y1), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y1), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y1), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[12].y1), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[15].y1), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[11].y1, vec_samRect[11].y2), cv::Range(vec_samRect[11].x1, vec_samRect[11].x2));
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[14].y1, vec_samRect[14].y2), cv::Range(vec_samRect[14].x1, vec_samRect[14].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[17].y1, vec_samRect[17].y2), cv::Range(vec_samRect[17].x1, vec_samRect[17].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[10].y1, vec_samRect[10].y2), cv::Range(vec_samRect[10].x1, vec_samRect[10].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[13].y1, vec_samRect[13].y2), cv::Range(vec_samRect[13].x1, vec_samRect[13].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[16].y1, vec_samRect[16].y2), cv::Range(vec_samRect[16].x1, vec_samRect[16].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[9].y1, vec_samRect[9].y2), cv::Range(vec_samRect[9].x1, vec_samRect[9].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[12].y1, vec_samRect[12].y2), cv::Range(vec_samRect[12].x1, vec_samRect[12].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[15].y1, vec_samRect[15].y2), cv::Range(vec_samRect[15].x1, vec_samRect[15].x2));
 	startIndex = 27;										//DÃæ
-	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y1), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
-	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y1), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
-	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y1), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
-	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y1), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
-	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y1), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
-	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y1), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
-	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y1), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
+	vec_samBlocks[startIndex + 0].matSample = image(cv::Range(vec_samRect[8].y1, vec_samRect[8].y2), cv::Range(vec_samRect[8].x1, vec_samRect[8].x2));
+	vec_samBlocks[startIndex + 3].matSample = image(cv::Range(vec_samRect[5].y1, vec_samRect[5].y2), cv::Range(vec_samRect[5].x1, vec_samRect[5].x2));
+	vec_samBlocks[startIndex + 4].matSample = image(cv::Range(vec_samRect[4].y1, vec_samRect[4].y2), cv::Range(vec_samRect[4].x1, vec_samRect[4].x2));
+	vec_samBlocks[startIndex + 5].matSample = image(cv::Range(vec_samRect[3].y1, vec_samRect[3].y2), cv::Range(vec_samRect[3].x1, vec_samRect[3].x2));
+	vec_samBlocks[startIndex + 6].matSample = image(cv::Range(vec_samRect[2].y1, vec_samRect[2].y2), cv::Range(vec_samRect[2].x1, vec_samRect[2].x2));
+	vec_samBlocks[startIndex + 7].matSample = image(cv::Range(vec_samRect[1].y1, vec_samRect[1].y2), cv::Range(vec_samRect[1].x1, vec_samRect[1].x2));
+	vec_samBlocks[startIndex + 8].matSample = image(cv::Range(vec_samRect[0].y1, vec_samRect[0].y2), cv::Range(vec_samRect[0].x1, vec_samRect[0].x2));
 
 	//case2£¬²¹³äÖ®Ç°±»ÕÚµ²µÄÉ«¿é
 	image = cv::imread("pic_cam/cam_case2_LD.jpg");
 	cv::resize(image, image, cv::Size(640, 480));
-	startIndex = 18;										//DÃæ
-	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y1), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
-	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y1), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
+	startIndex = 27;										//DÃæ
+	vec_samBlocks[startIndex + 1].matSample = image(cv::Range(vec_samRect[7].y1, vec_samRect[7].y2), cv::Range(vec_samRect[7].x1, vec_samRect[7].x2));
+	vec_samBlocks[startIndex + 2].matSample = image(cv::Range(vec_samRect[6].y1, vec_samRect[6].y2), cv::Range(vec_samRect[6].x1, vec_samRect[6].x2));
 
 	for (int i = 0; i < vec_samBlocks.size(); i++) {		//Ã¿¸öÉ«¿é¼ÇÂ¼×Ô¼ºÔ­Ê¼µÄÎ»ÖÃ
 		vec_samBlocks[i].index = i;							//
 	}
 
 ////¼ÆËãµÃµ½¸÷¸ö²ÉÑùÍ¼µÄHSV¾ùÖµ
-	int cntH150 = 0;
-
+	int cntH150;
 	for (int index = 0; index < vec_samBlocks.size(); index++) {
 		int sumH = 0, sumS = 0;
 		int cntH = 0, cntS = 0;
+		cntH150 = 0;
+
 		cv::Mat mat_hsv;
 		cv::cvtColor(vec_samBlocks[index].matSample, mat_hsv, cv::COLOR_BGR2HSV);
 		for (int i = 0; i < mat_hsv.rows; i++) {				//±éÀúÍ¼Æ¬Ã¿¸öÏñËØ
@@ -581,20 +583,23 @@ string recognizeNew() {
 			}
 		}
 		vec_samBlocks[index].meanH = (float)sumH / cntH;
-		vec_samBlocks[index].meanH = (float)sumS / cntS;
+		vec_samBlocks[index].meanS = (float)sumS / cntS;
+		vec_samBlocks[index].ratioH150 = (float)cntH150 / cntH;
 
-		if ((float)cntH150 / cntH > 0.03) {							//ÌôÑ¡³öHÔÚ170-180Ö®¼äµÄºìÉ«¿é£¬±ÜÃâÇø¼äÌøÔ¾µ¼ÖÂµÄ¾ùÖµÊ§Õæ
-			vec_samBlocks[index].bJudged = true;
-			strResult[index] = 'r';
-		}
+		//if ((float)cntH150 / cntH > 0.03) {							//ÌôÑ¡³öHÔÚ170-180Ö®¼äµÄºìÉ«¿é£¬±ÜÃâÇø¼äÌøÔ¾µ¼ÖÂµÄ¾ùÖµÊ§Õæ
+		//	vec_samBlocks[index].bJudged = true;
+		//	strResult[index] = 'r';
+		//	cntRed--;
+		//}
 	}
 
 ////¶ÔS½øÐÐÅÅÐò£¬È¡×îÐ¡µÄ6¸ö×÷Îª°×É«¿é
 	sort(vec_samBlocks.begin(), vec_samBlocks.end(), [](CubeBlock &a, CubeBlock &b) {return a.meanS < b.meanS; });
 
 	int i = 0;									
-	while (cntWhite > 0) {
+	while (cntWhite > 0&&i<vec_samBlocks.size()) {
 		if (vec_samBlocks[i].bJudged == false) {
+			vec_samBlocks[i].bJudged = true;
 			strResult[vec_samBlocks[i].index] = 'w';
 			cntWhite--;
 		}
@@ -602,32 +607,37 @@ string recognizeNew() {
 	}
 
 ////¶ÔH½øÐÐÅÅÐò£¬´ÓÐ¡µ½´óÒÔ´ËÎªºìÉ«£¨¿ÉÄÜÓÐ£©¡¢³ÈÉ«¡¢»ÆÉ«¡¢ÂÌÉ«¡¢À¶É«
-	sort(vec_samBlocks.begin(), vec_samBlocks.end(), [](CubeBlock &a, CubeBlock &b) {return a.meanH < a.meanS; });
+	sort(vec_samBlocks.begin(), vec_samBlocks.end(), [](CubeBlock &a, CubeBlock &b) {return a.meanH < b.meanH; });
 
 	for (int i = 0; i < vec_samBlocks.size(); i++) {
 		if (vec_samBlocks[i].bJudged == false) {
-			if (cntRed > 0) {
-				vec_samBlocks[i].bJudged == true;
+			if (vec_samBlocks[i].ratioH150 > 0.03) {		//Ê×ÏÈ¸ù¾ÝHÖµ´óÓÚ150µÄ±ÈÀýÑ¡È¡³ö¸ßÖµÇø¼äµÄºìÉ«¿é£¬ÅÅ³ý¿çÇø¼ä¶Ô¾ùÖµµÄÓ°Ïì
+				vec_samBlocks[i].bJudged = true;			
+				strResult[vec_samBlocks[i].index] = 'r';
+				cntRed--;
+			}
+			else if (cntRed > 0) {						
+				vec_samBlocks[i].bJudged = true;
 				strResult[vec_samBlocks[i].index] = 'r';
 				cntRed--;
 			}
 			else if (cntOrange > 0) {
-				vec_samBlocks[i].bJudged == true;
+				vec_samBlocks[i].bJudged = true;
 				strResult[vec_samBlocks[i].index] = 'o';
 				cntOrange--;
 			}
 			else if (cntYellow > 0) {
-				vec_samBlocks[i].bJudged == true;
+				vec_samBlocks[i].bJudged = true;
 				strResult[vec_samBlocks[i].index] = 'y';
 				cntYellow--;
 			}
 			else if (cntGreen > 0) {
-				vec_samBlocks[i].bJudged == true;
+				vec_samBlocks[i].bJudged = true;
 				strResult[vec_samBlocks[i].index] = 'g';
 				cntGreen--;
 			}
 			else if (cntBlue > 0) {
-				vec_samBlocks[i].bJudged == true;
+				vec_samBlocks[i].bJudged = true;
 				strResult[vec_samBlocks[i].index] = 'b';
 				cntBlue--;
 			}

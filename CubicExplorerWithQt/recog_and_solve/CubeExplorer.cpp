@@ -7,35 +7,35 @@ void CubeExplorer::SetTarget(string str) { target = str; }
 vector<string>& CubeExplorer::GetVecStrSerial() { return vecStrSerial; }
 
 void CubeExplorer::OnR(vector<string>::iterator& iter) {
-	//RightTight();											//ÓÒ×¦¼Ð½ô
+	RightTight();											//ÓÒ×¦¼Ð½ô
 	GetLeftReadyAndTight();									//×ó×¦µ÷ÕûÖÁ90/270¡ãÇÒ¼Ð½ô
 	macVec.push_back(Operation::R);							//ÓÒ×¦Ë³Ê±Õë×ª¶¯90¡ã£¨´æ´¢µ½ÈÝÆ÷ÄÚ£¬Ö®ºó½øÐÐ·¢ËÍ£©
 	handState.right.isReady = !handState.right.isReady;		//ÉèÖÃÓÒ×¦×´Ì¬²ÎÊý
 }
 
 void CubeExplorer::On_R(vector<string>::iterator& iter) {
-	//RightTight();
+	RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::_R);
 	handState.right.isReady = !handState.right.isReady;
 }
 
 void CubeExplorer::OnF(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F);
 	handState.left.isReady = !handState.left.isReady;
 }
 
 void CubeExplorer::On_F(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::_F);
 	handState.left.isReady = !handState.left.isReady;
 }
 
 void CubeExplorer::OnRR(vector<string>::iterator& iter) {
-	//RightTight();											//ÓÒ×¦¼Ð½ô
+	RightTight();											//ÓÒ×¦¼Ð½ô
 	LeftLoose();											//×ó×¦ËÉ¿ª
 	LeftReady();											//×ó×¦×ª¶¯ÖÁ90/270¡ã×´Ì¬
 	macVec.push_back(Operation::R);							//ÓÒ×¦Ë³Ê±Õë×ª¶¯90¡ã
@@ -57,7 +57,7 @@ void CubeExplorer::OnRR(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::On_RR(vector<string>::iterator& iter) {
-	//RightTight();
+	RightTight();
 	LeftLoose();
 	LeftReady();
 	macVec.push_back(Operation::_R);
@@ -79,7 +79,7 @@ void CubeExplorer::On_RR(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnFF(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::F);
@@ -101,7 +101,7 @@ void CubeExplorer::OnFF(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::On_FF(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::_F);
@@ -123,7 +123,7 @@ void CubeExplorer::On_FF(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
-	//RightTight();
+	RightTight();
 	LeftLoose();
 	LeftReady();
 	macVec.push_back(Operation::R2);
@@ -145,7 +145,7 @@ void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	RightLoose();
 	RightReady();
 	macVec.push_back(Operation::F2);
@@ -166,13 +166,13 @@ void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
 }
 
 void CubeExplorer::OnR2(vector<string>::iterator& iter) {
-	//RightTight();
+	RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::R2);
 }
 
 void CubeExplorer::OnF2(vector<string>::iterator& iter) {
-	//LeftTight();
+	LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F2);
 }

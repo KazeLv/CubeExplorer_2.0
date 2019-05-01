@@ -23,6 +23,8 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	connect(ui.btn_portRefresh, SIGNAL(clicked()), this, SLOT(on_btnPortRefreshClicked()));
 	connect(ui.btn_portSend, SIGNAL(clicked()), this, SLOT(on_btnPortSendClicked()));
 	connect(ui.comboBox_coms, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_portInfoChanged(QString)));
+
+	connect(ui.btn_sendSingle, SIGNAL(clicked()), this, SLOT(on_btnSendSingleClicked()));
 	
 	//connect(this, SIGNAL(signal_captureFinished()), this, SLOT(slot_continueRestore()));
 
@@ -128,7 +130,7 @@ void CubeExplorerWithQt::iniCamera()
 	scene_UB->addItem(videoItem_UB);				//
 	scene_LD->addItem(videoItem_LD);				//
 
-	list_pCamera[1]->setViewfinder(videoItem_FR);	//指针数组下标填充
+	list_pCamera[0]->setViewfinder(videoItem_FR);	//指针数组下标填充
 	list_pCamera[2]->setViewfinder(videoItem_UB);	//
 	list_pCamera[3]->setViewfinder(videoItem_LD);	//
 	map_pic_cameraIndex.insert("FR", 1);			//
@@ -168,9 +170,15 @@ void CubeExplorerWithQt::Sleep(int sec) {
 void CubeExplorerWithQt::SendOperationSerial() {
 	for (auto iter = cubeExplorer.GetVecStrSerial().cbegin(); iter != cubeExplorer.GetVecStrSerial().cend(); iter++) {
 		serialPort->write(QString(iter->c_str()).toLatin1());
+		serialPort->flush();
 	}
 	serialPort->write(QString("#2P2T200\r\n").toLatin1());
 	serialPort->write(QString("#4P2T200\r\n").toLatin1());
+}
+
+void CubeExplorerWithQt::on_btnSendSingleClicked() {
+	serialPort->write(QString(cubeExplorer.GetVecStrSerial()[0].c_str()).toLatin1());
+	cubeExplorer.GetVecStrSerial().erase(cubeExplorer.GetVecStrSerial().begin());
 }
 
 //右边栏操作按钮响应槽函数
@@ -297,6 +305,8 @@ void CubeExplorerWithQt::on_btnRecogClicked() {
 	//策略2，基于特别修改过的机械爪夹头，直接拍摄一组照片进行识别-------------------------------
 		//capture();
 	//-------------------------------------------------------------------------------------
+
+	continueRestore();
 }
 
 void CubeExplorerWithQt::on_btnSetHSVClicked()
@@ -358,7 +368,6 @@ void CubeExplorerWithQt::slot_menuShowHSVTriggered()
 
 	list_pCapture[map_pic_cameraIndex[caller]]->capture(curPath+"/pic_cam/"+caller+"_temp_for_showHSV");
 }
-
 
 void CubeExplorerWithQt::slot_setRecArea(QString groupName,QRect rect,int faceID, int blockID)
 {
@@ -455,7 +464,7 @@ void CubeExplorerWithQt::slot_cameraInfoChanged(const QString & text)
 void CubeExplorerWithQt::continueRestore()
 {
 	//2.进行识别得到识别字符串
-	std::string strRec = recognize();
+	std::string strRec = recognizeNew();
 
 	//把识别结果显示在界面上
 	QGraphicsScene* scene_rec_F = new QGraphicsScene;

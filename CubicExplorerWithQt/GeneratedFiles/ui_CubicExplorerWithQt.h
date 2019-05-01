@@ -111,6 +111,7 @@ public:
     QPushButton *btn_debug;
     QPushButton *btn_setHSV;
     QSpacerItem *verticalSpacer_13;
+    QPushButton *btn_sendSingle;
     QPushButton *btn_restore;
 
     void setupUi(QWidget *CubicExplorerWithQt)
@@ -581,6 +582,14 @@ public:
 
         vLay_btns->addItem(verticalSpacer_13);
 
+        btn_sendSingle = new QPushButton(layoutWidget);
+        btn_sendSingle->setObjectName(QStringLiteral("btn_sendSingle"));
+        btn_sendSingle->setMinimumSize(QSize(100, 30));
+        btn_sendSingle->setMaximumSize(QSize(100, 30));
+        btn_sendSingle->setFont(font2);
+
+        vLay_btns->addWidget(btn_sendSingle);
+
         btn_restore = new QPushButton(layoutWidget);
         btn_restore->setObjectName(QStringLiteral("btn_restore"));
         btn_restore->setMinimumSize(QSize(100, 30));
@@ -634,6 +643,7 @@ public:
         btn_reset->setText(QApplication::translate("CubicExplorerWithQt", "\347\210\252\345\244\215\344\275\215", Q_NULLPTR));
         btn_debug->setText(QApplication::translate("CubicExplorerWithQt", "\350\260\203\350\257\225", Q_NULLPTR));
         btn_setHSV->setText(QApplication::translate("CubicExplorerWithQt", "HSV\350\256\276\347\275\256", Q_NULLPTR));
+        btn_sendSingle->setText(QApplication::translate("CubicExplorerWithQt", "\345\215\225\346\255\245\346\211\247\350\241\214", Q_NULLPTR));
         btn_restore->setText(QApplication::translate("CubicExplorerWithQt", "\345\274\200\345\247\213\345\244\215\345\216\237", Q_NULLPTR));
     } // retranslateUi
 
