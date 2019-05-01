@@ -35,7 +35,8 @@ struct CubeBlock {
 	cv::Mat matSample;			//采样图
 	int meanH;					//H均值
 	int meanS;					//S均值
-	float ratioH150;			//H值大于150的像素点比例，用于判断高值区间的红色块，消除跨区间导致的均值失真
+	int meanV;
+	//float ratioH170;			//H值大于170的像素点比例，用于判断高值区间的红色块，消除跨区间导致的均值失真
 	bool bJudged = false;
 };
 
@@ -51,8 +52,9 @@ void iniRecogVars();
 QMap<QString, vector<cv::Mat>>& getLastRecogMatMap();
 int isColor(cv::Mat imgHSV, QString color, QString face);
 void judgeColor(cv::Mat image, QString picName, int caseID);
-
 string recognize();
+
+void sampleFromPic(cv::Mat image, QString picName, int caseID);
 string recognizeNew();
 
 #endif

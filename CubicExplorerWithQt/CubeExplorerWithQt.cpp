@@ -170,13 +170,13 @@ void CubeExplorerWithQt::Sleep(int sec) {
 void CubeExplorerWithQt::SendOperationSerial() {
 	for (auto iter = cubeExplorer.GetVecStrSerial().cbegin(); iter != cubeExplorer.GetVecStrSerial().cend(); iter++) {
 		serialPort->write(QString(iter->c_str()).toLatin1());
-		serialPort->flush();
 	}
 	serialPort->write(QString("#2P2T200\r\n").toLatin1());
 	serialPort->write(QString("#4P2T200\r\n").toLatin1());
 }
 
 void CubeExplorerWithQt::on_btnSendSingleClicked() {
+	if (cubeExplorer.GetVecStrSerial().empty()) return;
 	serialPort->write(QString(cubeExplorer.GetVecStrSerial()[0].c_str()).toLatin1());
 	cubeExplorer.GetVecStrSerial().erase(cubeExplorer.GetVecStrSerial().begin());
 }
@@ -302,9 +302,9 @@ void CubeExplorerWithQt::on_btnRecogClicked() {
 	capture("case1");
 	//-------------------------------------------------------------------------------------
 
-	//策略2，基于特别修改过的机械爪夹头，直接拍摄一组照片进行识别-------------------------------
-		//capture();
-	//-------------------------------------------------------------------------------------
+	////策略2，基于特别修改过的机械爪夹头，直接拍摄一组照片进行识别-------------------------------
+	//	//capture();
+	////-------------------------------------------------------------------------------------
 
 	continueRestore();
 }
