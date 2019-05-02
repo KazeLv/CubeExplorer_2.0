@@ -324,41 +324,42 @@ void CubeExplorer::GetShortestWay() {
 			OnR(iter);
 		}
 		else if (*iter == "U") {
-			//OnFF(iter);
-			//OnR(iter);
+			OnFF(iter);
+			OnR(iter);
 
-			//对于U、B两面的操作，有两个不同策略：1.魔方沿F面整体旋转后，右爪进行操作；2.魔方沿R面整体旋转后，左爪进行操作
-			//我们需要根据机械爪的当前状态和当前操作其后紧跟的操作判断，哪一种策略得到的指令最少
-			if (handState.left.isReady) {														//左爪处于90/270°状态
-				if (handState.right.isReady &&													//右爪处于90/270°状态
-					(iter + 1 != strNorVec.end()) &&											//紧跟的下一个操作是F、B面操作
-					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" ||		//
-					 *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {		//
-					//若左右手都处于90/270°状态，那么无论先F后R或先R后F，当前操作需要的指令数是一样的。因此仅考虑当前操作之后的操作
-					//如果紧跟的操作是F面和B面操作，那么对于当前操作之后的那个操作，策略1比策略2少4个机械爪指令，因此采用策略1
-					OnFF(iter);
-					OnR(iter);
-				}
-				else {
-					//若左手处于90/270°状态而右手处于0/180°状态，那么对于当前操作，策略2比策略1少4个机械爪指令
-					//若当前操作其后紧跟的那个操作不是对F、B面的操作，那么策略2得到的机械爪指令不大于策略1
-					//（当紧跟的是R、L面操作时，策略2比策略1少4个指令；当紧跟的是D面操作时，两个策略等效），因此采用策略2
-					On_RR(iter);
-					OnF(iter);
-				}
-			}
-			else {
-				//若左手处于0/180°状态，对于当前操作，策略1比策略2少4个指令
-				//其后紧跟的指令，若为L、R面操作，则策略1比策略2少4个指令，这两个因素相互抵消；若为F、B面操作，策略1比策略2少4个指令
-				//只要左手处于这个状态，就选择策略1
-				OnFF(iter);
-				OnR(iter);
-			}
+			////对于U、B两面的操作，有两个不同策略：1.魔方沿F面整体旋转后，右爪进行操作；2.魔方沿R面整体旋转后，左爪进行操作
+			////我们需要根据机械爪的当前状态和当前操作其后紧跟的操作判断，哪一种策略得到的指令最少
+			//if (handState.left.isReady) {														//左爪处于90/270°状态
+			//	if (handState.right.isReady &&													//右爪处于90/270°状态
+			//		(iter + 1 != strNorVec.end()) &&											//紧跟的下一个操作是F、B面操作
+			//		(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" ||		//
+			//		 *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {		//
+			//		//若左右手都处于90/270°状态，那么无论先F后R或先R后F，当前操作需要的指令数是一样的。因此仅考虑当前操作之后的操作
+			//		//如果紧跟的操作是F面和B面操作，那么对于当前操作之后的那个操作，策略1比策略2少4个机械爪指令，因此采用策略1
+			//		OnFF(iter);
+			//		OnR(iter);
+			//	}
+			//	else {
+			//		//若左手处于90/270°状态而右手处于0/180°状态，那么对于当前操作，策略2比策略1少4个机械爪指令
+			//		//若当前操作其后紧跟的那个操作不是对F、B面的操作，那么策略2得到的机械爪指令不大于策略1
+			//		//（当紧跟的是R、L面操作时，策略2比策略1少4个指令；当紧跟的是D面操作时，两个策略等效），因此采用策略2
+			//		On_RR(iter);
+			//		OnF(iter);
+			//	}
+			//}
+			//else {
+			//	//若左手处于0/180°状态，对于当前操作，策略1比策略2少4个指令
+			//	//其后紧跟的指令，若为L、R面操作，则策略1比策略2少4个指令，这两个因素相互抵消；若为F、B面操作，策略1比策略2少4个指令
+			//	//只要左手处于这个状态，就选择策略1
+			//	OnFF(iter);
+			//	OnR(iter);
+			//}
 		}
 		else if (*iter == "D") {
-			//OnRR(iter);
-			//OnF(iter);
-			if (handState.left.isReady) {
+			OnRR(iter);
+			OnF(iter);
+
+			/*if (handState.left.isReady) {
 				if (handState.right.isReady &&
 					(iter + 1 != strNorVec.end()) &&
 					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
@@ -373,7 +374,7 @@ void CubeExplorer::GetShortestWay() {
 			else {
 				On_FF(iter);
 				OnR(iter);
-			}
+			}*/
 		}
 		else if (*iter == "B'") {
 			OnRR2(iter);
@@ -384,44 +385,46 @@ void CubeExplorer::GetShortestWay() {
 			On_R(iter);
 		}
 		else if (*iter == "U'") {
-			//OnFF(iter);
-			//On_R(iter); 
-			if (handState.left.isReady) {
-				if (handState.right.isReady &&
-					(iter + 1 != strNorVec.end()) &&
-					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
-					OnFF(iter);
-					On_R(iter);
-				}
-				else {
-					On_RR(iter);
-					On_F(iter);
-				}
-			}
-			else {
-				OnFF(iter);
-				On_R(iter);
-			}
+			OnFF(iter);
+			On_R(iter); 
+
+			//if (handState.left.isReady) {
+			//	if (handState.right.isReady &&
+			//		(iter + 1 != strNorVec.end()) &&
+			//		(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
+			//		OnFF(iter);
+			//		On_R(iter);
+			//	}
+			//	else {
+			//		On_RR(iter);
+			//		On_F(iter);
+			//	}
+			//}
+			//else {
+			//	OnFF(iter);
+			//	On_R(iter);
+			//}
 		}
 		else if (*iter == "D'") {
-			/*OnRR(iter);
-			On_F(iter);*/
-			if (handState.left.isReady) {
-				if (handState.right.isReady &&
-					(iter + 1 != strNorVec.end()) &&
-					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
-					On_FF(iter);
-					On_R(iter);
-				}
-				else {
-					OnRR(iter);
-					On_F(iter);
-				}
-			}
-			else {
-				On_FF(iter);
-				On_R(iter);
-			}
+			OnRR(iter);
+			On_F(iter);
+
+			//if (handState.left.isReady) {
+			//	if (handState.right.isReady &&
+			//		(iter + 1 != strNorVec.end()) &&
+			//		(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
+			//		On_FF(iter);
+			//		On_R(iter);
+			//	}
+			//	else {
+			//		OnRR(iter);
+			//		On_F(iter);
+			//	}
+			//}
+			//else {
+			//	On_FF(iter);
+			//	On_R(iter);
+			//}
 		}
 		else if (*iter == "B2") {
 			OnRR2(iter);
@@ -432,44 +435,46 @@ void CubeExplorer::GetShortestWay() {
 			OnR2(iter);
 		}
 		else if (*iter == "U2") {
-			//OnFF(iter);
-			//OnR2(iter);
-			if (handState.left.isReady) {
-				if (handState.right.isReady&&
-					(iter + 1 != strNorVec.end()) &&
-					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
-					OnFF(iter);
-					OnR2(iter);
-				}
-				else {
-					On_RR(iter);
-					OnF2(iter);
-				}
-			}
-			else {
-				OnFF(iter);
-				OnR2(iter);
-			}
+			OnFF(iter);
+			OnR2(iter);
+
+			//if (handState.left.isReady) {
+			//	if (handState.right.isReady&&
+			//		(iter + 1 != strNorVec.end()) &&
+			//		(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
+			//		OnFF(iter);
+			//		OnR2(iter);
+			//	}
+			//	else {
+			//		On_RR(iter);
+			//		OnF2(iter);
+			//	}
+			//}
+			//else {
+			//	OnFF(iter);
+			//	OnR2(iter);
+			//}
 		}
 		else if (*iter == "D2") {
-			//OnRR(iter);
-			//OnF2(iter);
-			if (handState.left.isReady) {
-				if (handState.right.isReady&&
-					(iter + 1 != strNorVec.end()) &&
-					(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
-					On_FF(iter);
-					OnR2(iter);
-				}
-				else {
-					OnRR(iter);
-					OnF2(iter);
-				}
-			}
-			else {
-				On_FF(iter);
-				OnR2(iter);
-			}
+			OnRR(iter);
+			OnF2(iter);
+
+			//if (handState.left.isReady) {
+			//	if (handState.right.isReady&&
+			//		(iter + 1 != strNorVec.end()) &&
+			//		(*(iter + 1) == "F" || *(iter + 1) == "F'" || *(iter + 1) == "F2" || *(iter + 1) == "B" || *(iter + 1) == "B'" || *(iter + 1) == "B2")) {
+			//		On_FF(iter);
+			//		OnR2(iter);
+			//	}
+			//	else {
+			//		OnRR(iter);
+			//		OnF2(iter);
+			//	}
+			//}
+			//else {
+			//	On_FF(iter);
+			//	OnR2(iter);
+			//}
 		}
 	}
 

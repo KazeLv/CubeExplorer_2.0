@@ -20,13 +20,13 @@ public:
 
 	void stop() {
 		tp tpEnd = sc::now();
-		ddSpan += std::chrono::duration<dd>(tpEnd - tpBegin);
+		ddSpan += std::chrono::duration<double>(tpEnd - tpBegin);
 	}
 
 	double getTime() {
 		tp tpEnd = sc::now();
 		dd spanTmp = dd(0);
-		spanTmp += std::chrono::duration<dd>(tpEnd - tpBegin);
+		spanTmp += std::chrono::duration<double>(tpEnd - tpBegin);
 		return spanTmp.count();
 	}
 

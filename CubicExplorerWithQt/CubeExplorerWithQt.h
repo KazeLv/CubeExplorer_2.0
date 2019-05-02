@@ -59,6 +59,7 @@ private:
 	Ui::CubicExplorerWithQt ui;
 
 	bool bRestore = false;
+	const int captureInterval = 800;
 
 	CubeExplorer cubeExplorer;							//Ä§·½½âËã
 

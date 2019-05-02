@@ -138,16 +138,16 @@ void CubeExplorerWithQt::iniCamera()
 	scene_UB->addItem(videoItem_UB);				//
 	scene_LD->addItem(videoItem_LD);				//
 
-	list_pCamera[0]->setViewfinder(videoItem_FR);	//指针数组下标填充
-	list_pCamera[2]->setViewfinder(videoItem_UB);	//
-	list_pCamera[3]->setViewfinder(videoItem_LD);	//
-	map_pic_cameraIndex.insert("FR", 1);			//
-	map_pic_cameraIndex.insert("UB", 2);			//
-	map_pic_cameraIndex.insert("LD", 3);			//
+	list_pCamera[0]->setViewfinder(videoItem_FR);								//
+	if(list_pCamera.size()>=2) list_pCamera[1]->setViewfinder(videoItem_UB);	//
+	if(list_pCamera.size()>=3) list_pCamera[2]->setViewfinder(videoItem_LD);	//
+	map_pic_cameraIndex.insert("FR", 0);			//指针数组下标填充
+	map_pic_cameraIndex.insert("UB", 1);			//
+	map_pic_cameraIndex.insert("LD", 2);			//
 
-	ui.comboBox_cameraFR->setCurrentIndex(1);
-	ui.comboBox_cameraUB->setCurrentIndex(2);
-	ui.comboBox_cameraLD->setCurrentIndex(3);
+	ui.comboBox_cameraFR->setCurrentIndex(0);
+	ui.comboBox_cameraUB->setCurrentIndex(1);
+	ui.comboBox_cameraLD->setCurrentIndex(2);
 }
 
 void CubeExplorerWithQt::capture(std::string Case) {
@@ -230,8 +230,8 @@ void CubeExplorerWithQt::on_btnSendSingleClicked() {
 void CubeExplorerWithQt::on_btnTightOrLooseClicked() {
 	//操作两只机械手进行微松开和夹紧，用以装配和取下魔方
 	if (cubeExplorer.handState.left.isTight) {
-		serialPort->write(QString("#2P2T200\r\n").toLatin1());
-		serialPort->write(QString("#4P2T200\r\n").toLatin1());
+		serialPort->write(QString("#2P0T200\r\n").toLatin1());
+		serialPort->write(QString("#4P0T200\r\n").toLatin1());
 		cubeExplorer.handState = HandState(true, false, true, false);
 	}
 	else {
@@ -271,7 +271,7 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
 	serialPort->flush();
 	cubeExplorer.handState.right.isTight = false;
-	Sleep(500);
+	Sleep(captureInterval);
 
 	//b.拍照
 	capture("case1");
@@ -290,6 +290,26 @@ void CubeExplorerWithQt::on_btnDebugClicked() {
 }
 
 void CubeExplorerWithQt::on_btnCameraClicked() {
+	//刷新可用摄像头信息
+	list_cameraInfo.clear();
+	ui.comboBox_cameraFR->clear();
+	ui.comboBox_cameraUB->clear();
+	ui.comboBox_cameraLD->clear();
+	int i = 0;
+	foreach(QCameraInfo info, QCameraInfo::availableCameras()) {
+		list_cameraInfo.append(info);
+
+		QCamera* camera_t = new QCamera(info);																//构建camera对象，存放到list_pCamera中
+		QCameraImageCapture* capture_t = new QCameraImageCapture(camera_t);									//并构建对应于当前摄像头的capture对象，存放到list_pCapture中
+		connect(capture_t, SIGNAL(imageSaved(int, QString)), this, SLOT(slot_imageSaved(int, QString)));	//
+		list_pCamera.append(camera_t);																		//
+		list_pCapture.append(capture_t);																	//
+
+		ui.comboBox_cameraFR->addItem(QString::number(i));
+		ui.comboBox_cameraUB->addItem(QString::number(i));
+		ui.comboBox_cameraLD->addItem(QString::number(i));
+		i++;
+	}
 	for (int i = 0; i < list_pCamera.length(); i++) 
 		if (list_pCamera[i]->status() != QCamera::ActiveStatus) list_pCamera[i]->start();
 }
@@ -345,7 +365,7 @@ void CubeExplorerWithQt::on_btnRecogClicked() {
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
 	serialPort->flush();
 	cubeExplorer.handState.right.isTight = false;
-	Sleep(1000);
+	Sleep(captureInterval);
 
 	//b.拍照
 	capture("case1");
@@ -451,7 +471,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		serialPort->flush();
 		cubeExplorer.handState.left.isTight = false;
 		cubeExplorer.handState.right.isTight = true;
-		Sleep(500);
+		Sleep(captureInterval);
 
 		capture("case2");							//三张图片保存完毕，case1拍照成功，进行case2的拍照
 	}
@@ -570,7 +590,12 @@ void CubeExplorerWithQt::continueRestore()
 		ui.label_UI_message->setText(QStringLiteral("识别序列有误！"));
 		pTimer->stop();		//停止计时器
 		return;
-	}else ui.label_UI_message->setText(QStringLiteral("识别正确！"));
+	}
+	else {
+		//ui.label_UI_message->setText(QStringLiteral("识别正确！"));
+		ui.label_UI_message->setText(QString(strRec.c_str())+QString(res)+"  end");
+		ui.plainTextEdit_portWrite->setPlainText(QString("RecogResult: ") + strRec.c_str());
+	}
 	cubeExplorer.SetTarget(res);
 
 	//4.CubicExplorer对象调用解算方法，得到串口操作序列字符串
@@ -593,6 +618,7 @@ void CubeExplorerWithQt::slot_comReadyRead()
 		if (byteTmp.contains("Start")) {
 			//接收到开始按钮指令，开始复原
 			on_btnRestoreClicked();
+			ui.label_UI_message->setText(QStringLiteral("串口收到开始信号"));
 		}
 		else if (byteTmp.contains("Over")) {
 			//接收到结束指令，复原结束
@@ -600,6 +626,7 @@ void CubeExplorerWithQt::slot_comReadyRead()
 			int cnt = cubeExplorer.transCnt;
 			double time = double(int(pMyTimer->getTime()*100))/100;		//时间取两位小数
 			list_restoreRecord.push_back(RestoreRecord(cnt, time));
+			ui.label_UI_message->setText(QStringLiteral("串口收到结束信号"));
 		}
 	}
 }
