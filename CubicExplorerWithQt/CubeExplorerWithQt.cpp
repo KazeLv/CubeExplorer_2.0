@@ -9,6 +9,10 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 
 	curPath = QDir::currentPath();		//获取当前工作路径
 
+	pTimer = new QTimer(this);			//构造并绑定计时器槽函数
+	pMyTimer = new MyTimer();
+	connect(pTimer, &QTimer::timeout, this, &CubeExplorerWithQt::slot_timeout);
+
 	//界面按钮信号槽绑定
 	connect(ui.btn_tightOrLoose, SIGNAL(clicked()), this, SLOT(on_btnTightOrLooseClicked()));
 	connect(ui.btn_restore, SIGNAL(clicked()), this, SLOT(on_btnRestoreClicked()));
@@ -25,8 +29,7 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	connect(ui.comboBox_coms, SIGNAL(currentIndexChanged(QString)), this, SLOT(slot_portInfoChanged(QString)));
 
 	connect(ui.btn_sendSingle, SIGNAL(clicked()), this, SLOT(on_btnSendSingleClicked()));
-	
-	//connect(this, SIGNAL(signal_captureFinished()), this, SLOT(slot_continueRestore()));
+	connect(ui.btn_sendAll, SIGNAL(clicked()), this, SLOT(slot_sendOperationSerial()));
 
 	//初始化摄像头
 	iniCamera();
@@ -42,6 +45,7 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 	serialPort->setParity(QSerialPort::NoParity);
 	serialPort->setStopBits(QSerialPort::OneStop);
 	serialPort->setFlowControl(QSerialPort::NoFlowControl);
+	connect(serialPort, &QSerialPort::readyRead, this, &CubeExplorerWithQt::slot_comReadyRead);
 
 	ui.comboBox_coms->clear();
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
@@ -50,10 +54,14 @@ CubeExplorerWithQt::CubeExplorerWithQt(QWidget *parent)
 }
 
 CubeExplorerWithQt::~CubeExplorerWithQt() {
+	writeRecords();
+
 	if (serialPort->isOpen()){
 		serialPort->close();
 		delete serialPort;
 	}
+
+	delete pMyTimer;
 }
 
 void CubeExplorerWithQt::iniCamera()
@@ -167,16 +175,53 @@ void CubeExplorerWithQt::Sleep(int sec) {
 	}
 }
 
-void CubeExplorerWithQt::SendOperationSerial() {
+void CubeExplorerWithQt::initRecords() {
+	//从本地文件读取存储的HSV数据
+	QFile file_record(QDir::currentPath() + "/data/restoreRecord.txt");	//读取阈值数据文件到 str_record 以进行分割、遍历
+	file_record.open(QIODevice::ReadWrite);									//
+	QTextStream ts(&file_record);											//
+	QString str_record = ts.readAll();									//
+
+
+	QList<QString> list_recordStr = str_record.split('_');			//根据 '_' 分割得到复原步数记录
+
+	for (int i = 0; i < list_recordStr.size() - 1; i += 2) {		
+		int cnt = list_recordStr[i].toInt();
+		double time = list_recordStr[i + 1].toDouble();
+		list_restoreRecord.push_back(RestoreRecord(cnt,time));
+	}
+
+	file_record.close();
+}
+
+void CubeExplorerWithQt::writeRecords()
+{
+	QString data2write;
+	for (int i = 0; i < list_restoreRecord.size(); i++) {
+		data2write += QString::asprintf("%d_%f", list_restoreRecord[i].cnt, list_restoreRecord[i].time);
+		if (i != list_restoreRecord.size() - 1) {
+			data2write += '_';
+		}
+	}
+
+	QFile::remove(QDir::currentPath() + "/data/restoreRecord.txt");			//直接删除原来的数据文件
+	QFile file_record(QDir::currentPath() + "/data/restoreRecord.txt");		//创建并打开新文件进行输入
+	file_record.open(QIODevice::WriteOnly);									//
+	QTextStream ts(&file_record);											//
+	ts << data2write;														//
+	file_record.close();
+}
+
+void CubeExplorerWithQt::slot_sendOperationSerial() {
 	for (auto iter = cubeExplorer.GetVecStrSerial().cbegin(); iter != cubeExplorer.GetVecStrSerial().cend(); iter++) {
 		serialPort->write(QString(iter->c_str()).toLatin1());
 	}
-	serialPort->write(QString("#2P2T200\r\n").toLatin1());
-	serialPort->write(QString("#4P2T200\r\n").toLatin1());
+	serialPort->write(QString("#2P0T200\r\n").toLatin1());			//左右爪松开以便拿取魔方
+	serialPort->write(QString("#4P0T200\r\n").toLatin1());			//
 }
 
 void CubeExplorerWithQt::on_btnSendSingleClicked() {
-	if (cubeExplorer.GetVecStrSerial().empty()) return;
+	if (cubeExplorer.GetVecStrSerial().empty()) return;		
 	serialPort->write(QString(cubeExplorer.GetVecStrSerial()[0].c_str()).toLatin1());
 	cubeExplorer.GetVecStrSerial().erase(cubeExplorer.GetVecStrSerial().begin());
 }
@@ -209,12 +254,16 @@ void CubeExplorerWithQt::on_btnResetClicked() {
 }
 
 void CubeExplorerWithQt::on_btnRestoreClicked() {
+	pTimer->setInterval(50);
+	pMyTimer->reset();
+	pTimer->start();
+	pMyTimer->start();
+
 	bRestore = true;
 	nImgSaved = 0;						//重置拍照计数
 	cubeExplorer.Reset();
 	serialPort->write(QString("#2P1T200\r\n").toLatin1());		//两爪夹紧
 	serialPort->write(QString("#4P1T200\r\n").toLatin1());		//
-	serialPort->flush();
 
 //策略1 两爪依次张合，拍摄两组照片以获取所有色块信息----------------------------------------
 	//1.拍照case1，得到strCase1；拍照case2，得到strCase2
@@ -222,7 +271,7 @@ void CubeExplorerWithQt::on_btnRestoreClicked() {
 	serialPort->write(QString("#4P5T200\r\n").toLatin1());
 	serialPort->flush();
 	cubeExplorer.handState.right.isTight = false;
-	Sleep(1000);
+	Sleep(500);
 
 	//b.拍照
 	capture("case1");
@@ -402,7 +451,7 @@ void CubeExplorerWithQt::slot_imageSaved(int id, QString fileName)
 		serialPort->flush();
 		cubeExplorer.handState.left.isTight = false;
 		cubeExplorer.handState.right.isTight = true;
-		Sleep(1000);
+		Sleep(500);
 
 		capture("case2");							//三张图片保存完毕，case1拍照成功，进行case2的拍照
 	}
@@ -450,6 +499,7 @@ void CubeExplorerWithQt::slot_portInfoChanged(const QString & text)
 {
 	serialPort->setPortName(text);
 }
+
 
 void CubeExplorerWithQt::slot_cameraInfoChanged(const QString & text)
 {
@@ -518,13 +568,38 @@ void CubeExplorerWithQt::continueRestore()
 	char* res = cube_solve(cp, NULL);
 	if (!res) {
 		ui.label_UI_message->setText(QStringLiteral("识别序列有误！"));
+		pTimer->stop();		//停止计时器
 		return;
-	}
+	}else ui.label_UI_message->setText(QStringLiteral("识别正确！"));
 	cubeExplorer.SetTarget(res);
 
 	//4.CubicExplorer对象调用解算方法，得到串口操作序列字符串
 	cubeExplorer.GetShortestWay();
 
 	//5.通过串口通信把串口序列传递给控制机，并使用listView控件实时显示操作序列传输情况
-	if (bRestore) SendOperationSerial();
+	if (bRestore) slot_sendOperationSerial();
+}
+
+void CubeExplorerWithQt::slot_timeout() {
+	double second = pMyTimer->getTime();
+	ui.lineEdit_second1->setText(QString::asprintf("%d", int(second)));
+	ui.lineEdit_second2->setText(QString::asprintf("%d", int((second-int(second))*100)));
+}
+
+void CubeExplorerWithQt::slot_comReadyRead()
+{
+	QByteArray byteTmp = serialPort->readAll();
+	if (!byteTmp.isEmpty()) {
+		if (byteTmp.contains("Start")) {
+			//接收到开始按钮指令，开始复原
+			on_btnRestoreClicked();
+		}
+		else if (byteTmp.contains("Over")) {
+			//接收到结束指令，复原结束
+			pTimer->stop();
+			int cnt = cubeExplorer.transCnt;
+			double time = double(int(pMyTimer->getTime()*100))/100;		//时间取两位小数
+			list_restoreRecord.push_back(RestoreRecord(cnt, time));
+		}
+	}
 }

@@ -13,6 +13,7 @@
 #include <qcamera.h>
 #include <qcamerainfo.h>
 #include <qcameraimagecapture.h>
+#include <qtimer.h>
 #include <qgraphicsview.h>
 #include <qgraphicsscene.h>
 #include <qgraphicsitem.h>
@@ -23,6 +24,7 @@
 #include "RecogAreaDialog.h"
 #include "HSVDataDialog.h"
 #include "HSVThresholdDialog.h"
+#include "MyTimer.h"
 
 extern "C" {
 #include "solve.h"
@@ -30,6 +32,12 @@ extern "C" {
 
 #define SCENE_VIEW_WIDTH 320
 #define SCENE_VIEW_HEIGHT 240
+
+struct RestoreRecord {
+	int cnt;
+	double time;
+	RestoreRecord(int n,double t):cnt(n),time(t){}
+};
 
 class CubeExplorerWithQt : public QMainWindow
 {
@@ -41,8 +49,11 @@ public:
 	//void openCamera();
 	void iniCamera();
 	void capture(std::string);
-	void SendOperationSerial();
 	void Sleep(int);
+	void continueRestore();
+
+	void initRecords();									//从数据文件读取记录
+	void writeRecords();								//将记录写入文件
 
 private:
 	Ui::CubicExplorerWithQt ui;
@@ -50,6 +61,10 @@ private:
 	bool bRestore = false;
 
 	CubeExplorer cubeExplorer;							//魔方解算
+
+	QTimer *pTimer;										//复原计时触发器
+	MyTimer *pMyTimer;									//复原计时器
+	QList<RestoreRecord> list_restoreRecord;			//复原记录
 
 	QSerialPort *serialPort;							//串口控制
 	QSerialPortInfo currentPortInfo;
@@ -101,5 +116,8 @@ public slots:
 	//摄像头分配槽函数
 	void slot_cameraInfoChanged(const QString &text);
 
-	void continueRestore();
+	void slot_sendOperationSerial();
+
+	void slot_timeout();
+	void slot_comReadyRead();
 };

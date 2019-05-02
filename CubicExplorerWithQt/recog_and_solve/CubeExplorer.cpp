@@ -11,13 +11,17 @@ void CubeExplorer::OnR(vector<string>::iterator& iter) {
 	GetLeftReadyAndTight();									//左爪调整至90/270°且夹紧
 	macVec.push_back(Operation::R);							//右爪顺时针转动90°（存储到容器内，之后进行发送）
 	handState.right.isReady = !handState.right.isReady;		//设置右爪状态参数
+
+	transCnt++;
 }
 
 void CubeExplorer::On_R(vector<string>::iterator& iter) {
 	RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::_R);
-	handState.right.isReady = !handState.right.isReady;
+	handState.right.isReady = !handState.right.isReady; 
+
+	transCnt++;
 }
 
 void CubeExplorer::OnF(vector<string>::iterator& iter) {
@@ -25,6 +29,8 @@ void CubeExplorer::OnF(vector<string>::iterator& iter) {
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F);
 	handState.left.isReady = !handState.left.isReady;
+
+	transCnt++;
 }
 
 void CubeExplorer::On_F(vector<string>::iterator& iter) {
@@ -32,6 +38,8 @@ void CubeExplorer::On_F(vector<string>::iterator& iter) {
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::_F);
 	handState.left.isReady = !handState.left.isReady;
+
+	transCnt++;
 }
 
 void CubeExplorer::OnRR(vector<string>::iterator& iter) {
@@ -54,6 +62,8 @@ void CubeExplorer::OnRR(vector<string>::iterator& iter) {
 		else if (*it == "D2") *it = "F2";
 		else if (*it == "F2") *it = "U2";
 	}
+
+	transCnt++;
 }
 
 void CubeExplorer::On_RR(vector<string>::iterator& iter) {
@@ -76,6 +86,8 @@ void CubeExplorer::On_RR(vector<string>::iterator& iter) {
 		else if (*it == "D2") *it = "B2";
 		else if (*it == "F2") *it = "D2";
 	}
+
+	transCnt++;
 }
 
 void CubeExplorer::OnFF(vector<string>::iterator& iter) {
@@ -98,6 +110,8 @@ void CubeExplorer::OnFF(vector<string>::iterator& iter) {
 		else if (*it == "D2") *it = "L2";
 		else if (*it == "L2") *it = "U2";
 	}
+
+	transCnt++;
 }
 
 void CubeExplorer::On_FF(vector<string>::iterator& iter) {
@@ -120,6 +134,8 @@ void CubeExplorer::On_FF(vector<string>::iterator& iter) {
 		else if (*it == "D2") *it = "R2";
 		else if (*it == "L2") *it = "D2";
 	}
+
+	transCnt++;
 }
 
 void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
@@ -142,6 +158,7 @@ void CubeExplorer::OnRR2(vector<string>::iterator& iter) {
 		else if (*it == "F2") *it = "B2";
 	}
 
+	transCnt++;
 }
 
 void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
@@ -163,18 +180,24 @@ void CubeExplorer::OnFF2(vector<string>::iterator& iter) {
 		else if (*it == "D2") *it = "U2";
 		else if (*it == "L2") *it = "R2";
 	}
+
+	transCnt++;
 }
 
 void CubeExplorer::OnR2(vector<string>::iterator& iter) {
 	RightTight();
 	GetLeftReadyAndTight();
 	macVec.push_back(Operation::R2);
+
+	transCnt++;
 }
 
 void CubeExplorer::OnF2(vector<string>::iterator& iter) {
 	LeftTight();
 	GetRightReadyAndTight();
 	macVec.push_back(Operation::F2);
+
+	transCnt++;
 }
 
 void CubeExplorer::LeftLoose() {
@@ -284,6 +307,7 @@ void CubeExplorer::GetShortestWay() {
 		}
 	}
 
+	transCnt = 0;
 	for (auto iter = strNorVec.begin(); iter != strNorVec.end(); iter++) {
 		if (*iter == "R") OnR(iter);				//F和R面系列操作，无需魔方的整体转动就可以直接操作
 		else if (*iter == "F") OnF(iter);			//

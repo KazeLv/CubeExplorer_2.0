@@ -19,6 +19,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
@@ -103,22 +104,36 @@ public:
     QLabel *label_UI_message;
     QVBoxLayout *vLay_btns;
     QSpacerItem *verticalSpacer_14;
+    QGroupBox *groupBox_normal;
+    QVBoxLayout *verticalLayout_4;
     QPushButton *btn_camSwitch;
     QPushButton *btn_showSamRecs;
-    QPushButton *btn_recog;
-    QPushButton *btn_tightOrLoose;
-    QPushButton *btn_reset;
     QPushButton *btn_debug;
     QPushButton *btn_setHSV;
-    QSpacerItem *verticalSpacer_13;
+    QGroupBox *groupBox_operation;
+    QVBoxLayout *verticalLayout_5;
+    QPushButton *btn_tightOrLoose;
+    QPushButton *btn_reset;
+    QGroupBox *groupBox_recog_send;
+    QVBoxLayout *verticalLayout_3;
+    QPushButton *btn_recog;
     QPushButton *btn_sendSingle;
+    QPushButton *btn_sendAll;
+    QSpacerItem *verticalSpacer_13;
+    QGroupBox *groupBox;
+    QVBoxLayout *verticalLayout_6;
+    QHBoxLayout *horizontalLayout_4;
+    QLineEdit *lineEdit_second1;
+    QLabel *label;
+    QLineEdit *lineEdit_second2;
+    QLabel *label_2;
     QPushButton *btn_restore;
 
     void setupUi(QWidget *CubicExplorerWithQt)
     {
         if (CubicExplorerWithQt->objectName().isEmpty())
             CubicExplorerWithQt->setObjectName(QStringLiteral("CubicExplorerWithQt"));
-        CubicExplorerWithQt->resize(1172, 752);
+        CubicExplorerWithQt->resize(1208, 795);
         CubicExplorerWithQt->setMinimumSize(QSize(1172, 680));
         actSetBlock = new QAction(CubicExplorerWithQt);
         actSetBlock->setObjectName(QStringLiteral("actSetBlock"));
@@ -128,7 +143,7 @@ public:
         actCancel->setObjectName(QStringLiteral("actCancel"));
         layoutWidget = new QWidget(CubicExplorerWithQt);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(9, 9, 1154, 734));
+        layoutWidget->setGeometry(QRect(9, 9, 1192, 782));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
@@ -519,7 +534,13 @@ public:
 
         vLay_btns->addItem(verticalSpacer_14);
 
-        btn_camSwitch = new QPushButton(layoutWidget);
+        groupBox_normal = new QGroupBox(layoutWidget);
+        groupBox_normal->setObjectName(QStringLiteral("groupBox_normal"));
+        verticalLayout_4 = new QVBoxLayout(groupBox_normal);
+        verticalLayout_4->setSpacing(6);
+        verticalLayout_4->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
+        btn_camSwitch = new QPushButton(groupBox_normal);
         btn_camSwitch->setObjectName(QStringLiteral("btn_camSwitch"));
         btn_camSwitch->setMinimumSize(QSize(100, 30));
         btn_camSwitch->setMaximumSize(QSize(100, 30));
@@ -528,75 +549,163 @@ public:
         font2.setPointSize(14);
         btn_camSwitch->setFont(font2);
 
-        vLay_btns->addWidget(btn_camSwitch);
+        verticalLayout_4->addWidget(btn_camSwitch);
 
-        btn_showSamRecs = new QPushButton(layoutWidget);
+        btn_showSamRecs = new QPushButton(groupBox_normal);
         btn_showSamRecs->setObjectName(QStringLiteral("btn_showSamRecs"));
         btn_showSamRecs->setMinimumSize(QSize(100, 30));
         btn_showSamRecs->setMaximumSize(QSize(100, 30));
         btn_showSamRecs->setFont(font2);
 
-        vLay_btns->addWidget(btn_showSamRecs);
+        verticalLayout_4->addWidget(btn_showSamRecs);
 
-        btn_recog = new QPushButton(layoutWidget);
-        btn_recog->setObjectName(QStringLiteral("btn_recog"));
-        btn_recog->setMinimumSize(QSize(100, 30));
-        btn_recog->setMaximumSize(QSize(100, 30));
-        btn_recog->setFont(font2);
-
-        vLay_btns->addWidget(btn_recog);
-
-        btn_tightOrLoose = new QPushButton(layoutWidget);
-        btn_tightOrLoose->setObjectName(QStringLiteral("btn_tightOrLoose"));
-        btn_tightOrLoose->setMinimumSize(QSize(100, 30));
-        btn_tightOrLoose->setMaximumSize(QSize(100, 30));
-        btn_tightOrLoose->setFont(font2);
-
-        vLay_btns->addWidget(btn_tightOrLoose);
-
-        btn_reset = new QPushButton(layoutWidget);
-        btn_reset->setObjectName(QStringLiteral("btn_reset"));
-        btn_reset->setMinimumSize(QSize(100, 30));
-        btn_reset->setMaximumSize(QSize(100, 30));
-        btn_reset->setFont(font2);
-
-        vLay_btns->addWidget(btn_reset);
-
-        btn_debug = new QPushButton(layoutWidget);
+        btn_debug = new QPushButton(groupBox_normal);
         btn_debug->setObjectName(QStringLiteral("btn_debug"));
         btn_debug->setMinimumSize(QSize(100, 30));
         btn_debug->setMaximumSize(QSize(100, 30));
         btn_debug->setFont(font2);
 
-        vLay_btns->addWidget(btn_debug);
+        verticalLayout_4->addWidget(btn_debug);
 
-        btn_setHSV = new QPushButton(layoutWidget);
+        btn_setHSV = new QPushButton(groupBox_normal);
         btn_setHSV->setObjectName(QStringLiteral("btn_setHSV"));
         btn_setHSV->setMinimumSize(QSize(100, 30));
         btn_setHSV->setMaximumSize(QSize(100, 30));
         btn_setHSV->setFont(font2);
 
-        vLay_btns->addWidget(btn_setHSV);
+        verticalLayout_4->addWidget(btn_setHSV);
 
-        verticalSpacer_13 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        vLay_btns->addItem(verticalSpacer_13);
+        vLay_btns->addWidget(groupBox_normal);
 
-        btn_sendSingle = new QPushButton(layoutWidget);
+        groupBox_operation = new QGroupBox(layoutWidget);
+        groupBox_operation->setObjectName(QStringLiteral("groupBox_operation"));
+        verticalLayout_5 = new QVBoxLayout(groupBox_operation);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        btn_tightOrLoose = new QPushButton(groupBox_operation);
+        btn_tightOrLoose->setObjectName(QStringLiteral("btn_tightOrLoose"));
+        btn_tightOrLoose->setMinimumSize(QSize(100, 30));
+        btn_tightOrLoose->setMaximumSize(QSize(100, 30));
+        btn_tightOrLoose->setFont(font2);
+
+        verticalLayout_5->addWidget(btn_tightOrLoose);
+
+        btn_reset = new QPushButton(groupBox_operation);
+        btn_reset->setObjectName(QStringLiteral("btn_reset"));
+        btn_reset->setMinimumSize(QSize(100, 30));
+        btn_reset->setMaximumSize(QSize(100, 30));
+        btn_reset->setFont(font2);
+
+        verticalLayout_5->addWidget(btn_reset);
+
+
+        vLay_btns->addWidget(groupBox_operation);
+
+        groupBox_recog_send = new QGroupBox(layoutWidget);
+        groupBox_recog_send->setObjectName(QStringLiteral("groupBox_recog_send"));
+        verticalLayout_3 = new QVBoxLayout(groupBox_recog_send);
+        verticalLayout_3->setSpacing(6);
+        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
+        btn_recog = new QPushButton(groupBox_recog_send);
+        btn_recog->setObjectName(QStringLiteral("btn_recog"));
+        btn_recog->setMinimumSize(QSize(100, 30));
+        btn_recog->setMaximumSize(QSize(100, 30));
+        btn_recog->setFont(font2);
+
+        verticalLayout_3->addWidget(btn_recog);
+
+        btn_sendSingle = new QPushButton(groupBox_recog_send);
         btn_sendSingle->setObjectName(QStringLiteral("btn_sendSingle"));
         btn_sendSingle->setMinimumSize(QSize(100, 30));
         btn_sendSingle->setMaximumSize(QSize(100, 30));
         btn_sendSingle->setFont(font2);
 
-        vLay_btns->addWidget(btn_sendSingle);
+        verticalLayout_3->addWidget(btn_sendSingle);
 
-        btn_restore = new QPushButton(layoutWidget);
+        btn_sendAll = new QPushButton(groupBox_recog_send);
+        btn_sendAll->setObjectName(QStringLiteral("btn_sendAll"));
+        btn_sendAll->setMinimumSize(QSize(100, 30));
+        btn_sendAll->setMaximumSize(QSize(100, 30));
+        btn_sendAll->setFont(font2);
+
+        verticalLayout_3->addWidget(btn_sendAll);
+
+
+        vLay_btns->addWidget(groupBox_recog_send);
+
+        verticalSpacer_13 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        vLay_btns->addItem(verticalSpacer_13);
+
+        groupBox = new QGroupBox(layoutWidget);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setMaximumSize(QSize(120, 16777215));
+        verticalLayout_6 = new QVBoxLayout(groupBox);
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        lineEdit_second1 = new QLineEdit(groupBox);
+        lineEdit_second1->setObjectName(QStringLiteral("lineEdit_second1"));
+        lineEdit_second1->setMinimumSize(QSize(32, 32));
+        QFont font3;
+        font3.setFamily(QStringLiteral("Proxy 8"));
+        font3.setPointSize(16);
+        lineEdit_second1->setFont(font3);
+        lineEdit_second1->setContextMenuPolicy(Qt::DefaultContextMenu);
+        lineEdit_second1->setAlignment(Qt::AlignCenter);
+
+        horizontalLayout_4->addWidget(lineEdit_second1);
+
+        label = new QLabel(groupBox);
+        label->setObjectName(QStringLiteral("label"));
+        QFont font4;
+        font4.setFamily(QStringLiteral("Consolas"));
+        font4.setPointSize(12);
+        font4.setBold(true);
+        font4.setWeight(75);
+        label->setFont(font4);
+
+        horizontalLayout_4->addWidget(label);
+
+        lineEdit_second2 = new QLineEdit(groupBox);
+        lineEdit_second2->setObjectName(QStringLiteral("lineEdit_second2"));
+        lineEdit_second2->setMinimumSize(QSize(32, 32));
+        lineEdit_second2->setFont(font3);
+        lineEdit_second2->setContextMenuPolicy(Qt::DefaultContextMenu);
+        lineEdit_second2->setAlignment(Qt::AlignCenter);
+
+        horizontalLayout_4->addWidget(lineEdit_second2);
+
+        label_2 = new QLabel(groupBox);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        QFont font5;
+        font5.setFamily(QStringLiteral("Constantia"));
+        font5.setPointSize(16);
+        font5.setBold(false);
+        font5.setWeight(50);
+        label_2->setFont(font5);
+
+        horizontalLayout_4->addWidget(label_2);
+
+
+        verticalLayout_6->addLayout(horizontalLayout_4);
+
+        btn_restore = new QPushButton(groupBox);
         btn_restore->setObjectName(QStringLiteral("btn_restore"));
         btn_restore->setMinimumSize(QSize(100, 30));
         btn_restore->setMaximumSize(QSize(100, 30));
         btn_restore->setFont(font2);
 
-        vLay_btns->addWidget(btn_restore);
+        verticalLayout_6->addWidget(btn_restore);
+
+
+        vLay_btns->addWidget(groupBox);
 
 
         horizontalLayout->addLayout(vLay_btns);
@@ -636,14 +745,24 @@ public:
         label_portMessage->setText(QApplication::translate("CubicExplorerWithQt", "\346\234\252\346\211\223\345\274\200...", Q_NULLPTR));
         btn_portSend->setText(QApplication::translate("CubicExplorerWithQt", "\345\217\221\351\200\201", Q_NULLPTR));
         label_UI_message->setText(QApplication::translate("CubicExplorerWithQt", "message", Q_NULLPTR));
+        groupBox_normal->setTitle(QString());
         btn_camSwitch->setText(QApplication::translate("CubicExplorerWithQt", "\346\221\204\345\203\217\345\244\264\345\274\200\345\205\263", Q_NULLPTR));
         btn_showSamRecs->setText(QApplication::translate("CubicExplorerWithQt", "\346\230\276\347\244\272\351\207\207\346\240\267\346\241\206", Q_NULLPTR));
-        btn_recog->setText(QApplication::translate("CubicExplorerWithQt", "\350\257\206\345\210\253\350\211\262\345\235\227", Q_NULLPTR));
-        btn_tightOrLoose->setText(QApplication::translate("CubicExplorerWithQt", "\346\235\276\345\274\200/\345\244\271\347\264\247", Q_NULLPTR));
-        btn_reset->setText(QApplication::translate("CubicExplorerWithQt", "\347\210\252\345\244\215\344\275\215", Q_NULLPTR));
         btn_debug->setText(QApplication::translate("CubicExplorerWithQt", "\350\260\203\350\257\225", Q_NULLPTR));
         btn_setHSV->setText(QApplication::translate("CubicExplorerWithQt", "HSV\350\256\276\347\275\256", Q_NULLPTR));
+        groupBox_operation->setTitle(QString());
+        btn_tightOrLoose->setText(QApplication::translate("CubicExplorerWithQt", "\346\235\276\345\274\200/\345\244\271\347\264\247", Q_NULLPTR));
+        btn_reset->setText(QApplication::translate("CubicExplorerWithQt", "\347\210\252\345\244\215\344\275\215", Q_NULLPTR));
+        groupBox_recog_send->setTitle(QString());
+        btn_recog->setText(QApplication::translate("CubicExplorerWithQt", "\350\257\206\345\210\253\350\211\262\345\235\227", Q_NULLPTR));
         btn_sendSingle->setText(QApplication::translate("CubicExplorerWithQt", "\345\215\225\346\255\245\346\211\247\350\241\214", Q_NULLPTR));
+        btn_sendAll->setText(QApplication::translate("CubicExplorerWithQt", "\345\205\250\351\203\250\345\217\221\351\200\201", Q_NULLPTR));
+        groupBox->setTitle(QString());
+        lineEdit_second1->setInputMask(QString());
+        lineEdit_second1->setText(QApplication::translate("CubicExplorerWithQt", "00", Q_NULLPTR));
+        label->setText(QApplication::translate("CubicExplorerWithQt", ".", Q_NULLPTR));
+        lineEdit_second2->setText(QApplication::translate("CubicExplorerWithQt", "00", Q_NULLPTR));
+        label_2->setText(QApplication::translate("CubicExplorerWithQt", "s", Q_NULLPTR));
         btn_restore->setText(QApplication::translate("CubicExplorerWithQt", "\345\274\200\345\247\213\345\244\215\345\216\237", Q_NULLPTR));
     } // retranslateUi
 

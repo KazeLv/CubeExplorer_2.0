@@ -182,5 +182,8 @@
     <ClInclude Include="recog_and_solve\CubeExplorer.h">
       <Filter>Header Files\recog_and_solve</Filter>
     </ClInclude>
+    <ClInclude Include="MyTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

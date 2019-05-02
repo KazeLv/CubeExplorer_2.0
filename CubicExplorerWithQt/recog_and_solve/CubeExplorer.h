@@ -52,6 +52,7 @@ private:
 	string target;						//字符串，存储将要处理的普通公式序列
 public:
 	HandState handState;	//自定义类HandState类型，表示当前机械手状态
+	int transCnt = 0;					//记录魔方翻转次数
 	
 	CubeExplorer(char* cstr="", HandState& hs=HandState(true,true,true,true));
 	
