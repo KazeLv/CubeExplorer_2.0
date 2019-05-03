@@ -122,18 +122,23 @@ public:
     QSpacerItem *verticalSpacer_13;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout_6;
+    QVBoxLayout *verticalLayout_8;
+    QHBoxLayout *horizontalLayout_5;
+    QLabel *label_3;
+    QLabel *label_restoreCnt;
     QHBoxLayout *horizontalLayout_4;
     QLineEdit *lineEdit_second1;
     QLabel *label;
     QLineEdit *lineEdit_second2;
     QLabel *label_2;
+    QVBoxLayout *verticalLayout_7;
     QPushButton *btn_restore;
 
     void setupUi(QWidget *CubicExplorerWithQt)
     {
         if (CubicExplorerWithQt->objectName().isEmpty())
             CubicExplorerWithQt->setObjectName(QStringLiteral("CubicExplorerWithQt"));
-        CubicExplorerWithQt->resize(1208, 795);
+        CubicExplorerWithQt->resize(1468, 902);
         CubicExplorerWithQt->setMinimumSize(QSize(1172, 680));
         actSetBlock = new QAction(CubicExplorerWithQt);
         actSetBlock->setObjectName(QStringLiteral("actSetBlock"));
@@ -647,16 +652,43 @@ public:
         verticalLayout_6->setSpacing(6);
         verticalLayout_6->setContentsMargins(11, 11, 11, 11);
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        verticalLayout_8 = new QVBoxLayout();
+        verticalLayout_8->setSpacing(6);
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        label_3 = new QLabel(groupBox);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        QFont font3;
+        font3.setFamily(QStringLiteral("Agency FB"));
+        font3.setPointSize(11);
+        font3.setBold(true);
+        font3.setWeight(75);
+        label_3->setFont(font3);
+
+        horizontalLayout_5->addWidget(label_3);
+
+        label_restoreCnt = new QLabel(groupBox);
+        label_restoreCnt->setObjectName(QStringLiteral("label_restoreCnt"));
+        label_restoreCnt->setFont(font3);
+        label_restoreCnt->setAlignment(Qt::AlignCenter);
+
+        horizontalLayout_5->addWidget(label_restoreCnt);
+
+
+        verticalLayout_8->addLayout(horizontalLayout_5);
+
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         lineEdit_second1 = new QLineEdit(groupBox);
         lineEdit_second1->setObjectName(QStringLiteral("lineEdit_second1"));
         lineEdit_second1->setMinimumSize(QSize(32, 32));
-        QFont font3;
-        font3.setFamily(QStringLiteral("Proxy 8"));
-        font3.setPointSize(16);
-        lineEdit_second1->setFont(font3);
+        QFont font4;
+        font4.setFamily(QStringLiteral("OCR A Extended"));
+        font4.setPointSize(16);
+        lineEdit_second1->setFont(font4);
         lineEdit_second1->setContextMenuPolicy(Qt::DefaultContextMenu);
         lineEdit_second1->setAlignment(Qt::AlignCenter);
 
@@ -664,19 +696,19 @@ public:
 
         label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
-        QFont font4;
-        font4.setFamily(QStringLiteral("Consolas"));
-        font4.setPointSize(12);
-        font4.setBold(true);
-        font4.setWeight(75);
-        label->setFont(font4);
+        QFont font5;
+        font5.setFamily(QStringLiteral("Consolas"));
+        font5.setPointSize(12);
+        font5.setBold(true);
+        font5.setWeight(75);
+        label->setFont(font5);
 
         horizontalLayout_4->addWidget(label);
 
         lineEdit_second2 = new QLineEdit(groupBox);
         lineEdit_second2->setObjectName(QStringLiteral("lineEdit_second2"));
         lineEdit_second2->setMinimumSize(QSize(32, 32));
-        lineEdit_second2->setFont(font3);
+        lineEdit_second2->setFont(font4);
         lineEdit_second2->setContextMenuPolicy(Qt::DefaultContextMenu);
         lineEdit_second2->setAlignment(Qt::AlignCenter);
 
@@ -684,17 +716,26 @@ public:
 
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QStringLiteral("label_2"));
-        QFont font5;
-        font5.setFamily(QStringLiteral("Constantia"));
-        font5.setPointSize(16);
-        font5.setBold(false);
-        font5.setWeight(50);
-        label_2->setFont(font5);
+        QFont font6;
+        font6.setFamily(QStringLiteral("Roman"));
+        font6.setPointSize(16);
+        font6.setBold(false);
+        font6.setWeight(50);
+        label_2->setFont(font6);
 
         horizontalLayout_4->addWidget(label_2);
 
 
-        verticalLayout_6->addLayout(horizontalLayout_4);
+        verticalLayout_8->addLayout(horizontalLayout_4);
+
+
+        verticalLayout_6->addLayout(verticalLayout_8);
+
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setSpacing(6);
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+
+        verticalLayout_6->addLayout(verticalLayout_7);
 
         btn_restore = new QPushButton(groupBox);
         btn_restore->setObjectName(QStringLiteral("btn_restore"));
@@ -758,6 +799,8 @@ public:
         btn_sendSingle->setText(QApplication::translate("CubicExplorerWithQt", "\345\215\225\346\255\245\346\211\247\350\241\214", Q_NULLPTR));
         btn_sendAll->setText(QApplication::translate("CubicExplorerWithQt", "\345\205\250\351\203\250\345\217\221\351\200\201", Q_NULLPTR));
         groupBox->setTitle(QString());
+        label_3->setText(QApplication::translate("CubicExplorerWithQt", "\346\255\245\346\225\260\357\274\232", Q_NULLPTR));
+        label_restoreCnt->setText(QApplication::translate("CubicExplorerWithQt", "0", Q_NULLPTR));
         lineEdit_second1->setInputMask(QString());
         lineEdit_second1->setText(QApplication::translate("CubicExplorerWithQt", "00", Q_NULLPTR));
         label->setText(QApplication::translate("CubicExplorerWithQt", ".", Q_NULLPTR));

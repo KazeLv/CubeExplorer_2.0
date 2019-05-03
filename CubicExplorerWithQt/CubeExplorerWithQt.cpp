@@ -218,6 +218,7 @@ void CubeExplorerWithQt::slot_sendOperationSerial() {
 	}
 	serialPort->write(QString("#2P0T200\r\n").toLatin1());			//左右爪松开以便拿取魔方
 	serialPort->write(QString("#4P0T200\r\n").toLatin1());			//
+	serialPort->write(QString("#7P90T200\r\n").toLatin1());			//
 }
 
 void CubeExplorerWithQt::on_btnSendSingleClicked() {
@@ -520,7 +521,6 @@ void CubeExplorerWithQt::slot_portInfoChanged(const QString & text)
 	serialPort->setPortName(text);
 }
 
-
 void CubeExplorerWithQt::slot_cameraInfoChanged(const QString & text)
 {
 	QString str_t = sender()->objectName();
@@ -592,8 +592,9 @@ void CubeExplorerWithQt::continueRestore()
 		return;
 	}
 	else {
+		ui.label_restoreCnt->setText(QString::asprintf("%d",cubeExplorer.transCnt));
 		//ui.label_UI_message->setText(QStringLiteral("识别正确！"));
-		ui.label_UI_message->setText(QString(strRec.c_str())+QString(res)+"  end");
+		ui.label_UI_message->setText(QString(QString(res)+"  end"));
 		ui.plainTextEdit_portWrite->setPlainText(QString("RecogResult: ") + strRec.c_str());
 	}
 	cubeExplorer.SetTarget(res);
