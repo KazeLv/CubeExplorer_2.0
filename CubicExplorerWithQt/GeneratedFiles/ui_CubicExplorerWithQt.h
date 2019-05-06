@@ -138,7 +138,7 @@ public:
     {
         if (CubicExplorerWithQt->objectName().isEmpty())
             CubicExplorerWithQt->setObjectName(QStringLiteral("CubicExplorerWithQt"));
-        CubicExplorerWithQt->resize(1468, 902);
+        CubicExplorerWithQt->resize(1208, 800);
         CubicExplorerWithQt->setMinimumSize(QSize(1172, 680));
         actSetBlock = new QAction(CubicExplorerWithQt);
         actSetBlock->setObjectName(QStringLiteral("actSetBlock"));

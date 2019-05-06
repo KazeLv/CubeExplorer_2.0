@@ -592,15 +592,15 @@ void CubeExplorerWithQt::continueRestore()
 		return;
 	}
 	else {
-		ui.label_restoreCnt->setText(QString::asprintf("%d",cubeExplorer.transCnt));
 		//ui.label_UI_message->setText(QStringLiteral("识别正确！"));
-		ui.label_UI_message->setText(QString(QString(res)+"  end"));
 		ui.plainTextEdit_portWrite->setPlainText(QString("RecogResult: ") + strRec.c_str());
 	}
 	cubeExplorer.SetTarget(res);
 
 	//4.CubicExplorer对象调用解算方法，得到串口操作序列字符串
 	cubeExplorer.GetShortestWay();
+	ui.label_UI_message->setText(QString::asprintf("%d", cubeExplorer.GetVecStrSerial().size()));
+	ui.label_restoreCnt->setText(QString::asprintf("%d", cubeExplorer.transCnt));
 
 	//5.通过串口通信把串口序列传递给控制机，并使用listView控件实时显示操作序列传输情况
 	if (bRestore) slot_sendOperationSerial();
@@ -614,12 +614,13 @@ void CubeExplorerWithQt::slot_timeout() {
 
 void CubeExplorerWithQt::slot_comReadyRead()
 {
-	QByteArray byteTmp = serialPort->readAll();
+	QByteArray byteTmp = serialPort->readAll(); 
 	if (!byteTmp.isEmpty()) {
-		if (byteTmp.contains("Start")) {
+		if (byteTmp.contains("Start")&& bResponseStart) {
 			//接收到开始按钮指令，开始复原
 			on_btnRestoreClicked();
-			ui.label_UI_message->setText(QStringLiteral("串口收到开始信号"));
+			ui.label_UI_message->setText(QStringLiteral("串口收到开始信号")); 
+			bResponseStart = false;
 		}
 		else if (byteTmp.contains("Over")) {
 			//接收到结束指令，复原结束
@@ -628,6 +629,14 @@ void CubeExplorerWithQt::slot_comReadyRead()
 			double time = double(int(pMyTimer->getTime()*100))/100;		//时间取两位小数
 			list_restoreRecord.push_back(RestoreRecord(cnt, time));
 			ui.label_UI_message->setText(QStringLiteral("串口收到结束信号"));
+			bResponseStart = true;
 		}
+		else if (byteTmp.contains("Reset")) {
+			//接收到开机指令
+			bResponseStart = true;
+		}/*
+		else if (byteTmp.contains("Pause")) {
+			bResponseStart = true;
+		}*/
 	}
 }

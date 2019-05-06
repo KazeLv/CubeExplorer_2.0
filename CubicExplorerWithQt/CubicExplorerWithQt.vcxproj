@@ -35,6 +35,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>C:\Users\Wind\Desktop\CubicExplorerWithQt\CubicExplorerWithQt\recog_and_solve;C:\Users\Wind\Desktop\CubicExplorerWithQt\CubicExplorerWithQt\kociemba;E:\OpenCV3.4.0\opencv\build\include;E:\OpenCV3.4.0\opencv\build\include\opencv;E:\OpenCV3.4.0\opencv\build\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>e:\OpenCV3.4.0\opencv\build\x64\vc15\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
     <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
@@ -97,7 +99,7 @@
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5SerialPort.lib;Qt5Widgets.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Charts.lib;Qt5DataVisualization.lib;Qt53DQuick.lib;Qt53DQuickAnimation.lib;Qt53DQuickExtras.lib;Qt53DQuickInput.lib;Qt53DQuickRender.lib;Qt53DQuickScene2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;Qt5Core.lib;Qt5Gui.lib;Qt5SerialPort.lib;Qt5Widgets.lib;Qt5Multimedia.lib;Qt5MultimediaWidgets.lib;Qt5Charts.lib;Qt5DataVisualization.lib;Qt53DQuick.lib;Qt53DQuickAnimation.lib;Qt53DQuickExtras.lib;Qt53DQuickInput.lib;Qt53DQuickRender.lib;Qt53DQuickScene2D.lib;opencv_world340.lib;opencv_world340d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <QtMoc>
       <OutputFile>.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</OutputFile>
